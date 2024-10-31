@@ -1,7 +1,7 @@
 <script setup>
-	const a = "5";
+	const a = '5';
 
-	console.log(a);
+	console.log(a, 1);
 </script>
 
 <template>
