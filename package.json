@@ -10,7 +10,7 @@
 		"postinstall": "nuxt prepare",
 		"lint": "eslint .",
 		"lint:fix": "eslint . --fix",
-		"prepare": "husky"
+		"prepare": "husky && husky install"
 	},
 	"dependencies": {
 		"@nuxt/eslint": "^0.6.1",
@@ -38,6 +38,9 @@
 		"vue": "latest"
 	},
 	"lint-staged": {
-		"**/*": "prettier --write --ignore-unknown"
+		"*.{js,ts,vue,css,md}": [
+			"prettier --write",
+			"eslint --fix"
+		]
 	}
 }
