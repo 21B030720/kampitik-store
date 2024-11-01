@@ -5,7 +5,7 @@ import withNuxt from './.nuxt/eslint.config.mjs';
 export default withNuxt({
 	ignores: ['node_modules/', 'dist/', '.nuxt/', '.output/', '.husky', '.nuxt'],
 	rules: {
-		'capitalized-comments': ['warn', 'always'],
+		'capitalized-comments': ['off', 'always'],
 		'default-case-last': 'error',
 		'no-dupe-else-if': 'error',
 		'no-dupe-keys': 'error',
