@@ -1,5 +1,11 @@
+<script setup lang="ts">
+	import Hero from '~/components/features/Hero.vue';
+	import MainHeader from '~/components/shared/MainHeader.vue';
+</script>
+
 <template>
 	<div>
-		<h1>Home page</h1>
+		<MainHeader />
+		<Hero />
 	</div>
 </template>
