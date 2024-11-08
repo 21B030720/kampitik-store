@@ -38,5 +38,6 @@ export default withNuxt({
 		'no-useless-catch': 'error',
 		'no-useless-return': 'error',
 		'no-useless-escape': 'warn',
+		'vue/html-self-closing': 'off', // bad?
 	},
 });

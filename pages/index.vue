@@ -1,11 +1,11 @@
 <script setup lang="ts">
-	import Hero from '~/components/features/Hero.vue';
-	import MainHeader from '~/components/shared/MainHeader.vue';
+	import Hero from '~/pages/_components/Hero.vue';
+
+	definePageMeta({ layout: 'main' });
 </script>
 
 <template>
 	<div>
-		<MainHeader />
 		<Hero />
 	</div>
 </template>
