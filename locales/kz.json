@@ -1,1 +1,23 @@
-{}
+{
+  "nav": {
+    "brand": "Kampitik Store",
+    "home": "Басты бет",
+    "catalog": "Каталог",
+    "bonusPoints": "Бонустық ұпайлар",
+    "chat": "Чат",
+    "signIn": "Кіру"
+  },
+  "catalog": {
+    "title": "Тауарлар каталогы"
+  },
+  "search": {
+    "catalog": "Каталог"
+  },
+  "categories": {
+    "sport": "Спорт",
+    "food": "Тамақтану",
+    "service": "Қызмет",
+    "vitamins": "Дәрумендер",
+    "activities": "Іс-шаралар"
+  }
+}

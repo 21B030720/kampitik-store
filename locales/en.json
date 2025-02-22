@@ -1,1 +1,23 @@
-{}
+{
+  "nav": {
+    "brand": "Kampitik Store",
+    "home": "Home",
+    "catalog": "Catalog",
+    "bonusPoints": "Bonus Points",
+    "chat": "Chat",
+    "signIn": "Sign in"
+  },
+  "catalog": {
+    "title": "Product Catalog"
+  },
+  "search": {
+    "catalog": "Catalog"
+  },
+  "categories": {
+    "sport": "Sport",
+    "food": "Food",
+    "service": "Service",
+    "vitamins": "Vitamins",
+    "activities": "Activities"
+  }
+}

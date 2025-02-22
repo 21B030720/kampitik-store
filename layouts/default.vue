@@ -1,4 +1,7 @@
 <script setup>
+	// Import the navigation component explicitly since auto-imports is disabled
+	import Header from '~/components/shared/main-header.vue';
+
 	const route = useRoute();
 	const { t, te } = useI18n();
 
@@ -8,19 +11,21 @@
 		addSeoAttributes: true,
 	});
 
-	// Localization-based title
-	const title = computed(() =>
-		te(route.meta.title) ? t(route.meta.title) : 'Default page title'
-	);
+	// Add error handling for title
+	const title = computed(() => {
+		if (!route.meta?.title) return 'Kampitik Store';
+		return te(route.meta.title) ? t(route.meta.title) : 'Kampitik Store';
+	});
 </script>
 
 <template>
 	<div>
-		<Html :lang="head.htmlAttrs.lang" :dir="head.htmlAttrs.dir">
+		<Header />
+		<Html :lang="head?.htmlAttrs?.lang" :dir="head?.htmlAttrs?.dir">
 			<Head>
 				<Title>{{ title }}</Title>
 
-				<template v-for="link in head.link" :key="link.id">
+				<template v-for="link in head?.link" :key="link.id">
 					<Link
 						:id="link.id"
 						:rel="link.rel"
@@ -29,7 +34,7 @@
 					/>
 				</template>
 
-				<template v-for="meta in head.meta" :key="meta.id">
+				<template v-for="meta in head?.meta" :key="meta.id">
 					<Meta
 						:id="meta.id"
 						:property="meta.property"
