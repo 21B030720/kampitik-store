@@ -8,7 +8,22 @@
     "signIn": "Sign in"
   },
   "catalog": {
-    "title": "Product Catalog"
+    "title": "Product Catalog",
+    "stores": "Featured Stores",
+    "filters": "Filters",
+    "priceRange": "Price Range",
+    "categories": "Categories",
+    "products": "products",
+    "addToBasket": "Add to Basket",
+    "storeCount": "stores",
+    "searchStores": "Search stores",
+    "sortBy": {
+      "label": "Sort by",
+      "popularity": "Popularity",
+      "newest": "Newest",
+      "priceAsc": "Price: Low to High",
+      "priceDesc": "Price: High to Low"
+    }
   },
   "search": {
     "catalog": "Catalog"

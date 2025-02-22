@@ -8,7 +8,22 @@
     "signIn": "Кіру"
   },
   "catalog": {
-    "title": "Тауарлар каталогы"
+    "title": "Тауарлар каталогы",
+    "stores": "Таңдаулы дүкендер",
+    "filters": "Сүзгілер",
+    "priceRange": "Баға аралығы",
+    "categories": "Санаттар",
+    "products": "тауарлар",
+    "addToBasket": "Себетке қосу",
+    "storeCount": "дүкендер",
+    "searchStores": "Дүкендерді іздеу",
+    "sortBy": {
+      "label": "Сұрыптау",
+      "popularity": "Танымалдылық",
+      "newest": "Жаңа",
+      "priceAsc": "Баға: төменнен жоғары",
+      "priceDesc": "Баға: жоғарыдан төмен"
+    }
   },
   "search": {
     "catalog": "Каталог"

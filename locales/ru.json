@@ -8,7 +8,22 @@
     "signIn": "Войти"
   },
   "catalog": {
-    "title": "Каталог товаров"
+    "title": "Каталог товаров",
+    "stores": "Популярные магазины",
+    "filters": "Фильтры",
+    "priceRange": "Диапазон цен",
+    "categories": "Категории",
+    "products": "товаров",
+    "addToBasket": "Добавить в корзину",
+    "storeCount": "магазинов",
+    "searchStores": "Поиск магазинов",
+    "sortBy": {
+      "label": "Сортировать по",
+      "popularity": "Популярности",
+      "newest": "Новизне",
+      "priceAsc": "Цене: по возрастанию",
+      "priceDesc": "Цене: по убыванию"
+    }
   },
   "search": {
     "catalog": "Каталог"
@@ -16,8 +31,8 @@
   "categories": {
     "sport": "Спорт",
     "food": "Питание",
-    "service": "Сервис",
+    "service": "Услуги",
     "vitamins": "Витамины",
-    "activities": "Активности"
+    "activities": "Мероприятия"
   }
 }
