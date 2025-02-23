@@ -1,28 +1,31 @@
 <template>
-	<div class="flex-none w-64 transition-transform duration-300 ease-in-out">
-		<div
-			class="bg-white rounded-lg shadow p-4 hover:shadow-lg transition-shadow cursor-pointer"
-		>
-			<div class="aspect-video bg-gray-200 mb-3 rounded-lg overflow-hidden">
-				<img
-					:src="store.image"
-					:alt="store.name"
-					class="w-full h-full object-cover"
-					@error="handleImageError"
-				>
-			</div>
-			<h3 class="text-lg font-semibold">{{ store.name }}</h3>
-			<p class="text-sm text-gray-600 mt-1">
+	<NuxtLink
+		:to="localePath(`/shop/${store.id}`)"
+		class="flex-shrink-0 w-72 bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+		prefetch
+	>
+		<div class="aspect-video bg-gray-200 mb-3 rounded-lg overflow-hidden">
+			<img
+				:src="store.image"
+				:alt="store.name"
+				class="w-full h-full object-cover"
+				@error="handleImageError"
+			>
+		</div>
+		<div class="p-4">
+			<h3 class="font-semibold text-lg">{{ store.name }}</h3>
+			<p class="text-gray-600">
 				{{ store.productCount }} {{ t('catalog.products') }}
 			</p>
 		</div>
-	</div>
+	</NuxtLink>
 </template>
 
 <script setup lang="ts">
 	import type { Store } from '~/types/store';
 
 	const { t } = useI18n();
+	const localePath = useLocalePath();
 
 	defineProps<{
 		store: Store;

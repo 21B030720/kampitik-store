@@ -2,6 +2,13 @@
 export default defineNuxtConfig({
 	compatibilityDate: '2024-04-03',
 	devtools: { enabled: false },
+	// build: {
+	// 	// parallel: true
+	// 	cache: true,
+	// 	extractCSS: process.env.NODE_ENV === 'production',
+	// 	optimizeCSS: process.env.NODE_ENV === 'production',
+	// 	transpile: ['vue-intersect'],
+	// },
 
 	components: false,
 	alias: {
