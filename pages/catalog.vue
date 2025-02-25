@@ -24,42 +24,50 @@
 
 	const { t } = useI18n();
 
+	// Import images
+	const magnumImage =
+		'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlMDAh7DttznnRGKvt2KTAMeM0a9RqeqpcAQ&s';
+	const store6Image =
+		'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlMDAh7DttznnRGKvt2KTAMeM0a9RqeqpcAQ&s';
+	const agushaImage =
+		'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRf7sW3JRTOWjhUZgJYHUM_Xj1nYKX_lTZcNw&s';
+
 	// Store data
 	const stores = ref<Store[]>([
 		{
 			id: 1,
 			name: 'Fashion Store',
-			image: '/images/stores/store1.jpg',
+			image: magnumImage,
 			productCount: 156,
 		},
 		{
 			id: 2,
 			name: 'Electronics Hub',
-			image: '/images/stores/store2.jpg',
+			image: magnumImage,
 			productCount: 243,
 		},
 		{
 			id: 3,
 			name: 'Home Decor',
-			image: '/images/stores/store3.jpg',
+			image: magnumImage,
 			productCount: 189,
 		},
 		{
 			id: 4,
 			name: 'Sports Center',
-			image: '/images/stores/store4.jpg',
+			image: magnumImage,
 			productCount: 167,
 		},
 		{
 			id: 5,
 			name: 'Beauty & Care',
-			image: '/images/stores/store5.jpg',
+			image: magnumImage,
 			productCount: 198,
 		},
 		{
 			id: 6,
 			name: 'Books & Media',
-			image: '/images/stores/store6.jpg',
+			image: store6Image,
 			productCount: 312,
 		},
 	]);
@@ -81,16 +89,16 @@
 	const products = ref<Product[]>([
 		{
 			id: 1,
-			name: 'Premium Laptop',
+			name: 'Agusha',
 			price: 999.99,
-			image: '/images/products/laptop.jpg',
+			image: agushaImage,
 			categoryId: 1,
 		},
 		{
 			id: 2,
-			name: 'Wireless Headphones',
+			name: 'Pampers',
 			price: 149.99,
-			image: '/images/products/headphones.jpg',
+			image: agushaImage,
 			categoryId: 1,
 		},
 	]);

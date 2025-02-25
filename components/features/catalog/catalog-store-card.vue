@@ -31,10 +31,16 @@
 		store: Store;
 	}>();
 
+	// Import placeholder image
+	const placeholderImage = new URL(
+		'@/assets/images/placeholder-store.png',
+		import.meta.url,
+	).href;
+
 	// Handle image loading errors
 	const handleImageError = (event: Event) => {
 		const img = event.target as HTMLImageElement;
-		img.src = '/images/placeholder-store.jpg';
+		img.src = placeholderImage;
 	};
 </script>
 
