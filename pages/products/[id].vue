@@ -1,49 +1,170 @@
 <template>
 	<div class="container mx-auto px-4 py-8">
-		<div class="bg-white rounded-lg shadow p-6">
-			<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+		<div v-if="product" class="bg-white rounded-lg shadow-lg">
+			<!-- Back to Shop -->
+			<div class="border-t p-6">
+				<NuxtLink
+					:to="localePath(`/shop/${product.shop_id}`)"
+					class="text-primary-600 hover:text-primary-700 flex items-center gap-2"
+				>
+					<span>←</span>
+					<span>{{ t('back.toShop') }}</span>
+				</NuxtLink>
+			</div>
+			<!-- Product Header -->
+			<div class="grid md:grid-cols-2 gap-8 p-6">
+				<!-- Image Section -->
 				<div>
-					<div class="aspect-square bg-gray-200 rounded-lg"/>
-					<div class="grid grid-cols-4 gap-2 mt-4">
-						<div
-							v-for="i in 4"
-							:key="i"
-							class="aspect-square bg-gray-100 rounded"
-						/>
-					</div>
+					<img
+						:src="product.image || placeholderImage"
+						:alt="product.name"
+						class="w-full aspect-square object-cover rounded-lg"
+						@error="handleImageError"
+					>
 				</div>
 
-				<div>
-					<h1 class="text-3xl font-bold mb-2">Product Name</h1>
-					<p class="text-2xl font-semibold text-primary mb-4">$99.99</p>
-
-					<div class="mb-6">
-						<h2 class="text-xl font-semibold mb-2">Description</h2>
-						<p class="text-gray-600">Product description goes here...</p>
+				<!-- Product Info -->
+				<div class="space-y-4">
+					<div>
+						<h1 class="text-3xl font-bold mb-2">{{ product.name }}</h1>
+						<p class="text-gray-600">{{ product.description }}</p>
 					</div>
 
-					<div class="mb-6">
-						<h2 class="text-xl font-semibold mb-2">Specifications</h2>
-						<ul class="list-disc list-inside space-y-2">
-							<li>Specification 1</li>
-							<li>Specification 2</li>
-							<li>Specification 3</li>
-						</ul>
+					<div class="flex items-center gap-2">
+						<span v-if="product.rating" class="flex items-center gap-1">
+							<span class="text-yellow-400">★</span>
+							<span>{{ product.rating }}</span>
+						</span>
+						<span class="text-gray-500">{{ product.shop_name }}</span>
 					</div>
 
-					<button
-						class="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary-dark"
-					>
-						Add to Cart
-					</button>
+					<div class="text-lg font-semibold">
+						{{ product.price }}тг/{{ product.measure }}
+					</div>
+
+					<div class="text-sm text-gray-600">
+						<p>
+							{{ t('product.ageRange') }}: {{ product.from_age }}-{{
+								product.to_age
+							}}
+							{{ t('product.years') }}
+						</p>
+						<p>{{ product.category_name }}</p>
+					</div>
+
+					<!-- Nutrition Info -->
+					<div v-if="hasNutritionInfo" class="border-t pt-4">
+						<h2 class="font-semibold mb-2">
+							{{ t('product.nutritionPer100g') }}
+						</h2>
+						<div class="grid grid-cols-2 gap-4">
+							<div>
+								<p class="text-gray-600">{{ t('product.nutritionalValue') }}</p>
+								<p class="font-medium">
+									{{ product.nutrition_characteristics.nutritional_value }}kcal
+								</p>
+							</div>
+							<div>
+								<p class="text-gray-600">{{ t('product.fats') }}</p>
+								<p class="font-medium">
+									{{ product.nutrition_characteristics.fats }}g
+								</p>
+							</div>
+							<div>
+								<p class="text-gray-600">{{ t('product.proteins') }}</p>
+								<p class="font-medium">
+									{{ product.nutrition_characteristics.proteins }}g
+								</p>
+							</div>
+							<div>
+								<p class="text-gray-600">{{ t('product.carbs') }}</p>
+								<p class="font-medium">
+									{{ product.nutrition_characteristics.carbohydrates }}g
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Add to Basket Button -->
+					<AddToBasketButton :product="product" />
 				</div>
 			</div>
+		</div>
+
+		<!-- Loading State -->
+		<div
+			v-else-if="isLoading"
+			class="flex justify-center items-center min-h-[400px]"
+		>
+			<p class="text-gray-500">{{ t('loading') }}</p>
+		</div>
+
+		<!-- Error State -->
+		<div v-else-if="error" class="text-center py-12 bg-white rounded-lg shadow">
+			<p class="text-red-600 mb-4">{{ error }}</p>
+			<NuxtLink
+				:to="localePath('/catalog')"
+				class="text-primary-600 hover:text-primary-700"
+			>
+				{{ t('back.toCatalog') }}
+			</NuxtLink>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-	// const route = useRoute()
-	// const productId = route.params.id
-	// Fetch product details using productId
+	import { ref, computed, onMounted } from 'vue';
+	import { useI18n } from 'vue-i18n';
+	import { useBasketStore } from '~/stores/useBasketStore';
+	import { ShopService } from '~/services/ShopService';
+	import type { Product } from '~/types/product';
+	import AddToBasketButton from '~/components/shared/add-to-basket-button.vue';
+
+	const { t } = useI18n();
+	const localePath = useLocalePath();
+	const route = useRoute();
+	const basketStore = useBasketStore();
+
+	const productId = parseInt(route.params.id as string);
+	const product = ref<Product | null>(null);
+	const isLoading = ref(true);
+	const error = ref<string | null>(null);
+
+	const placeholderImage = new URL(
+		'@/assets/images/placeholder-product.png',
+		import.meta.url,
+	).href;
+
+	const hasNutritionInfo = computed(() => {
+		if (!product.value) return false;
+		const nutrition = product.value.nutrition_characteristics;
+		return (
+			nutrition.nutritional_value > 0 ||
+			nutrition.fats > 0 ||
+			nutrition.proteins > 0 ||
+			nutrition.carbohydrates > 0
+		);
+	});
+
+	const addToBasket = () => {
+		if (product.value) {
+			basketStore.addItem(product.value);
+		}
+	};
+
+	onMounted(async () => {
+		try {
+			product.value = await ShopService.getProductById(productId);
+		} catch (err) {
+			console.error('Failed to fetch product:', err);
+			error.value = t('errors.failedToLoadProduct');
+		} finally {
+			isLoading.value = false;
+		}
+	});
+
+	const handleImageError = (event: Event) => {
+		const img = event.target as HTMLImageElement;
+		img.src = placeholderImage;
+	};
 </script>

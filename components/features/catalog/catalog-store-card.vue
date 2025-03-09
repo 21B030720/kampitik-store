@@ -6,16 +6,22 @@
 	>
 		<div class="aspect-video bg-gray-200 mb-3 rounded-lg overflow-hidden">
 			<img
-				:src="store.image"
+				:src="store.image || placeholderImage"
 				:alt="store.name"
 				class="w-full h-full object-cover"
 				@error="handleImageError"
 			>
 		</div>
+
 		<div class="p-4">
 			<h3 class="font-semibold text-lg">{{ store.name }}</h3>
+
 			<p class="text-gray-600">
-				{{ store.productCount }} {{ t('catalog.products') }}
+				{{ store.address }}
+			</p>
+
+			<p class="text-sm text-gray-500">
+				{{ store.city_name }}
 			</p>
 		</div>
 	</NuxtLink>
@@ -24,7 +30,7 @@
 <script setup lang="ts">
 	import type { Store } from '~/types/store';
 
-	const { t } = useI18n();
+	// const { t } = useI18n();
 	const localePath = useLocalePath();
 
 	defineProps<{

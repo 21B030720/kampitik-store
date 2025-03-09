@@ -5,7 +5,8 @@
     "catalog": "Catalog",
     "bonusPoints": "Bonus Points",
     "chat": "Chat",
-    "signIn": "Sign in"
+    "signIn": "Sign in",
+    "cabinet": "Personal Cabinet"
   },
   "catalog": {
     "title": "Product Catalog",
@@ -23,7 +24,9 @@
       "newest": "Newest",
       "priceAsc": "Price: Low to High",
       "priceDesc": "Price: High to Low"
-    }
+    },
+    "activitiesComingSoon": "Activities coming soon",
+    "servicesComingSoon": "Services coming soon"
   },
   "search": {
     "catalog": "Catalog"
@@ -34,5 +37,84 @@
     "service": "Service",
     "vitamins": "Vitamins",
     "activities": "Activities"
+  },
+  "contentTypes": {
+    "menu": "Menu",
+    "activities": "Activities",
+    "services": "Services"
+  },
+  "basket": {
+    "title": "Shopping Basket",
+    "empty": "Your basket is empty",
+    "continueShopping": "Continue Shopping",
+    "orderSummary": "Order Summary",
+    "subtotal": "Subtotal",
+    "total": "Total",
+    "checkout": "Proceed to Checkout"
+  },
+  "product": {
+    "nutritionPer100g": "Nutrition per 100g",
+    "nutritionalValue": "Calories",
+    "fats": "Fats",
+    "proteins": "Proteins",
+    "carbs": "Carbohydrates",
+    "ageRange": "Age Range",
+    "years": "years",
+    "addToBasket": "Add to Basket"
+  },
+  "back": {
+    "toShop": "Back to Shop",
+    "toCatalog": "Back to Catalog"
+  },
+  "errors": {
+    "failedToLoadProduct": "Failed to load product details"
+  },
+  "loading": "Loading...",
+  "checkout": {
+    "title": "Checkout",
+    "orderSummary": "Order Summary",
+    "customerInfo": "Customer Information",
+    "name": "Full Name",
+    "phone": "Phone Number",
+    "address": "Delivery Address",
+    "placeOrder": "Place Order",
+    "total": "Total"
+  },
+  "purchase": {
+    "confirmed": "Order Confirmed!",
+    "thankYou": "Thank you for your purchase. We will contact you shortly.",
+    "orderDetails": "Order Details",
+    "name": "Name",
+    "phone": "Phone",
+    "address": "Address",
+    "total": "Total Amount",
+    "continueShopping": "Continue Shopping"
+  },
+  "auth": {
+    "loginTitle": "Sign in to your account",
+    "signupTitle": "Create a new account",
+    "name": "Full Name",
+    "username": "Username",
+    "email": "Email address",
+    "usernameOrEmail": "Username or Email",
+    "phone": "Phone number",
+    "password": "Password",
+    "login": "Sign in",
+    "signup": "Sign up",
+    "needAccount": "Need an account? Sign up",
+    "haveAccount": "Already have an account? Sign in",
+    "error": "Authentication failed. Please try again."
+  },
+  "cabinet": {
+    "title": "Personal Cabinet",
+    "personalInfo": "Personal Information",
+    "name": "Name",
+    "username": "Username",
+    "email": "Email",
+    "phone": "Phone",
+    "orderHistory": "Order History",
+    "completed": "Completed",
+    "items": "items",
+    "noOrders": "No orders yet"
   }
 }
