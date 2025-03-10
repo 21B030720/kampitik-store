@@ -61,25 +61,25 @@
 							<div>
 								<p class="text-gray-600">{{ t('product.nutritionalValue') }}</p>
 								<p class="font-medium">
-									{{ product.nutrition_characteristics.nutritional_value }}kcal
+									{{ nutrition.nutritional_value }}kcal
 								</p>
 							</div>
 							<div>
 								<p class="text-gray-600">{{ t('product.fats') }}</p>
 								<p class="font-medium">
-									{{ product.nutrition_characteristics.fats }}g
+									{{ nutrition.fats }}g
 								</p>
 							</div>
 							<div>
 								<p class="text-gray-600">{{ t('product.proteins') }}</p>
 								<p class="font-medium">
-									{{ product.nutrition_characteristics.proteins }}g
+									{{ nutrition.proteins }}g
 								</p>
 							</div>
 							<div>
 								<p class="text-gray-600">{{ t('product.carbs') }}</p>
 								<p class="font-medium">
-									{{ product.nutrition_characteristics.carbohydrates }}g
+									{{ nutrition.carbohydrates }}g
 								</p>
 							</div>
 						</div>
@@ -125,25 +125,30 @@
 	const route = useRoute();
 	const basketStore = useBasketStore();
 
-	const productId = parseInt(route.params.id as string);
 	const product = ref<Product | null>(null);
 	const isLoading = ref(true);
 	const error = ref<string | null>(null);
+
+	const productId = parseInt(route.params.id as string);
 
 	const placeholderImage = new URL(
 		'@/assets/images/placeholder-product.png',
 		import.meta.url,
 	).href;
 
+	const nutrition = computed(() => {
+		return product.value?.nutrition_characteristics || {
+			nutritional_value: 0,
+			fats: 0,
+			proteins: 0,
+			carbohydrates: 0
+		};
+	});
+
 	const hasNutritionInfo = computed(() => {
-		if (!product.value) return false;
-		const nutrition = product.value.nutrition_characteristics;
-		return (
-			nutrition.nutritional_value > 0 ||
-			nutrition.fats > 0 ||
-			nutrition.proteins > 0 ||
-			nutrition.carbohydrates > 0
-		);
+		if (!product.value?.nutrition_characteristics) return false;
+		const n = product.value.nutrition_characteristics;
+		return n.nutritional_value > 0 || n.fats > 0 || n.proteins > 0 || n.carbohydrates > 0;
 	});
 
 	const addToBasket = () => {
@@ -154,7 +159,9 @@
 
 	onMounted(async () => {
 		try {
-			product.value = await ShopService.getProductById(productId);
+			const data = await ShopService.getProductById(productId);
+			product.value = data;
+			isLoading.value = false;
 		} catch (err) {
 			console.error('Failed to fetch product:', err);
 			error.value = t('errors.failedToLoadProduct');

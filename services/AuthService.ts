@@ -6,7 +6,7 @@ const API_BASE_URL = BASE_URL;
 export const AuthService = {
 	async login(credentials: LoginCredentials) {
 		try {
-			const response = await fetch(`${API_BASE_URL}/user/client/sign-in/`, {
+			const response = await fetch(`${API_BASE_URL}/users/client/sign-in/`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -31,7 +31,7 @@ export const AuthService = {
 
 	async signup(credentials: SignupCredentials) {
 		try {
-			const response = await fetch(`${API_BASE_URL}/user/client/sign-up/`, {
+			const response = await fetch(`${API_BASE_URL}/users/client/sign-up/`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',

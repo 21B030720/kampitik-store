@@ -66,11 +66,20 @@
 				ShopService.getAllProducts(),
 			]);
 
-			console.log('API Response - Products:', productsData);
-			stores.value = storesData;
-			products.value = productsData;
+			// Transform products to ensure nutrition_characteristics is never null
+			const transformedProducts = productsData.map(product => ({
+				...product,
+				nutrition_characteristics: product.nutrition_characteristics || {
+					nutritional_value: 0,
+					fats: 0,
+					proteins: 0,
+					carbohydrates: 0
+				}
+			}));
 
-			console.log('Products after setting to ref:', products.value);
+			stores.value = storesData;
+			products.value = transformedProducts;
+			console.log('Products after transform:', products.value);
 		} catch (err) {
 			console.error('Failed to fetch data:', err);
 			error.value = 'Failed to load data. Please try again later.';

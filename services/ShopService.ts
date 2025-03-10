@@ -18,7 +18,7 @@ interface PaginatedResponse<T> {
 }
 
 export const ShopService = {
-	async getStores(): Promise<Store[]> {
+	async getShops(): Promise<Store[]> {
 		try {
 			const response = await fetch(`${API_BASE_URL}/shops`);
 
@@ -34,7 +34,7 @@ export const ShopService = {
 		}
 	},
 
-	async getStoreById(storeId: number): Promise<Store> {
+	async getShopById(storeId: number): Promise<Store> {
 		try {
 			const response = await fetch(`${API_BASE_URL}/shops/${storeId}`);
 
