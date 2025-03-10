@@ -1,9 +1,6 @@
 <template>
 	<NuxtLink
-		:to="{ 
-			path: localePath(`/products/${product.id}`),
-			state: { product }
-		}"
+		:to="localePath(`/products/${product.id}`)"
 		class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow flex flex-col h-full"
 	>
 		<div class="aspect-square relative">
