@@ -6,7 +6,9 @@
     "bonusPoints": "Bonus Points",
     "chat": "Chat",
     "signIn": "Sign in",
-    "cabinet": "Personal Cabinet"
+    "cabinet": "Personal Cabinet",
+    "balance": "Balance",
+    "logout": "Logout"
   },
   "catalog": {
     "title": "Product Catalog",
@@ -115,6 +117,14 @@
     "orderHistory": "Order History",
     "completed": "Completed",
     "items": "items",
-    "noOrders": "No orders yet"
+    "noOrders": "No orders yet",
+    "budget": "My Budget",
+    "balance": "Current Balance",
+    "walletId": "Wallet ID",
+    "noWallet": "No wallet information available",
+    "userId": "User ID",
+    "clientId": "Client ID",
+    "clientInfo": "Client Information",
+    "emailVerified": "Verified"
   }
 }

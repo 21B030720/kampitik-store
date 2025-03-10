@@ -11,10 +11,16 @@ export interface SignupCredentials {
 	email: string;
 }
 
+export interface AuthResponse {
+	refresh_token: string;
+	access_token: string;
+	client_id: number;
+	user_id: number;
+	username: string;
+}
+
 export interface User {
-	id: number;
-	name: string;
-	email: string;
-	phone: string;
+	id: number;           // user_id
+	client_id: number;    // client_id
 	username: string;
 }

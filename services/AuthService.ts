@@ -1,10 +1,10 @@
 import { BASE_URL } from '~/BASE_URL';
-import type { LoginCredentials, SignupCredentials, User } from '~/types/auth';
+import type { LoginCredentials, SignupCredentials, AuthResponse } from '~/types/auth';
 
 const API_BASE_URL = BASE_URL;
 
 export const AuthService = {
-	async login(credentials: LoginCredentials) {
+	async login(credentials: LoginCredentials): Promise<AuthResponse> {
 		try {
 			const response = await fetch(`${API_BASE_URL}/users/client/sign-in/`, {
 				method: 'POST',
@@ -21,15 +21,14 @@ export const AuthService = {
 				throw new Error('Login failed');
 			}
 
-			const data = await response.json();
-			return data.user as User;
+			return await response.json();
 		} catch (error) {
 			console.error('Login error:', error);
 			throw error;
 		}
 	},
 
-	async signup(credentials: SignupCredentials) {
+	async signup(credentials: SignupCredentials): Promise<AuthResponse> {
 		try {
 			const response = await fetch(`${API_BASE_URL}/users/client/sign-up/`, {
 				method: 'POST',
@@ -49,8 +48,7 @@ export const AuthService = {
 				throw new Error('Signup failed');
 			}
 
-			const data = await response.json();
-			return data.user as User;
+			return await response.json();
 		} catch (error) {
 			console.error('Signup error:', error);
 			throw error;

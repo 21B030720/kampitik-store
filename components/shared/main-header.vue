@@ -53,29 +53,34 @@
 					<template v-if="authStore.isAuthenticated">
 						<div class="relative">
 							<button
-								class="flex items-center space-x-2 text-gray-700"
-								@click="toggleDropdown"
+								class="flex items-center gap-2"
+								@click.stop="toggleDropdown"
 							>
 								<div
 									class="w-8 h-8 bg-[#128C7E] rounded-full flex items-center justify-center text-white"
 								>
-									{{ authStore.user?.name?.[0]?.toUpperCase() }}
+									{{ authStore.user?.username[0]?.toUpperCase() }}
 								</div>
 								<span class="text-xs">▼</span>
 							</button>
+
 							<div
-								v-show="isDropdownOpen"
-								class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1"
+								v-if="isDropdownOpen"
+								class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50"
 							>
+								<div v-if="wallet" class="px-4 py-2 border-b">
+									<div class="text-sm text-gray-600">{{ t('nav.balance') }}</div>
+									<div class="font-semibold">{{ wallet.balance }}тг</div>
+								</div>
+
 								<NuxtLink
 									:to="localePath('/cabinet')"
-									class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-									@click="closeDropdown"
+									class="block px-4 py-2 text-gray-700 hover:bg-gray-100"
 								>
 									{{ t('nav.cabinet') }}
 								</NuxtLink>
 								<button
-									class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+									class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
 									@click="handleLogout"
 								>
 									{{ t('nav.logout') }}
@@ -86,7 +91,7 @@
 					<template v-else>
 						<NuxtLink
 							:to="localePath('/login')"
-							class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+							class="text-gray-600 hover:text-gray-900"
 						>
 							{{ t('nav.signIn') }}
 						</NuxtLink>
@@ -98,11 +103,13 @@
 </template>
 
 <script setup lang="ts">
-	import { ref, onMounted, onUnmounted } from 'vue';
+	import { ref, onMounted, onUnmounted, watch } from 'vue';
 	import { useI18n } from 'vue-i18n';
 	import { useBasketStore } from '~/stores/useBasketStore';
 	import { useAuthStore } from '~/stores/useAuthStore';
 	import { useRouter } from 'vue-router';
+	import { WalletService } from '~/services/WalletService';
+	import type { Wallet } from '~/types/wallet';
 
 	const { t } = useI18n();
 	const localePath = useLocalePath();
@@ -111,31 +118,28 @@
 	const router = useRouter();
 
 	const isDropdownOpen = ref(false);
+	const wallet = ref<Wallet | null>(null);
 
 	const toggleDropdown = () => {
 		isDropdownOpen.value = !isDropdownOpen.value;
 	};
 
-	const closeDropdown = () => {
-		isDropdownOpen.value = false;
+	const handleClickOutside = (event: MouseEvent) => {
+		const dropdown = document.querySelector('.relative');
+		if (dropdown && !dropdown.contains(event.target as Node)) {
+			isDropdownOpen.value = false;
+		}
 	};
 
 	const handleLogout = () => {
-		closeDropdown();
 		authStore.logout();
 		router.push(localePath('/'));
-	};
-
-	// Close dropdown when clicking outside
-	const handleClickOutside = (event: MouseEvent) => {
-		const target = event.target as HTMLElement;
-		if (!target.closest('.relative')) {
-			closeDropdown();
-		}
+		isDropdownOpen.value = false;
 	};
 
 	onMounted(() => {
 		document.addEventListener('click', handleClickOutside);
+		fetchWallet();
 	});
 
 	onUnmounted(() => {
@@ -150,4 +154,25 @@
 		...link,
 		name: t(link.name),
 	}));
+
+	// Fetch wallet data when authenticated
+	const fetchWallet = async () => {
+		if (authStore.isAuthenticated) {
+			try {
+				const walletData = await WalletService.getMyWallet();
+				wallet.value = walletData;
+			} catch (error) {
+				console.error('Failed to fetch wallet:', error);
+			}
+		}
+	};
+
+	// Watch for auth state changes
+	watch(() => authStore.isAuthenticated, (isAuthenticated) => {
+		if (isAuthenticated) {
+			fetchWallet();
+		} else {
+			wallet.value = null;
+		}
+	});
 </script>
