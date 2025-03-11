@@ -126,6 +126,8 @@
 
 	const { t } = useI18n();
 	const authStore = useAuthStore();
+	const localePath = useLocalePath();
+
 	const purchaseStore = usePurchaseStore();
 
 	const wallet = ref<Wallet | null>(null);
