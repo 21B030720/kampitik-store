@@ -5,7 +5,15 @@
 		<div class="grid gap-6">
 			<!-- Budget Section -->
 			<div class="bg-white rounded-lg shadow-lg p-6">
-				<h2 class="text-lg font-semibold mb-4">{{ t('cabinet.budget') }}</h2>
+				<div class="flex justify-between items-center mb-4">
+					<h2 class="text-lg font-semibold">{{ t('cabinet.budget') }}</h2>
+					<NuxtLink
+						:to="localePath('/balance-replenishment')"
+						class="bg-[#128C7E] text-white px-4 py-2 rounded-lg hover:bg-[#0E7265] transition-colors text-sm"
+					>
+						{{ t('cabinet.replenishBalance') }}
+					</NuxtLink>
+				</div>
 				<div v-if="wallet" class="flex items-center justify-between">
 					<div>
 						<p class="text-gray-600">{{ t('cabinet.balance') }}</p>

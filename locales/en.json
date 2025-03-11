@@ -66,7 +66,8 @@
   },
   "back": {
     "toShop": "Back to Shop",
-    "toCatalog": "Back to Catalog"
+    "toCatalog": "Back to Catalog",
+    "toCabinet": "Back to Cabinet"
   },
   "errors": {
     "failedToLoadProduct": "Failed to load product details"
@@ -125,6 +126,27 @@
     "userId": "User ID",
     "clientId": "Client ID",
     "clientInfo": "Client Information",
-    "emailVerified": "Verified"
+    "emailVerified": "Verified",
+    "replenishBalance": "Replenish Balance"
+  },
+  "balance": {
+    "replenishmentTitle": "Balance Replenishment",
+    "currentBalance": "Current Balance",
+    "amount": "Amount",
+    "enterAmount": "Enter amount",
+    "replenish": "Replenish Balance",
+    "invalidAmount": "Amount must be between 2000тг and 10000тг",
+    "limitNote": "Min: 2000тг, Max: 10000тг",
+    "replenishmentError": "Failed to replenish balance. Please try again.",
+    "paymentProcessing": "Payment Processing",
+    "transactionId": "Transaction ID",
+    "proceedToPayment": "Proceed to Payment"
+  },
+  "common": {
+    "cancel": "Cancel"
+  },
+  "payment": {
+    "success": "Payment Successful",
+    "successMessage": "Your payment has been processed successfully. Your balance will be updated shortly."
   }
 }
