@@ -147,6 +147,8 @@
   },
   "payment": {
     "success": "Payment Successful",
-    "successMessage": "Your payment has been processed successfully. Your balance will be updated shortly."
+    "failure": "Payment Failed",
+    "successMessage": "Your payment has been processed successfully. Your balance will be updated shortly.",
+    "failureMessage": "We couldn't process your payment. Please try again or contact support if the problem persists."
   }
 }
