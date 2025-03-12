@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Render Escaped HTML</title>
+</head>
+<body>
+    <div id="output"></div>
+
+    <script>
+        const jsonData = {
+            "message": "<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <meta http-equiv=\"X-UA-Compatible\" content=\"ie=edge\">\n    <link rel=\"icon\" href=\"https://cdn.freedompay.kz/core/favicon.ico\" type=\"image/x-icon\">\n    <title>Ввод cvc</title>\n  </head>\n  <body>\n    <form action=\"https://customer.freedompay.kz/v1/merchant/545949/card/pay\" method=\"POST\" id=\"form\">\n            <input type=\"hidden\" name=\"pg_merchant_id\" value=\"545949\" />\n            <input type=\"hidden\" name=\"pg_payment_id\" value=\"1521262006\" />\n            <input type=\"hidden\" name=\"pg_salt\" value=\"qGO8wDX7\" />\n            <input type=\"hidden\" name=\"pg_sig\" value=\"b84b7395dfb34964923117e992c0cbbf\" />\n            <div id=\"app\"></div>\n    </form>\n    <script nonce=\"ODE3YmIyZmM4YzM2NWIwMWM3YjAzYWVjMWMwMDU4MjI=\" src=\"https://cdn.freedompay.kz/core/assets/cvc-page/app.js\"></script>\n  </body>\n</html>\n"
+        };
+
+        // Decoding HTML and displaying it
+        document.getElementById("output").innerHTML = jsonData.message;
+    </script>
+</body>
+</html>

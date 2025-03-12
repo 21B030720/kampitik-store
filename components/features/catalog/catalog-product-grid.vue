@@ -1,6 +1,6 @@
 <template>
 	<div class="flex-grow">
-		<div v-if="products.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+		<div v-if="products.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 			<ProductCard
 				v-for="product in products"
 				:key="product.id"
@@ -21,8 +21,6 @@
 	const props = defineProps<{
 		products: Product[];
 	}>();
-
-	console.log('Products in grid:', props.products); // Debug log
 
 	defineEmits<{
 		(e: 'add-to-basket', product: Product): void;
