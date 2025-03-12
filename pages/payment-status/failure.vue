@@ -29,9 +29,14 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
+import { useRoute } from 'vue-router';
 
 const { t } = useI18n();
 const localePath = useLocalePath();
+const route = useRoute();
+
+// Store all query parameters for future use
+const params = route.query;
 
 definePageMeta({
 	middleware: ['auth']

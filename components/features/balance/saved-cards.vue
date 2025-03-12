@@ -1,7 +1,16 @@
 <template>
 	<div class="bg-white rounded-lg shadow-lg p-6">
-		<h2 class="text-xl font-bold mb-4">Saved Cards</h2>
-		<div v-if="isLoading" class="text-center py-4">
+		<div class="flex items-center justify-between mb-4">
+			<h2 class="text-xl font-bold">Saved Cards</h2>
+			<button
+				class="px-4 py-2 bg-[#128C7E] text-white rounded-lg hover:bg-[#0E7265] transition-colors text-sm"
+				:disabled="isAddingCard"
+				@click="handleAddCard"
+			>
+				{{ isAddingCard ? t('loading') : t('cards.addNew') }}
+			</button>
+		</div>
+		<div v-if="isLoading || isAddingCard" class="text-center py-4">
 			<p class="text-gray-500">{{ t('loading') }}</p>
 		</div>
 		<div v-else-if="cards.length === 0" class="text-center py-4">
@@ -49,7 +58,9 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { PayboxService } from '~/services/PayboxService';
 
 const { t } = useI18n();
 
@@ -71,6 +82,8 @@ const emit = defineEmits<{
 	(e: 'update:selectedCardId', id: number): void;
 }>();
 
+const isAddingCard = ref(false);
+
 const getCardType = (hash: string) => {
 	const firstDigit = hash[0];
 	if (firstDigit === '5') return 'mastercard';
@@ -80,5 +93,18 @@ const getCardType = (hash: string) => {
 
 const selectCard = (cardId: number) => {
 	emit('update:selectedCardId', cardId);
+};
+
+const handleAddCard = async () => {
+	try {
+		isAddingCard.value = true;
+		const response = await PayboxService.getCardSaveUrl();
+		// Redirect to the card save page
+		window.location.href = response.message;
+	} catch (error) {
+		console.error('Failed to get card save URL:', error);
+	} finally {
+		isAddingCard.value = false;
+	}
 };
 </script> 

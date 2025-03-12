@@ -13,6 +13,10 @@ interface CardPaymentResponse {
 	message: string;
 }
 
+interface CardSaveResponse {
+	message: string;
+}
+
 export const PayboxService = {
 	async getSavedCards(): Promise<SavedCard[]> {
 		try {
@@ -41,5 +45,17 @@ export const PayboxService = {
 			console.error('Error processing card payment:', error);
 			throw error;
 		}
-	}
+	},
+
+	async getCardSaveUrl(): Promise<CardSaveResponse> {
+		try {
+			const response = await fetchWithAuth(`${BASE_URL}/paybox/cards/save/`, {
+                method: 'POST',
+            });
+			return await response.json();
+		} catch (error) {
+			console.error('Error getting card save URL:', error);
+			throw error;
+		}
+	},
 }; 
