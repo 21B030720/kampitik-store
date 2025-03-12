@@ -37,8 +37,4 @@ const route = useRoute();
 
 // Store all query parameters for future use
 const params = route.query;
-
-definePageMeta({
-	middleware: ['auth']
-});
 </script> 
