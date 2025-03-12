@@ -19,7 +19,21 @@
 				@click="selectCard(card.id)"
 			>
 				<div class="flex items-center gap-3">
-					<div class="w-10 h-6 bg-gray-200 rounded"></div>
+					<div class="w-10 h-6 flex items-center justify-center">
+						<img 
+							v-if="getCardType(card.card_hash) === 'mastercard'"
+							src="~/assets/icons/mastercard.svg"
+							alt="Mastercard"
+							class="w-full h-full object-contain"
+						/>
+						<img 
+							v-else-if="getCardType(card.card_hash) === 'visa'"
+							src="~/assets/icons/visa.svg"
+							alt="Visa"
+							class="w-full h-full object-contain"
+						/>
+						<div v-else class="w-full h-full bg-gray-200 rounded"></div>
+					</div>
 					<div>
 						<p class="font-medium">•••• {{ card.card_hash.slice(-4) }}</p>
 						<p class="text-sm text-gray-500">{{ card.card_month }}/{{ card.card_year }}</p>
@@ -56,6 +70,13 @@ const props = defineProps<{
 const emit = defineEmits<{
 	(e: 'update:selectedCardId', id: number): void;
 }>();
+
+const getCardType = (hash: string) => {
+	const firstDigit = hash[0];
+	if (firstDigit === '5') return 'mastercard';
+	if (firstDigit === '4') return 'visa';
+	return 'unknown';
+};
 
 const selectCard = (cardId: number) => {
 	emit('update:selectedCardId', cardId);
