@@ -19,7 +19,8 @@
 				</label>
 				<div class="relative">
 					<input
-						v-model="amount"
+						:value="modelValue"
+						@input="$emit('update:modelValue', Number(($event.target as HTMLInputElement).value))"
 						type="number"
 						min="2000"
 						max="10000"
@@ -42,7 +43,7 @@
 					:key="quickAmount"
 					type="button"
 					class="px-4 py-2 border rounded-lg hover:bg-gray-50 transition-colors"
-					@click="amount = quickAmount"
+					@click="$emit('update:modelValue', quickAmount)"
 				>
 					{{ quickAmount }}тг
 				</button>
@@ -66,33 +67,33 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import type { Wallet } from '~/types/wallet';
 
 const { t } = useI18n();
 
 const props = defineProps<{
+	modelValue: number;
 	wallet: Wallet | null;
 	isLoading: boolean;
 	error: string;
 }>();
 
 const emit = defineEmits<{
-	(e: 'submit', amount: number): void;
+	(e: 'update:modelValue', value: number): void;
+	(e: 'submit'): void;
 }>();
 
-const amount = ref<number>(2000);
 const quickAmounts = [2000, 5000, 10000];
 
 const isValidAmount = computed(() => {
-	const value = amount.value;
-	return value >= 2000 && value <= 10000;
+	return props.modelValue >= 2000 && props.modelValue <= 10000;
 });
 
 const handleSubmit = () => {
 	if (isValidAmount.value) {
-		emit('submit', amount.value);
+		emit('submit');
 	}
 };
 </script> 

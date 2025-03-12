@@ -11,6 +11,7 @@
 
 		<div class="grid md:grid-cols-2 gap-8">
 			<BalanceForm
+				v-model="amount"
 				:wallet="wallet"
 				:is-loading="isLoading"
 				:error="error"
@@ -64,7 +65,7 @@ const localePath = useLocalePath();
 const router = useRouter();
 
 const wallet = ref<Wallet | null>(null);
-const amount = ref<number>(2000);
+const amount = ref(2000);
 const isLoading = ref(false);
 const error = ref('');
 const cards = ref<SavedCard[]>([]);
