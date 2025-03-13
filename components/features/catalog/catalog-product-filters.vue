@@ -74,7 +74,7 @@ import { ContentType, MenuSubtype, ActivitiesSubtype, ServicesSubtype } from '~/
 import { useRoute, useRouter } from 'vue-router';
 import type { LocationQueryValue } from 'vue-router';
 
-const { t } = useI18n();
+	const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const localePath = useLocalePath();

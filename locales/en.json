@@ -33,7 +33,9 @@
     "filters": {
       "name": "Name",
       "category": "Category"
-    }
+    },
+    "searchByCity": "Select city...",
+    "allCities": "All Cities"
   },
   "search": {
     "catalog": "Catalog"
@@ -75,7 +77,9 @@
     "toCabinet": "Back to Cabinet"
   },
   "errors": {
-    "failedToLoadProduct": "Failed to load product details"
+    "failedToLoadProduct": "Failed to load product details",
+    "failedToLoadStores": "Failed to load stores. Please try again later.",
+    "failedToLoadCities": "Failed to load cities. Please try again later."
   },
   "loading": "Loading...",
   "checkout": {

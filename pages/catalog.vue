@@ -10,7 +10,7 @@
 		<div class="flex flex-col md:flex-row gap-8">
 			<!-- Content type filter -->
 			<div>
-				<ProductFilters
+			<ProductFilters
 					v-model:selected-type="selectedContentType"
 					v-model:selected-subtype="selectedSubtype"
 				/>
@@ -18,8 +18,10 @@
 				<!-- Additional Filters -->
 				<AdditionalFilters
 					v-if="selectedSubtype"
-					v-model:name="filters.name"
-					v-model:category-name="filters.category_name"
+					:name="filters.name ?? ''"
+					:category-name="filters.category_name ?? ''"
+					@update:name="filters.name = $event"
+					@update:category-name="filters.category_name = $event"
 					class="mt-6"
 				/>
 			</div>
@@ -94,6 +96,7 @@
 	import { useI18n } from 'vue-i18n';
 	import { useRoute } from 'vue-router';
 	import AdditionalFilters from '~/components/features/catalog/catalog-additional-filters.vue';
+	import type { ProductFilterParams } from '~/services/ShopService';
 
 	const { t } = useI18n();
 	const route = useRoute();
@@ -118,8 +121,8 @@
 		route.query.subtype as string || null
 	);
 
-	// Add filters state
-	const filters = ref({
+	// Add filters state with default values
+	const filters = ref<ProductFilterParams>({
 		name: '',
 		category_name: ''
 	});

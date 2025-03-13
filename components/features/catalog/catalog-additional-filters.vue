@@ -37,8 +37,8 @@ import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 
 const props = defineProps<{
-  name: string;
-  categoryName: string;
+  name?: string;
+  categoryName?: string;
 }>();
 
 const emit = defineEmits<{
@@ -47,12 +47,12 @@ const emit = defineEmits<{
 }>();
 
 const nameModel = computed({
-  get: () => props.name,
-  set: (value) => emit('update:name', value)
+  get: () => props.name ?? '',
+  set: (value: string) => emit('update:name', value)
 });
 
 const categoryModel = computed({
-  get: () => props.categoryName,
-  set: (value) => emit('update:categoryName', value)
+  get: () => props.categoryName ?? '',
+  set: (value: string) => emit('update:categoryName', value)
 });
 </script> 

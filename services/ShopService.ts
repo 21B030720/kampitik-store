@@ -10,9 +10,19 @@ import { BASE_URL } from '~/BASE_URL';
 
 const API_BASE_URL = BASE_URL;
 
-interface FilterParams {
+// Different filter types for different endpoints
+export interface StoreFilterParams {
+	city_id?: number;
+}
+
+export interface ProductFilterParams {
 	name?: string;
 	category_name?: string;
+}
+
+export interface City {
+	id: number;
+	name: string;
 }
 
 interface PaginatedResponse<T> {
@@ -26,18 +36,39 @@ interface PaginatedResponse<T> {
 }
 
 export const ShopService = {
-	async getShops(): Promise<Store[]> {
+	async getCities(): Promise<City[]> {
 		try {
-			const response = await fetch(`${API_BASE_URL}/shops`);
+			const response = await fetch(`${API_BASE_URL}/shops/city/all`);
 			
 			if (!response.ok) {
 				throw new Error(`HTTP error! status: ${response.status}`);
 			}
+
+			return await response.json();
+		} catch (error) {
+			console.error('Error fetching cities:', error);
+			throw error;
+		}
+	},
+
+	async getShops(filters?: StoreFilterParams): Promise<Store[]> {
+		try {
+			const params = new URLSearchParams();
+			if (filters?.city_id) {
+				params.append('city_id', filters.city_id.toString());
+			}
+
+			const url = `${API_BASE_URL}/shops${params.toString() ? `?${params.toString()}` : ''}`;
+			const response = await fetch(url);
 			
+			if (!response.ok) {
+				throw new Error(`HTTP error! status: ${response.status}`);
+			}
+
 			const data: PaginatedResponse<Store> = await response.json();
 			return data.results;
 		} catch (error) {
-			console.error('Error fetching shops:', error);
+			console.error('Error fetching stores:', error);
 			throw error;
 		}
 	},
@@ -151,7 +182,7 @@ export const ShopService = {
 		}
 	},
 
-	async getAllProducts(filters?: FilterParams): Promise<Product[]> {
+	async getAllProducts(filters?: ProductFilterParams): Promise<Product[]> {
 		try {
 			const params = new URLSearchParams();
 			if (filters?.name) params.append('name', filters.name);
@@ -190,7 +221,7 @@ export const ShopService = {
 	},
 
 	// Menu subtypes
-	async getAllPacks(filters?: FilterParams): Promise<Bundle[]> {
+	async getAllPacks(filters?: ProductFilterParams): Promise<Bundle[]> {
 		try {
 			const params = new URLSearchParams();
 			if (filters?.name) params.append('name', filters.name);
@@ -210,7 +241,7 @@ export const ShopService = {
 	},
 
 	// Activities subtypes
-	async getAllEvents(filters?: FilterParams): Promise<Event[]> {
+	async getAllEvents(filters?: ProductFilterParams): Promise<Event[]> {
 		try {
 			const params = new URLSearchParams();
 			if (filters?.name) params.append('name', filters.name);
@@ -229,7 +260,7 @@ export const ShopService = {
 		}
 	},
 
-	async getAllCourses(filters?: FilterParams): Promise<Course[]> {
+	async getAllCourses(filters?: ProductFilterParams): Promise<Course[]> {
 		try {
 			const params = new URLSearchParams();
 			if (filters?.name) params.append('name', filters.name);
@@ -249,7 +280,7 @@ export const ShopService = {
 	},
 
 	// Services subtype
-	async getAllServices(filters?: FilterParams): Promise<Service[]> {
+	async getAllServices(filters?: ProductFilterParams): Promise<Service[]> {
 		try {
 			const params = new URLSearchParams();
 			if (filters?.name) params.append('name', filters.name);
