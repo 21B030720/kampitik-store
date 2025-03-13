@@ -3,6 +3,9 @@ import type { Product } from '~/types/product';
 import type { Category } from '~/types/category';
 import type { CommodityGroup } from '~/types/commodity-group';
 import type { Bundle } from '~/types/bundle';
+import type { Event } from '~/types/event';
+import type { Course } from '~/types/course';
+import type { Service } from '~/types/service';
 import { BASE_URL } from '~/BASE_URL';
 
 const API_BASE_URL = BASE_URL;
@@ -173,6 +176,65 @@ export const ShopService = {
 			return data;
 		} catch (error) {
 			console.error(`Error fetching product ${productId}:`, error);
+			throw error;
+		}
+	},
+
+	// Menu subtypes
+	async getAllPacks(): Promise<Bundle[]> {
+		try {
+			const response = await fetch(`${API_BASE_URL}/shops/bundles/`);
+			if (!response.ok) {
+				throw new Error(`HTTP error! status: ${response.status}`);
+			}
+			const data: PaginatedResponse<Bundle> = await response.json();
+			return data.results;
+		} catch (error) {
+			console.error('Error fetching packs:', error);
+			throw error;
+		}
+	},
+
+	// Activities subtypes
+	async getAllEvents(): Promise<Event[]> {
+		try {
+			const response = await fetch(`${API_BASE_URL}/shops/events/`);
+			if (!response.ok) {
+				throw new Error(`HTTP error! status: ${response.status}`);
+			}
+			const data: PaginatedResponse<Event> = await response.json();
+			return data.results;
+		} catch (error) {
+			console.error('Error fetching events:', error);
+			throw error;
+		}
+	},
+
+	async getAllCourses(): Promise<Course[]> {
+		try {
+			const response = await fetch(`${API_BASE_URL}/shops/courses/`);
+			if (!response.ok) {
+				throw new Error(`HTTP error! status: ${response.status}`);
+			}
+			const data: PaginatedResponse<Course> = await response.json();
+			return data.results;
+		} catch (error) {
+			console.error('Error fetching courses:', error);
+			throw error;
+		}
+	},
+
+	// Services subtype
+	async getAllServices(): Promise<Service[]> {
+		try {
+			const response = await fetch(`${API_BASE_URL}/shops/services/`);
+			if (!response.ok) {
+				throw new Error(`HTTP error! status: ${response.status}`);
+			}
+			const data: PaginatedResponse<Service> = await response.json();
+			return data.results;
+		} catch (error) {
+			console.error('Error fetching services:', error);
 			throw error;
 		}
 	},
