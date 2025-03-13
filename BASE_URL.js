@@ -1,1 +1,1 @@
-export const BASE_URL = 'http://91.243.71.236';
+export const BASE_URL = 'https://api-kampitik.kz';

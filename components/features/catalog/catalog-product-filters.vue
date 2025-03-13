@@ -32,7 +32,7 @@
 								</svg>
 							</span>
 							<span class="text-gray-700">{{ t(`contentTypes.${type}`) }}</span>
-						</div>
+					</div>
 						<svg
 							v-if="hasSubtypes(type)"
 							class="w-5 h-5"
@@ -68,11 +68,16 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, watch, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { ContentType, MenuSubtype, ActivitiesSubtype, ServicesSubtype } from '~/types/content-type';
+import { useRoute, useRouter } from 'vue-router';
+import type { LocationQueryValue } from 'vue-router';
 
 	const { t } = useI18n();
+const route = useRoute();
+const router = useRouter();
+const localePath = useLocalePath();
 
 const contentTypes = [
 	ContentType.MENU,
@@ -89,6 +94,40 @@ const contentTypes = [
 	(e: 'update:selectedType', type: ContentType): void;
 	(e: 'update:selectedSubtype', subtype: string | null): void;
 	}>();
+
+// Update URL when filters change, but preserve existing query params
+watch(() => props.selectedType, (newType) => {
+	const query: Record<string, LocationQueryValue | LocationQueryValue[]> = { 
+		...route.query,
+		type: newType 
+	};
+	
+	if (!props.selectedSubtype) {
+		delete query.subtype;
+	}
+	
+	router.push({ 
+		path: route.path,
+		query 
+	}).catch(() => {});
+}, { immediate: false });
+
+watch(() => props.selectedSubtype, (newSubtype) => {
+	const query: Record<string, LocationQueryValue | LocationQueryValue[]> = { 
+		...route.query 
+	};
+	
+	if (newSubtype) {
+		query.subtype = newSubtype;
+	} else {
+		delete query.subtype;
+	}
+	
+	router.push({ 
+		path: route.path,
+		query 
+	}).catch(() => {});
+}, { immediate: false });
 
 const selectedTypeModel = computed({
 	get: () => props.selectedType,
@@ -122,7 +161,29 @@ const selectType = (type: ContentType) => {
 
 const selectSubtype = (subtype: string) => {
 	emit('update:selectedSubtype', props.selectedSubtype === subtype ? null : subtype);
-	};
+};
+
+// Helper function to validate subtype for current type
+const isValidSubtype = (type: ContentType, subtype: string | null): boolean => {
+	if (!subtype) return true;
+	return getSubtypes(type).includes(subtype);
+};
+
+// Initialize with URL params if they're valid
+onMounted(() => {
+	const queryType = route.query.type as ContentType;
+	const querySubtype = route.query.subtype as string;
+
+	// If we have valid type in URL, use it
+	if (queryType && Object.values(ContentType).includes(queryType)) {
+		selectedTypeModel.value = queryType;
+	}
+
+	// If we have valid subtype in URL, use it
+	if (querySubtype && isValidSubtype(selectedTypeModel.value, querySubtype)) {
+		emit('update:selectedSubtype', querySubtype);
+	}
+});
 </script>
 
 <style scoped>

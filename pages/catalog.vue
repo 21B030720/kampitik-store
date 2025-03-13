@@ -1,6 +1,7 @@
 <template>
 	<div class="container mx-auto px-4 py-8">
-		<StoreCarousel :stores="stores" />
+		<!-- StoreCarousel now handles its own data fetching -->
+		<StoreCarousel v-if="!selectedSubtype" />
 
 		<div v-if="error" class="text-red-600 mb-4">
 			{{ error }}
@@ -81,8 +82,10 @@
 	import CourseGrid from '~/components/features/catalog/catalog-course-grid.vue';
 	import ServiceGrid from '~/components/features/catalog/catalog-service-grid.vue';
 	import { useI18n } from 'vue-i18n';
+	import { useRoute } from 'vue-router';
 
 	const { t } = useI18n();
+	const route = useRoute();
 
 	// Store data with proper typing
 	const stores = ref<Store[]>([]);
@@ -94,9 +97,31 @@
 	const isLoading = ref(false);
 	const error = ref<string | null>(null);
 
-	// Filter state
-	const selectedContentType = ref<ContentType>(ContentType.MENU);
-	const selectedSubtype = ref<string | null>(null);
+	// Initialize filters from URL params with proper type checking
+	const selectedContentType = ref<ContentType>(
+		(route.query.type as ContentType) || ContentType.MENU
+	);
+
+	const selectedSubtype = ref<string | null>(
+		// If we have a valid subtype in URL, use it
+		route.query.subtype as string || null
+	);
+
+	// Watch URL changes to update filters
+	watch(
+		() => route.query,
+		(query) => {
+			// Only update type if it's a valid ContentType
+			if (query.type && Object.values(ContentType).includes(query.type as ContentType)) {
+				selectedContentType.value = query.type as ContentType;
+			}
+			
+			// Only update subtype if it exists in query
+			if ('subtype' in query) {
+				selectedSubtype.value = query.subtype as string;
+			}
+		}
+	);
 
 	// Watch for filter changes
 	watch(
@@ -147,16 +172,6 @@
 		},
 		{ immediate: true } // This makes the watch run immediately when component mounts
 	);
-
-	// Simplified onMounted to only fetch stores
-	onMounted(async () => {
-		try {
-			stores.value = await ShopService.getShops();
-		} catch (err) {
-			console.error('Failed to fetch stores:', err);
-			error.value = 'Failed to load stores. Please try again later.';
-		}
-	});
 
 	// Import images
 	const magnumImage =

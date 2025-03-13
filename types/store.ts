@@ -13,4 +13,5 @@ export interface Store {
 	city_id: number;
 	city_name: string;
 	two_gis_link: string | null;
+	productCount: number;
 }
