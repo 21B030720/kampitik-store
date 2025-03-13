@@ -28,7 +28,12 @@
       "priceDesc": "Price: High to Low"
     },
     "activitiesComingSoon": "Activities coming soon",
-    "servicesComingSoon": "Services coming soon"
+    "servicesComingSoon": "Services coming soon",
+    "additionalFilters": "Additional Filters",
+    "filters": {
+      "name": "Name",
+      "category": "Category"
+    }
   },
   "search": {
     "catalog": "Catalog"

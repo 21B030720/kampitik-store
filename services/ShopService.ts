@@ -10,6 +10,11 @@ import { BASE_URL } from '~/BASE_URL';
 
 const API_BASE_URL = BASE_URL;
 
+interface FilterParams {
+	name?: string;
+	category_name?: string;
+}
+
 interface PaginatedResponse<T> {
 	previous: string | null;
 	next: string | null;
@@ -24,11 +29,11 @@ export const ShopService = {
 	async getShops(): Promise<Store[]> {
 		try {
 			const response = await fetch(`${API_BASE_URL}/shops`);
-
+			
 			if (!response.ok) {
 				throw new Error(`HTTP error! status: ${response.status}`);
 			}
-
+			
 			const data: PaginatedResponse<Store> = await response.json();
 			return data.results;
 		} catch (error) {
@@ -146,14 +151,18 @@ export const ShopService = {
 		}
 	},
 
-	async getAllProducts(): Promise<Product[]> {
+	async getAllProducts(filters?: FilterParams): Promise<Product[]> {
 		try {
-			const response = await fetch(`${API_BASE_URL}/shops/products/`);
+			const params = new URLSearchParams();
+			if (filters?.name) params.append('name', filters.name);
+			if (filters?.category_name) params.append('category_name', filters.category_name);
 
+			const url = `${API_BASE_URL}/shops/products/${params.toString() ? `?${params.toString()}` : ''}`;
+			const response = await fetch(url);
+			
 			if (!response.ok) {
 				throw new Error(`HTTP error! status: ${response.status}`);
 			}
-
 			const data: PaginatedResponse<Product> = await response.json();
 			return data.results;
 		} catch (error) {
@@ -167,11 +176,11 @@ export const ShopService = {
 			const response = await fetch(
 				`${API_BASE_URL}/shops/products/${productId}/`,
 			);
-
+      
 			if (!response.ok) {
 				throw new Error(`HTTP error! status: ${response.status}`);
 			}
-
+			
 			const data: Product = await response.json();
 			return data;
 		} catch (error) {
@@ -181,9 +190,14 @@ export const ShopService = {
 	},
 
 	// Menu subtypes
-	async getAllPacks(): Promise<Bundle[]> {
+	async getAllPacks(filters?: FilterParams): Promise<Bundle[]> {
 		try {
-			const response = await fetch(`${API_BASE_URL}/shops/bundles/`);
+			const params = new URLSearchParams();
+			if (filters?.name) params.append('name', filters.name);
+			if (filters?.category_name) params.append('category_name', filters.category_name);
+
+			const url = `${API_BASE_URL}/shops/packs/${params.toString() ? `?${params.toString()}` : ''}`;
+			const response = await fetch(url);
 			if (!response.ok) {
 				throw new Error(`HTTP error! status: ${response.status}`);
 			}
@@ -196,9 +210,14 @@ export const ShopService = {
 	},
 
 	// Activities subtypes
-	async getAllEvents(): Promise<Event[]> {
+	async getAllEvents(filters?: FilterParams): Promise<Event[]> {
 		try {
-			const response = await fetch(`${API_BASE_URL}/shops/events/`);
+			const params = new URLSearchParams();
+			if (filters?.name) params.append('name', filters.name);
+			if (filters?.category_name) params.append('category_name', filters.category_name);
+
+			const url = `${API_BASE_URL}/shops/events/${params.toString() ? `?${params.toString()}` : ''}`;
+			const response = await fetch(url);
 			if (!response.ok) {
 				throw new Error(`HTTP error! status: ${response.status}`);
 			}
@@ -210,9 +229,14 @@ export const ShopService = {
 		}
 	},
 
-	async getAllCourses(): Promise<Course[]> {
+	async getAllCourses(filters?: FilterParams): Promise<Course[]> {
 		try {
-			const response = await fetch(`${API_BASE_URL}/shops/courses/`);
+			const params = new URLSearchParams();
+			if (filters?.name) params.append('name', filters.name);
+			if (filters?.category_name) params.append('category_name', filters.category_name);
+
+			const url = `${API_BASE_URL}/shops/courses/${params.toString() ? `?${params.toString()}` : ''}`;
+			const response = await fetch(url);
 			if (!response.ok) {
 				throw new Error(`HTTP error! status: ${response.status}`);
 			}
@@ -225,9 +249,14 @@ export const ShopService = {
 	},
 
 	// Services subtype
-	async getAllServices(): Promise<Service[]> {
+	async getAllServices(filters?: FilterParams): Promise<Service[]> {
 		try {
-			const response = await fetch(`${API_BASE_URL}/shops/services/`);
+			const params = new URLSearchParams();
+			if (filters?.name) params.append('name', filters.name);
+			if (filters?.category_name) params.append('category_name', filters.category_name);
+
+			const url = `${API_BASE_URL}/shops/services/${params.toString() ? `?${params.toString()}` : ''}`;
+			const response = await fetch(url);
 			if (!response.ok) {
 				throw new Error(`HTTP error! status: ${response.status}`);
 			}

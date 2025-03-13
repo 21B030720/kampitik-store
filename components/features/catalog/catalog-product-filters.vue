@@ -74,7 +74,7 @@ import { ContentType, MenuSubtype, ActivitiesSubtype, ServicesSubtype } from '~/
 import { useRoute, useRouter } from 'vue-router';
 import type { LocationQueryValue } from 'vue-router';
 
-	const { t } = useI18n();
+const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const localePath = useLocalePath();
@@ -97,35 +97,65 @@ const contentTypes = [
 
 // Update URL when filters change, but preserve existing query params
 watch(() => props.selectedType, (newType) => {
-	const query: Record<string, LocationQueryValue | LocationQueryValue[]> = { 
-		...route.query,
-		type: newType 
-	};
+	// Create a new query object with proper typing
+	const query: Record<string, string | null> = {};
 	
+	// Copy existing query params, converting to string or null
+	Object.entries(route.query).forEach(([key, value]) => {
+		if (Array.isArray(value)) {
+			query[key] = value[0]?.toString() || null;
+		} else {
+			query[key] = value?.toString() || null;
+		}
+	});
+
+	// Update type
+	query.type = newType;
+
+	// Remove subtype if not needed
 	if (!props.selectedSubtype) {
-		delete query.subtype;
+		query.subtype = null;
 	}
-	
+
+	// Filter out null values
+	const cleanQuery = Object.fromEntries(
+		Object.entries(query).filter(([_, value]) => value !== null)
+	);
+
 	router.push({ 
 		path: route.path,
-		query 
+		query: cleanQuery
 	}).catch(() => {});
 }, { immediate: false });
 
 watch(() => props.selectedSubtype, (newSubtype) => {
-	const query: Record<string, LocationQueryValue | LocationQueryValue[]> = { 
-		...route.query 
-	};
+	// Create a new query object with proper typing
+	const query: Record<string, string | null> = {};
 	
+	// Copy existing query params, converting to string or null
+	Object.entries(route.query).forEach(([key, value]) => {
+		if (Array.isArray(value)) {
+			query[key] = value[0]?.toString() || null;
+		} else {
+			query[key] = value?.toString() || null;
+		}
+	});
+
+	// Update subtype
 	if (newSubtype) {
 		query.subtype = newSubtype;
 	} else {
-		delete query.subtype;
+		query.subtype = null;
 	}
-	
+
+	// Filter out null values
+	const cleanQuery = Object.fromEntries(
+		Object.entries(query).filter(([_, value]) => value !== null)
+	);
+
 	router.push({ 
 		path: route.path,
-		query 
+		query: cleanQuery
 	}).catch(() => {});
 }, { immediate: false });
 

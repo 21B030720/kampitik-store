@@ -9,10 +9,20 @@
 
 		<div class="flex flex-col md:flex-row gap-8">
 			<!-- Content type filter -->
-			<ProductFilters
-				v-model:selected-type="selectedContentType"
-				v-model:selected-subtype="selectedSubtype"
-			/>
+			<div>
+				<ProductFilters
+					v-model:selected-type="selectedContentType"
+					v-model:selected-subtype="selectedSubtype"
+				/>
+
+				<!-- Additional Filters -->
+				<AdditionalFilters
+					v-if="selectedSubtype"
+					v-model:name="filters.name"
+					v-model:category-name="filters.category_name"
+					class="mt-6"
+				/>
+			</div>
 
 			<!-- Content display -->
 			<div class="flex-1">
@@ -83,6 +93,7 @@
 	import ServiceGrid from '~/components/features/catalog/catalog-service-grid.vue';
 	import { useI18n } from 'vue-i18n';
 	import { useRoute } from 'vue-router';
+	import AdditionalFilters from '~/components/features/catalog/catalog-additional-filters.vue';
 
 	const { t } = useI18n();
 	const route = useRoute();
@@ -107,6 +118,18 @@
 		route.query.subtype as string || null
 	);
 
+	// Add filters state
+	const filters = ref({
+		name: '',
+		category_name: ''
+	});
+
+	// Debounce filter changes
+	const debouncedFilters = computed(() => ({
+		name: filters.value.name,
+		category_name: filters.value.category_name
+	}));
+
 	// Watch URL changes to update filters
 	watch(
 		() => route.query,
@@ -125,17 +148,15 @@
 
 	// Watch for filter changes
 	watch(
-		[selectedContentType, selectedSubtype],
-		async () => {
+		[() => selectedContentType.value, () => selectedSubtype.value, debouncedFilters],
+		async ([type, subtype, currentFilters]) => {
 			isLoading.value = true;
 			error.value = null;
 
 			try {
-				// For Menu type, show products by default
-				if (selectedContentType.value === ContentType.MENU) {
-					if (!selectedSubtype.value || selectedSubtype.value === MenuSubtype.PRODUCTS) {
-						const productsData = await ShopService.getAllProducts();
-						// Transform products to ensure nutrition_characteristics is never null
+				if (type === ContentType.MENU) {
+					if (!subtype || subtype === MenuSubtype.PRODUCTS) {
+						const productsData = await ShopService.getAllProducts(currentFilters);
 						products.value = productsData.map(product => ({
 							...product,
 							nutrition_characteristics: product.nutrition_characteristics || {
@@ -145,22 +166,20 @@
 								carbohydrates: 0
 							}
 						}));
-					} else if (selectedSubtype.value === MenuSubtype.PACKS) {
-						packs.value = await ShopService.getAllPacks();
+					} else if (subtype === MenuSubtype.PACKS) {
+						packs.value = await ShopService.getAllPacks(currentFilters);
 					}
 				} 
-				// For Activities type, require subtype selection
-				else if (selectedContentType.value === ContentType.ACTIVITIES) {
-					if (selectedSubtype.value === ActivitiesSubtype.EVENTS) {
-						events.value = await ShopService.getAllEvents();
-					} else if (selectedSubtype.value === ActivitiesSubtype.COURSES) {
-						courses.value = await ShopService.getAllCourses();
+				else if (type === ContentType.ACTIVITIES) {
+					if (subtype === ActivitiesSubtype.EVENTS) {
+						events.value = await ShopService.getAllEvents(currentFilters);
+					} else if (subtype === ActivitiesSubtype.COURSES) {
+						courses.value = await ShopService.getAllCourses(currentFilters);
 					}
 				}
-				// For Services type
-				else if (selectedContentType.value === ContentType.SERVICES) {
-					if (selectedSubtype.value === ServicesSubtype.SERVICES) {
-						services.value = await ShopService.getAllServices();
+				else if (type === ContentType.SERVICES) {
+					if (subtype === ServicesSubtype.SERVICES) {
+						services.value = await ShopService.getAllServices(currentFilters);
 					}
 				}
 			} catch (err) {
@@ -170,7 +189,7 @@
 				isLoading.value = false;
 			}
 		},
-		{ immediate: true } // This makes the watch run immediately when component mounts
+		{ immediate: true }
 	);
 
 	// Import images
