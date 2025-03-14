@@ -36,7 +36,9 @@
       "allCategories": "All Categories"
     },
     "searchByCity": "Select city...",
-    "allCities": "All Cities"
+    "allCities": "All Cities",
+    "noProducts": "No products available",
+    "fetchError": "Failed to fetch products"
   },
   "search": {
     "catalog": "Catalog"

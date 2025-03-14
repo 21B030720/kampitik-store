@@ -39,7 +39,9 @@
 						<ProductGrid
 							v-if="!selectedSubtype || selectedSubtype === MenuSubtype.PRODUCTS"
 							:products="products"
-							@add-to-basket="addToBasket"
+							:total-items="totalItems"
+							:is-loading="isLoading"
+							@page-change="handlePageChange"
 						/>
 						<PackGrid
 							v-else-if="selectedSubtype === MenuSubtype.PACKS"
@@ -99,6 +101,7 @@
 	import { useRoute } from 'vue-router';
 	import AdditionalFilters from '~/components/features/catalog/catalog-additional-filters.vue';
 	import type { ProductFilterParams } from '~/services/ShopService';
+	import { PER_PAGE } from '~/composables/usePagination';
 
 	const { t } = useI18n();
 	const route = useRoute();
@@ -112,16 +115,14 @@
 	const services = ref<Service[]>([]);
 	const isLoading = ref(false);
 	const error = ref<string | null>(null);
+	const totalItems = ref(0);
 
 	// Initialize filters from URL params with proper type checking
 	const selectedContentType = ref<ContentType>(
 		(route.query.type as ContentType) || ContentType.MENU
 	);
 
-	const selectedSubtype = ref<string | null>(
-		// If we have a valid subtype in URL, use it
-		route.query.subtype as string || null
-	);
+	const selectedSubtype = ref<MenuSubtype | ActivitiesSubtype | ServicesSubtype | null>(null);
 
 	// Add filters state with default values
 	const filters = ref<ProductFilterParams>({
@@ -135,7 +136,7 @@
 		category_name: filters.value.category_name
 	}));
 
-	// Watch URL changes to update filters
+	// Watch URL changes to update filters(params from url like type and so on)
 	watch(
 		() => route.query,
 		(query) => {
@@ -146,12 +147,39 @@
 			
 			// Only update subtype if it exists in query
 			if ('subtype' in query) {
-				selectedSubtype.value = query.subtype as string;
+				selectedSubtype.value = query.subtype as MenuSubtype | ActivitiesSubtype | ServicesSubtype | null;
 			}
 		}
 	);
 
-	// Watch for filter changes
+	const handlePageChange = async (params: { page: number; per_page: number }) => {
+		isLoading.value = true;
+		error.value = null;
+
+		try {
+			const response = await ShopService.getAllProducts({
+				...filters.value,
+				...params
+			});
+			products.value = response.results.map(product => ({
+				...product,
+				nutrition_characteristics: product.nutrition_characteristics || {
+					nutritional_value: 0,
+					fats: 0,
+					proteins: 0,
+					carbohydrates: 0
+				}
+			}));
+			totalItems.value = response.count;
+		} catch (err) {
+			console.error('Failed to fetch products:', err);
+			error.value = t('catalog.fetchError');
+		} finally {
+			isLoading.value = false;
+		}
+	};
+
+	// Watch for filter changes(params from url like type and so on)
 	watch(
 		[() => selectedContentType.value, () => selectedSubtype.value, debouncedFilters],
 		async ([type, subtype, currentFilters]) => {
@@ -161,8 +189,12 @@
 			try {
 				if (type === ContentType.MENU) {
 					if (!subtype || subtype === MenuSubtype.PRODUCTS) {
-						const productsData = await ShopService.getAllProducts(currentFilters);
-						products.value = productsData.map(product => ({
+						const response = await ShopService.getAllProducts({
+							...currentFilters,
+							page: 1,
+							per_page: PER_PAGE
+						});
+						products.value = response.results.map(product => ({
 							...product,
 							nutrition_characteristics: product.nutrition_characteristics || {
 								nutritional_value: 0,
@@ -171,6 +203,7 @@
 								carbohydrates: 0
 							}
 						}));
+						totalItems.value = response.count;
 					} else if (subtype === MenuSubtype.PACKS) {
 						packs.value = await ShopService.getAllPacks(currentFilters);
 					}
@@ -197,19 +230,6 @@
 		{ immediate: true }
 	);
 
-	// Import images
-	const magnumImage =
-		'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlMDAh7DttznnRGKvt2KTAMeM0a9RqeqpcAQ&s';
-	const store6Image =
-		'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlMDAh7DttznnRGKvt2KTAMeM0a9RqeqpcAQ&s';
-	const agushaImage =
-		'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRf7sW3JRTOWjhUZgJYHUM_Xj1nYKX_lTZcNw&s';
-
-	// Add to basket functionality
-	const addToBasket = (product: Product) => {
-		// TODO: Implement basket functionality
-		console.log('Adding to basket:', product);
-	};
 </script>
 
 <style scoped>

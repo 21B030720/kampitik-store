@@ -10,7 +10,13 @@ export default defineNuxtConfig({
 	// 	transpile: ['vue-intersect'],
 	// },
 
-	components: false,
+	components: {
+		dirs: [
+			'~/components',
+			'~/components/shared',
+			'~/components/features'
+		]
+	},
 	alias: {
 		components: './components',
 		services: './services',

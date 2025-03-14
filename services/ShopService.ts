@@ -18,6 +18,8 @@ export interface StoreFilterParams {
 export interface ProductFilterParams {
 	name?: string;
 	category_name?: string;
+	page?: number;
+	per_page?: number;
 }
 
 export interface City {
@@ -25,14 +27,11 @@ export interface City {
 	name: string;
 }
 
-interface PaginatedResponse<T> {
-	previous: string | null;
-	next: string | null;
-	count: number;
+export interface PaginatedResponse<T> {
 	results: T[];
-	page_number: number;
-	per_page: number;
-	total_pages: number;
+	count: number;
+	next: string | null;
+	previous: string | null;
 }
 
 export const ShopService = {
@@ -76,14 +75,14 @@ export const ShopService = {
 	async getShopById(storeId: number): Promise<Store> {
 		try {
 			const response = await fetch(`${API_BASE_URL}/shops/${storeId}`);
-
-			if (!response.ok) {
-				throw new Error(`HTTP error! status: ${response.status}`);
-			}
-
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
 			const data: Store = await response.json();
-			return data;
-		} catch (error) {
+      return data;
+    } catch (error) {
 			console.error(`Error fetching shop with id ${storeId}:`, error);
 			throw error;
 		}
@@ -160,8 +159,8 @@ export const ShopService = {
 			return data.results;
 		} catch (error) {
 			console.error(`Error fetching bundles for shop ${shopId}:`, error);
-			throw error;
-		}
+      throw error;
+    }
 	},
 
 	async getCommodityGroupById(id: number): Promise<CommodityGroup> {
@@ -182,20 +181,17 @@ export const ShopService = {
 		}
 	},
 
-	async getAllProducts(filters?: ProductFilterParams): Promise<Product[]> {
+	async getAllProducts(params: ProductFilterParams): Promise<PaginatedResponse<Product>> {
 		try {
-			const params = new URLSearchParams();
-			if (filters?.name) params.append('name', filters.name);
-			if (filters?.category_name) params.append('category_name', filters.category_name);
+			const queryParams = new URLSearchParams();
+			if (params.name) queryParams.set('name', params.name);
+			if (params.category_name) queryParams.set('category_name', params.category_name);
+			if (params.page) queryParams.set('page', params.page.toString());
+			if (params.per_page) queryParams.set('per_page', params.per_page.toString());
 
-			const url = `${API_BASE_URL}/shops/products/${params.toString() ? `?${params.toString()}` : ''}`;
-			const response = await fetch(url);
-			
-			if (!response.ok) {
-				throw new Error(`HTTP error! status: ${response.status}`);
-			}
-			const data: PaginatedResponse<Product> = await response.json();
-			return data.results;
+			const response = await fetch(`${API_BASE_URL}/shops/products/?${queryParams}`);
+			if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+			return await response.json();
 		} catch (error) {
 			console.error('Error fetching products:', error);
 			throw error;
@@ -208,13 +204,13 @@ export const ShopService = {
 				`${API_BASE_URL}/shops/products/${productId}/`,
 			);
       
-			if (!response.ok) {
-				throw new Error(`HTTP error! status: ${response.status}`);
-			}
-			
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
 			const data: Product = await response.json();
-			return data;
-		} catch (error) {
+      return data;
+    } catch (error) {
 			console.error(`Error fetching product ${productId}:`, error);
 			throw error;
 		}
@@ -355,7 +351,7 @@ export const ShopService = {
 			return data.results;
 		} catch (error) {
 			console.error('Error fetching service categories:', error);
-			throw error;
-		}
-	}
+      throw error;
+    }
+  }
 };
