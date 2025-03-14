@@ -227,7 +227,7 @@ export const ShopService = {
 			if (filters?.name) params.append('name', filters.name);
 			if (filters?.category_name) params.append('category_name', filters.category_name);
 
-			const url = `${API_BASE_URL}/shops/packs/${params.toString() ? `?${params.toString()}` : ''}`;
+			const url = `${API_BASE_URL}/shops/bundles/${params.toString() ? `?${params.toString()}` : ''}`;
 			const response = await fetch(url);
 			if (!response.ok) {
 				throw new Error(`HTTP error! status: ${response.status}`);
@@ -298,4 +298,64 @@ export const ShopService = {
 			throw error;
 		}
 	},
+
+	async getProductCategories(): Promise<Category[]> {
+		try {
+			const response = await fetch(`${API_BASE_URL}/shops/products/categories/`);
+			if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+			const data = await response.json();
+			return data.results;
+		} catch (error) {
+			console.error('Error fetching product categories:', error);
+			throw error;
+		}
+	},
+
+	async getBundleCategories(): Promise<Category[]> {
+		try {
+			const response = await fetch(`${API_BASE_URL}/shops/bundles/categories/`);
+			if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+			const data = await response.json();
+			return data.results;
+		} catch (error) {
+			console.error('Error fetching bundle categories:', error);
+			throw error;
+		}
+	},
+
+	async getEventCategories(): Promise<Category[]> {
+		try {
+			const response = await fetch(`${API_BASE_URL}/shops/events/categories/`);
+			if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+			const data = await response.json();
+			return data.results;
+		} catch (error) {
+			console.error('Error fetching event categories:', error);
+			throw error;
+		}
+	},
+
+	async getCourseCategories(): Promise<Category[]> {
+		try {
+			const response = await fetch(`${API_BASE_URL}/shops/courses/categories/`);
+			if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+			const data = await response.json();
+			return data.results;
+		} catch (error) {
+			console.error('Error fetching course categories:', error);
+			throw error;
+		}
+	},
+
+	async getServiceCategories(): Promise<Category[]> {
+		try {
+			const response = await fetch(`${API_BASE_URL}/shops/services/categories/`);
+			if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+			const data = await response.json();
+			return data.results;
+		} catch (error) {
+			console.error('Error fetching service categories:', error);
+			throw error;
+		}
+	}
 };

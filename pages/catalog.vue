@@ -20,6 +20,8 @@
 					v-if="selectedSubtype"
 					:name="filters.name ?? ''"
 					:category-name="filters.category_name ?? ''"
+					:content-type="selectedContentType"
+					:subtype="selectedSubtype"
 					@update:name="filters.name = $event"
 					@update:category-name="filters.category_name = $event"
 					class="mt-6"
