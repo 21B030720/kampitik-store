@@ -38,10 +38,8 @@
 					<template v-if="selectedContentType === ContentType.MENU">
 						<ProductGrid
 							v-if="!selectedSubtype || selectedSubtype === MenuSubtype.PRODUCTS"
-							:products="products"
-							:total-items="totalItems"
-							:is-loading="isLoading"
-							@page-change="handlePageChange"
+							:filters="filters"
+							v-model:products="products"
 						/>
 						<PackGrid
 							v-else-if="selectedSubtype === MenuSubtype.PACKS"
@@ -152,32 +150,7 @@
 		}
 	);
 
-	const handlePageChange = async (params: { page: number; per_page: number }) => {
-		isLoading.value = true;
-		error.value = null;
-
-		try {
-			const response = await ShopService.getAllProducts({
-				...filters.value,
-				...params
-			});
-			products.value = response.results.map(product => ({
-				...product,
-				nutrition_characteristics: product.nutrition_characteristics || {
-					nutritional_value: 0,
-					fats: 0,
-					proteins: 0,
-					carbohydrates: 0
-				}
-			}));
-			totalItems.value = response.count;
-		} catch (err) {
-			console.error('Failed to fetch products:', err);
-			error.value = t('catalog.fetchError');
-		} finally {
-			isLoading.value = false;
-		}
-	};
+	
 
 	// Watch for filter changes(params from url like type and so on)
 	watch(

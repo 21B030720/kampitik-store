@@ -31,25 +31,31 @@
 </template>
 
 <script setup lang="ts">
-	import { ref, watch } from 'vue';
+	import { ref, watch, onMounted } from 'vue';
 	import { useI18n } from 'vue-i18n';
 	import type { Product } from '~/types/product';
 	import { usePagination } from '~/composables/usePagination';
+	import { ShopService } from '~/services/ShopService';
 	import Pagination from '~/components/shared/pagination.vue';
 	import ProductCard from './catalog-product-card.vue';
 
 	const { t } = useI18n();
 	const isLoading = ref(false);
+	const error = ref<string | null>(null);
 
 	const props = defineProps<{
-		products: Product[];
-		totalItems: number;
-		isLoading?: boolean;
+		filters: {
+			name?: string;
+			category_name?: string;
+		};
 	}>();
+
+	const products = ref<Product[]>([]);
+	const totalItems = ref(0);
 
 	const emit = defineEmits<{
 		(e: 'add-to-basket', product: Product): void;
-		(e: 'page-change', params: { page: number; per_page: number }): void;
+		(e: 'update:products', products: Product[]): void;
 	}>();
 
 	const {
@@ -60,19 +66,45 @@
 		setPage
 	} = usePagination();
 
-	// Update total items when products change
-	watch(() => props.totalItems, (total) => {
-		setTotalItems(total);
-	}, { immediate: true });
-
-	// Handle page change
-	const onPageChange = (page: number) => {
+	// Handle page change and fetch data
+	const onPageChange = async (page: number) => {
 		setPage(page);
-		emit('page-change', paginationParams.value);
+		isLoading.value = true;
+		error.value = null;
+
+		try {
+			const response = await ShopService.getAllProducts({
+				...props.filters,
+				...paginationParams.value
+			});
+			
+			products.value = response.results.map(product => ({
+				...product,
+				nutrition_characteristics: product.nutrition_characteristics || {
+					nutritional_value: 0,
+					fats: 0,
+					proteins: 0,
+					carbohydrates: 0
+				}
+			}));
+			
+			totalItems.value = response.count;
+			emit('update:products', products.value);
+		} catch (err) {
+			console.error('Failed to fetch products:', err);
+			error.value = t('catalog.fetchError');
+		} finally {
+			isLoading.value = false;
+		}
 	};
 
-	// Watch for loading state
-	watch(() => props.isLoading, (loading) => {
-		isLoading.value = loading;
-	}, { immediate: true });
+	// Initial data fetch
+	onMounted(() => {
+		onPageChange(1);
+	});
+
+	// Watch filters changes
+	watch(() => props.filters, () => {
+		onPageChange(1); // Reset to first page when filters change
+	}, { deep: true });
 </script>
