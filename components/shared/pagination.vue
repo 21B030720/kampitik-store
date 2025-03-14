@@ -44,6 +44,17 @@
     >
       →
     </button>
+
+    <!-- Items per page selector (optional) -->
+    <select
+      v-if="showPerPage"
+      v-model="perPageModel"
+      class="ml-4 px-2 py-1 border rounded-lg"
+    >
+      <option v-for="size in perPageOptions" :key="size" :value="size">
+        {{ size }} / page
+      </option>
+    </select>
   </div>
 </template>
 
@@ -53,11 +64,20 @@ import { computed } from 'vue';
 const props = defineProps<{
   currentPage: number;
   totalPages: number;
+  perPage?: number;
+  showPerPage?: boolean;
+  perPageOptions?: number[];
 }>();
 
-defineEmits<{
+const emit = defineEmits<{
   (e: 'update:page', page: number): void;
+  (e: 'update:perPage', perPage: number): void;
 }>();
+
+const perPageModel = computed({
+  get: () => props.perPage ?? 10,
+  set: (value: number) => emit('update:perPage', value)
+});
 
 // Show max 5 pages, centered around current page
 const displayedPages = computed(() => {
