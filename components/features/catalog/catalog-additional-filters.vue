@@ -1,22 +1,21 @@
 <template>
-  <div class="bg-white rounded-lg shadow-lg p-4">
-    <h3 class="text-lg font-medium text-gray-900 mb-4">{{ t('catalog.additionalFilters') }}</h3>
-    
-    <div class="space-y-4">
+  <div class="bg-white rounded-lg shadow p-4">
+    <div class="flex flex-wrap gap-4 items-end">
       <!-- Name Filter -->
-      <div>
+      <div class="flex-1 min-w-[200px]">
         <label class="block text-sm font-medium text-gray-700 mb-1">
           {{ t('catalog.filters.name') }}
         </label>
         <input
-          v-model="nameModel"
+          v-model="localName"
           type="text"
           class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+          @input="handleNameInput"
         />
       </div>
 
       <!-- Category Filter -->
-      <div>
+      <div class="flex-1 min-w-[200px]">
         <label class="block text-sm font-medium text-gray-700 mb-1">
           {{ t('catalog.filters.category') }}
         </label>
@@ -49,7 +48,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue';
+import { ref, computed, onMounted, watch, onBeforeUnmount } from 'vue';
 import { useI18n } from 'vue-i18n';
 import type { Category } from '~/types/category';
 import { ShopService } from '~/services/ShopService';
@@ -71,15 +70,31 @@ const emit = defineEmits<{
 
 const categories = ref<Category[]>([]);
 const isLoadingCategories = ref(false);
-
-const nameModel = computed({
-  get: () => props.name ?? '',
-  set: (value: string) => emit('update:name', value)
-});
+const localName = ref(props.name ?? '');
+let debounceTimer: NodeJS.Timeout | null = null;
 
 const categoryModel = computed({
   get: () => props.categoryName ?? '',
   set: (value: string) => emit('update:categoryName', value)
+});
+
+const handleNameInput = () => {
+  // Clear existing timer if it exists
+  if (debounceTimer) {
+    clearTimeout(debounceTimer);
+  }
+  
+  // Set new timer
+  debounceTimer = setTimeout(() => {
+    emit('update:name', localName.value);
+  }, 3000);
+};
+
+// Watch for external name changes
+watch(() => props.name, (newValue) => {
+  if (newValue !== localName.value) {
+    localName.value = newValue ?? '';
+  }
 });
 
 const fetchCategories = async () => {
@@ -112,6 +127,13 @@ const fetchCategories = async () => {
     isLoadingCategories.value = false;
   }
 };
+
+// Clean up timer when component is destroyed
+onBeforeUnmount(() => {
+  if (debounceTimer) {
+    clearTimeout(debounceTimer);
+  }
+});
 
 // Fetch categories when content type or subtype changes
 watch([() => props.contentType, () => props.subtype], () => {

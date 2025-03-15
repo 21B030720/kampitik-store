@@ -14,7 +14,10 @@
 					v-model:selected-type="selectedContentType"
 					v-model:selected-subtype="selectedSubtype"
 				/>
+			</div>
 
+			<!-- Content display -->
+			<div class="flex-1">
 				<!-- Additional Filters -->
 				<AdditionalFilters
 					v-if="selectedSubtype"
@@ -24,12 +27,9 @@
 					:subtype="selectedSubtype"
 					@update:name="filters.name = $event"
 					@update:category-name="filters.category_name = $event"
-					class="mt-6"
+					class="mb-6"
 				/>
-			</div>
 
-			<!-- Content display -->
-			<div class="flex-1">
 				<div v-if="isLoading" class="flex justify-center items-center">
 					<p class="text-gray-500">{{ t('loading') }}</p>
 				</div>

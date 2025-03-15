@@ -149,7 +149,7 @@
 	const navigationLinks = [
 		{ name: 'nav.home', path: '/' },
 		{ name: 'nav.catalog', path: '/catalog' },
-		{ name: 'nav.bonusPoints', path: '/bonus-points' },
+		// { name: 'nav.bonusPoints', path: '/bonus-points' },
 	].map((link) => ({
 		...link,
 		name: t(link.name),

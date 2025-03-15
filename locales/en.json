@@ -33,7 +33,8 @@
     "filters": {
       "name": "Name",
       "category": "Category",
-      "allCategories": "All Categories"
+      "allCategories": "All Categories",
+      "apply": "Apply Filters"
     },
     "searchByCity": "Select city...",
     "allCities": "All Cities",
