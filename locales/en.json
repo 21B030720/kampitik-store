@@ -85,7 +85,8 @@
   "errors": {
     "failedToLoadProduct": "Failed to load product details",
     "failedToLoadStores": "Failed to load stores. Please try again later.",
-    "failedToLoadCities": "Failed to load cities. Please try again later."
+    "failedToLoadCities": "Failed to load cities. Please try again later.",
+    "failedToLoadBundle": "Failed to load bundle details"
   },
   "loading": "Loading...",
   "checkout": {
@@ -170,5 +171,21 @@
     "title": "Chat Assistant",
     "inputPlaceholder": "Type your message...",
     "error": "Sorry, I couldn't process your message. Please try again."
+  },
+  "course": {
+    "company": "Company",
+    "location": "Location",
+    "ageRange": "Age Range"
+  },
+  "event": {
+    "date": "Date",
+    "organizer": "Organizer",
+    "location": "Location",
+    "ageRange": "Age Range",
+    "ticketsLeft": "Tickets Left"
+  },
+  "bundle": {
+    "includedProducts": "Included Products",
+    "discount": "Discount"
   }
 }

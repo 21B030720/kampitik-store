@@ -1,13 +1,24 @@
+interface CoursePrice {
+  id: number;
+  name: string;
+  description: string;
+  price: string;
+  payment_period: string;
+}
+
 export interface Course {
-    id: number;
-    name: string;
-    description: string | null;
-    image: string | null;
-    price: string;
-    shop_id: number;
-    shop_name: string;
-    // Add any other fields that come from the API
-    duration?: string;
-    level?: string;
-    instructor?: string;
+  id: number;
+  title: string;
+  category_id: number;
+  category_name: string;
+  image: string | null;
+  description: string;
+  company: string;
+  contacts: string;
+  social_networks: string | null;
+  location: string;
+  two_gis_link: string;
+  from_age: number;
+  to_age: number;
+  course_prices: CoursePrice[];
 } 

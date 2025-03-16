@@ -238,7 +238,7 @@ export const ShopService = {
 	},
 
 	// Menu subtypes
-	async getAllPacks(filters?: ProductFilterParams): Promise<Bundle[]> {
+	async getAllBundles(filters?: ProductFilterParams): Promise<Bundle[]> {
 		try {
 			const params = new URLSearchParams();
 			if (filters?.name) params.append('name', filters.name);
@@ -264,7 +264,7 @@ export const ShopService = {
 			if (filters?.name) params.append('name', filters.name);
 			if (filters?.category_name) params.append('category_name', filters.category_name);
 
-			const url = `${API_BASE_URL}/shops/events/${params.toString() ? `?${params.toString()}` : ''}`;
+			const url = `${API_BASE_URL}/activities/events/${params.toString() ? `?${params.toString()}` : ''}`;
 			const response = await fetch(url);
 			if (!response.ok) {
 				throw new Error(`HTTP error! status: ${response.status}`);
@@ -283,7 +283,7 @@ export const ShopService = {
 			if (filters?.name) params.append('name', filters.name);
 			if (filters?.category_name) params.append('category_name', filters.category_name);
 
-			const url = `${API_BASE_URL}/shops/courses/${params.toString() ? `?${params.toString()}` : ''}`;
+			const url = `${API_BASE_URL}/activities/courses/${params.toString() ? `?${params.toString()}` : ''}`;
 			const response = await fetch(url);
 			if (!response.ok) {
 				throw new Error(`HTTP error! status: ${response.status}`);
@@ -372,6 +372,53 @@ export const ShopService = {
 			return data.results;
 		} catch (error) {
 			console.error('Error fetching service categories:', error);
+      throw error;
+    }
+  },
+
+  // Bundle details
+  async getBundleById(id: number): Promise<Bundle> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/shops/bundles/${id}/`);
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      return await response.json();
+    } catch (error) {
+      console.error(`Error fetching bundle ${id}:`, error);
+      throw error;
+    }
+  },
+
+  async getBundleProducts(id: number): Promise<Product[]> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/shops/bundles/${id}/products/`);
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      return await response.json();
+    } catch (error) {
+      console.error(`Error fetching bundle products ${id}:`, error);
+      throw error;
+    }
+  },
+
+  // Event details
+  async getEventById(id: number): Promise<Event> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/activities/events/${id}/`);
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      return await response.json();
+    } catch (error) {
+      console.error(`Error fetching event ${id}:`, error);
+      throw error;
+    }
+  },
+
+  // Course details
+  async getCourseById(id: number): Promise<Course> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/activities/courses/${id}/`);
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      return await response.json();
+    } catch (error) {
+      console.error(`Error fetching course ${id}:`, error);
       throw error;
     }
   }

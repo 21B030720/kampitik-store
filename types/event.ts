@@ -1,13 +1,18 @@
 export interface Event {
     id: number;
-    name: string;
-    description: string | null;
+    title: string;
+    category_id: number;
+    category_name: string;
     image: string | null;
+    description: string;
     price: string;
-    shop_id: number;
-    shop_name: string;
-    // Add any other fields that come from the API
-    start_date?: string;
-    end_date?: string;
-    location?: string;
+    tickets_left: number;
+    organizator: string;
+    contacts: string;
+    social_networks: string | null;
+    location: string;
+    two_gis_link: string;
+    date_held: string;
+    from_age: number;
+    to_age: number;
 } 

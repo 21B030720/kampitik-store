@@ -48,6 +48,7 @@
 						<PackGrid
 							v-else-if="selectedSubtype === MenuSubtype.PACKS"
 							:packs="packs"
+							@select="handleBundleSelect"
 						/>
 					</template>
 
@@ -186,7 +187,7 @@
 						}));
 						totalItems.value = response.count;
 					} else if (subtype === MenuSubtype.PACKS) {
-						packs.value = await ShopService.getAllPacks(currentFilters);
+						packs.value = await ShopService.getAllBundles(currentFilters);
 					}
 				} 
 				else if (type === ContentType.ACTIVITIES) {
@@ -210,6 +211,14 @@
 		},
 		{ immediate: true }
 	);
+
+	// Add this to your existing state management
+	const selectedBundle = ref<Bundle | null>(null);
+
+	// Add this handler
+	const handleBundleSelect = (bundle: Bundle) => {
+		selectedBundle.value = bundle;
+	};
 
 </script>
 
