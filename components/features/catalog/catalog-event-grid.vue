@@ -1,17 +1,18 @@
 <template>
 	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-		<div
+		<NuxtLink
 			v-for="event in events"
 			:key="event.id"
-			class="bg-white rounded-lg shadow-lg overflow-hidden"
+			:to="localePath(`/events/${event.id}`)"
+			class="bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow overflow-hidden"
 		>
 			<img
-				v-if="event.image"
-				:src="event.image"
-				:alt="event.title"
-				class="w-full h-48 object-cover"
-				@error="handleImageError"
-			>
+                v-if="event.image"
+                :src="event.image"
+                :alt="event.title"
+                class="w-full h-48 object-cover"
+                @error="handleImageError"
+            >
 			<div class="p-4">
 				<h3 class="font-semibold text-lg mb-2">{{ event.title }}</h3>
 				<p class="text-gray-600 text-sm mb-4">{{ event.description }}</p>
@@ -43,7 +44,7 @@
 					</p>
 				</div>
 			</div>
-		</div>
+		</NuxtLink>
 	</div>
 </template>
 
@@ -52,6 +53,7 @@ import type { Event } from '~/types/event';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
+const localePath = useLocalePath();
 
 defineProps<{
 	events: Event[];

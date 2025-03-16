@@ -35,6 +35,10 @@ export interface PaginatedResponse<T> {
 	next: string | null;
 	previous: string | null;
 }
+export interface ServiceRating {
+	rating: number;
+	comment?: string;
+  }
 
 export const ShopService = {
 	async getCities(): Promise<City[]> {
@@ -241,8 +245,28 @@ export const ShopService = {
 	async getAllBundles(filters?: ProductFilterParams): Promise<Bundle[]> {
 		try {
 			const params = new URLSearchParams();
-			if (filters?.name) params.append('name', filters.name);
-			if (filters?.category_name) params.append('category_name', filters.category_name);
+			const queryParams = new URLSearchParams();
+			
+			console.log('Sending filters to API:', filters);
+			
+			if (filters?.name) {
+				queryParams.set('title', filters.name);
+			}
+			if (filters?.category_name) {
+				queryParams.set('category_name', filters.category_name);
+			}
+			if (filters?.from_age !== null && filters?.from_age !== undefined) {
+				queryParams.set('from_age', filters?.from_age.toString());
+			}
+			if (filters?.to_age !== null && filters?.to_age !== undefined) {
+				queryParams.set('to_age', filters?.to_age.toString());
+			}
+			if (filters?.page) {
+				queryParams.set('page', filters?.page.toString());
+			}
+			if (filters?.per_page) {
+				queryParams.set('per_page', filters?.per_page.toString());
+			}
 
 			const url = `${API_BASE_URL}/shops/bundles/${params.toString() ? `?${params.toString()}` : ''}`;
 			const response = await fetch(url);
@@ -261,8 +285,28 @@ export const ShopService = {
 	async getAllEvents(filters?: ProductFilterParams): Promise<Event[]> {
 		try {
 			const params = new URLSearchParams();
-			if (filters?.name) params.append('name', filters.name);
-			if (filters?.category_name) params.append('category_name', filters.category_name);
+			const queryParams = new URLSearchParams();
+			
+			console.log('Sending filters to API:', filters);
+			
+			if (filters?.name) {
+				queryParams.set('title', filters.name);
+			}
+			if (filters?.category_name) {
+				queryParams.set('category_name', filters.category_name);
+			}
+			if (filters?.from_age !== null && filters?.from_age !== undefined) {
+				queryParams.set('from_age', filters?.from_age.toString());
+			}
+			if (filters?.to_age !== null && filters?.to_age !== undefined) {
+				queryParams.set('to_age', filters?.to_age.toString());
+			}
+			if (filters?.page) {
+				queryParams.set('page', filters?.page.toString());
+			}
+			if (filters?.per_page) {
+				queryParams.set('per_page', filters?.per_page.toString());
+			}
 
 			const url = `${API_BASE_URL}/activities/events/${params.toString() ? `?${params.toString()}` : ''}`;
 			const response = await fetch(url);
@@ -280,8 +324,28 @@ export const ShopService = {
 	async getAllCourses(filters?: ProductFilterParams): Promise<Course[]> {
 		try {
 			const params = new URLSearchParams();
-			if (filters?.name) params.append('name', filters.name);
-			if (filters?.category_name) params.append('category_name', filters.category_name);
+			const queryParams = new URLSearchParams();
+			
+			console.log('Sending filters to API:', filters);
+			
+			if (filters?.name) {
+				queryParams.set('title', filters.name);
+			}
+			if (filters?.category_name) {
+				queryParams.set('category_name', filters.category_name);
+			}
+			if (filters?.from_age !== null && filters?.from_age !== undefined) {
+				queryParams.set('from_age', filters?.from_age.toString());
+			}
+			if (filters?.to_age !== null && filters?.to_age !== undefined) {
+				queryParams.set('to_age', filters?.to_age.toString());
+			}
+			if (filters?.page) {
+				queryParams.set('page', filters?.page.toString());
+			}
+			if (filters?.per_page) {
+				queryParams.set('per_page', filters?.per_page.toString());
+			}
 
 			const url = `${API_BASE_URL}/activities/courses/${params.toString() ? `?${params.toString()}` : ''}`;
 			const response = await fetch(url);
@@ -297,24 +361,31 @@ export const ShopService = {
 	},
 
 	// Services subtype
-	async getAllServices(filters?: ProductFilterParams): Promise<Service[]> {
+	async getAllServices(filters?: ProductFilterParams): Promise<PaginatedResponse<Service>> {
 		try {
-			const params = new URLSearchParams();
-			if (filters?.name) params.append('name', filters.name);
-			if (filters?.category_name) params.append('category_name', filters.category_name);
-
-			const url = `${API_BASE_URL}/shops/services/${params.toString() ? `?${params.toString()}` : ''}`;
-			const response = await fetch(url);
-			if (!response.ok) {
-				throw new Error(`HTTP error! status: ${response.status}`);
-			}
-			const data: PaginatedResponse<Service> = await response.json();
-			return data.results;
+		  const queryParams = new URLSearchParams();
+		  
+		  if (filters?.name) {
+			queryParams.set('title', filters.name);
+		  }
+		  if (filters?.category_name) {
+			queryParams.set('category_name', filters.category_name);
+		  }
+		  if (filters?.page) {
+			queryParams.set('page', filters.page.toString());
+		  }
+		  if (filters?.per_page) {
+			queryParams.set('per_page', filters.per_page.toString());
+		  }
+	
+		  const url = `${API_BASE_URL}/services/${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
+		  const response = await fetch(url);
+		  return await response.json();
 		} catch (error) {
-			console.error('Error fetching services:', error);
-			throw error;
+		  console.error('Error fetching services:', error);
+		  throw error;
 		}
-	},
+	  },
 
 	async getProductCategories(): Promise<Category[]> {
 		try {
@@ -419,6 +490,35 @@ export const ShopService = {
       return await response.json();
     } catch (error) {
       console.error(`Error fetching course ${id}:`, error);
+      throw error;
+    }
+  },
+
+  
+
+  async getServiceById(id: number): Promise<Service> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/services/${id}/`);
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      return await response.json();
+    } catch (error) {
+      console.error(`Error fetching service ${id}:`, error);
+      throw error;
+    }
+  },
+
+  async rateServiceProvider(serviceId: number, rating: ServiceRating): Promise<void> {
+    try {
+      const response = await fetchWithAuth(`${API_BASE_URL}/services/${serviceId}/rate-provider/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(rating),
+      });
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    } catch (error) {
+      console.error('Error rating service provider:', error);
       throw error;
     }
   }

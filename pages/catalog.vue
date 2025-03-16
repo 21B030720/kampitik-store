@@ -48,7 +48,6 @@
 						<PackGrid
 							v-else-if="selectedSubtype === MenuSubtype.PACKS"
 							:packs="packs"
-							@select="handleBundleSelect"
 						/>
 					</template>
 
@@ -105,6 +104,7 @@
 	import AdditionalFilters from '~/components/features/catalog/catalog-additional-filters.vue';
 	import type { ProductFilterParams } from '~/types/product';
 	import { PER_PAGE } from '~/composables/usePagination';
+	import type { PaginatedResponse } from '~/types/category';
 
 	const { t } = useI18n();
 	const route = useRoute();
@@ -199,7 +199,8 @@
 				}
 				else if (type === ContentType.SERVICES) {
 					if (subtype === ServicesSubtype.SERVICES) {
-						services.value = await ShopService.getAllServices(currentFilters);
+						const response = await ShopService.getAllServices(currentFilters);
+						services.value = response.results;
 					}
 				}
 			} catch (err) {
@@ -211,14 +212,6 @@
 		},
 		{ immediate: true }
 	);
-
-	// Add this to your existing state management
-	const selectedBundle = ref<Bundle | null>(null);
-
-	// Add this handler
-	const handleBundleSelect = (bundle: Bundle) => {
-		selectedBundle.value = bundle;
-	};
 
 </script>
 

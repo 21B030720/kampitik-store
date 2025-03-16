@@ -86,7 +86,9 @@
     "failedToLoadProduct": "Failed to load product details",
     "failedToLoadStores": "Failed to load stores. Please try again later.",
     "failedToLoadCities": "Failed to load cities. Please try again later.",
-    "failedToLoadBundle": "Failed to load bundle details"
+    "failedToLoadCourse": "Failed to load course details",
+    "failedToLoadService": "Failed to load service details",
+    "failedToSubmitRating": "Failed to submit rating"
   },
   "loading": "Loading...",
   "checkout": {
@@ -159,7 +161,10 @@
     "proceedToPayment": "Proceed to Payment"
   },
   "common": {
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "viewOnMap": "View on Map",
+    "years": "years",
+    "optional": "optional"
   },
   "payment": {
     "success": "Payment Successful",
@@ -173,9 +178,13 @@
     "error": "Sorry, I couldn't process your message. Please try again."
   },
   "course": {
+    "details": "Course Details",
     "company": "Company",
     "location": "Location",
-    "ageRange": "Age Range"
+    "ageRange": "Age Range",
+    "contacts": "Contacts",
+    "pricingPlans": "Pricing Plans",
+    "per": "per"
   },
   "event": {
     "date": "Date",
@@ -184,8 +193,18 @@
     "ageRange": "Age Range",
     "ticketsLeft": "Tickets Left"
   },
-  "bundle": {
-    "includedProducts": "Included Products",
-    "discount": "Discount"
+  "service": {
+    "provider": "Provider",
+    "type": "Type",
+    "location": "Location",
+    "rating": "Rating",
+    "noRating": "No ratings yet",
+    "providerDetails": "Service Provider",
+    "rateProvider": "Rate this Provider",
+    "review": "Review",
+    "submitRating": "Submit Rating",
+    "online": "Online",
+    "offline": "Offline",
+    "reviewPlaceholder": "Write your review here..."
   }
 }

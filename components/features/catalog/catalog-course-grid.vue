@@ -1,17 +1,18 @@
 <template>
 	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-		<div
+		<NuxtLink
 			v-for="course in courses"
 			:key="course.id"
-			class="bg-white rounded-lg shadow-lg overflow-hidden"
+			:to="localePath(`/courses/${course.id}`)"
+			class="bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow overflow-hidden"
 		>
 			<img
-				v-if="course.image"
-				:src="course.image"
-				:alt="course.title"
-				class="w-full h-48 object-cover"
-				@error="handleImageError"
-			/>
+                v-if="course.image"
+                :src="course.image"
+                :alt="course.title"
+                class="w-full h-48 object-cover"
+                @error="handleImageError"
+            />
 			<div class="p-4">
 				<h3 class="font-semibold text-lg mb-2">{{ course.title }}</h3>
 				<p class="text-gray-600 text-sm mb-4">{{ course.description }}</p>
@@ -47,7 +48,7 @@
 					</div>
 				</div>
 			</div>
-		</div>
+		</NuxtLink>
 	</div>
 </template>
 
@@ -56,6 +57,7 @@ import type { Course } from '~/types/course';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
+const localePath = useLocalePath();
 
 defineProps<{
 	courses: Course[];
