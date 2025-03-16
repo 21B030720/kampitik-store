@@ -22,3 +22,12 @@ export interface Product {
 	shop_name: string;
 	commodity_group: number | null;
 }
+
+export interface ProductFilterParams {
+	name?: string;
+	category_name?: string;
+	from_age?: number | null;
+	to_age?: number | null;
+	page?: number;
+	per_page?: number;
+}

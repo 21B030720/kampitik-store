@@ -34,7 +34,9 @@
       "name": "Name",
       "category": "Category",
       "allCategories": "All Categories",
-      "apply": "Apply Filters"
+      "apply": "Apply Filters",
+      "fromAge": "From Age",
+      "toAge": "To Age"
     },
     "searchByCity": "Select city...",
     "allCities": "All Cities",

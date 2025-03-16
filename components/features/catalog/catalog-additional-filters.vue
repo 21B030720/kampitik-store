@@ -43,6 +43,39 @@
           </div>
         </div>
       </div>
+
+      <!-- Age Range Filters -->
+      <div class="flex gap-4">
+        <!-- From Age -->
+        <div class="min-w-[120px]">
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            {{ t('catalog.filters.from_age') }}
+          </label>
+          <input
+            :value="from_age"
+            type="number"
+            min="0"
+            max="18"
+            class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            @input="handleFromAgeInput"
+          />
+        </div>
+
+        <!-- To Age -->
+        <div class="min-w-[120px]">
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            {{ t('catalog.filters.to_age') }}
+          </label>
+          <input
+            :value="to_age"
+            type="number"
+            min="0"
+            max="18"
+            class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            @input="handleToAgeInput"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -59,41 +92,89 @@ const { t } = useI18n();
 const props = defineProps<{
   name?: string;
   categoryName?: string;
+  from_age?: number | null;
+  to_age?: number | null;
   contentType: ContentType;
   subtype?: MenuSubtype | ActivitiesSubtype | ServicesSubtype;
 }>();
 
 const emit = defineEmits<{
   (e: 'update:name', value: string): void;
-  (e: 'update:categoryName', value: string): void;
+  (e: 'update:category-name', value: string): void;
+  (e: 'update:from-age', value: number | null): void;
+  (e: 'update:to-age', value: number | null): void;
 }>();
 
 const categories = ref<Category[]>([]);
 const isLoadingCategories = ref(false);
 const localName = ref(props.name ?? '');
+const from_age = ref<number | null>(props.from_age ?? null);
+const to_age = ref<number | null>(props.to_age ?? null);
 let debounceTimer: NodeJS.Timeout | null = null;
 
 const categoryModel = computed({
   get: () => props.categoryName ?? '',
-  set: (value: string) => emit('update:categoryName', value)
+  set: (value: string) => emit('update:category-name', value)
 });
 
 const handleNameInput = () => {
-  // Clear existing timer if it exists
   if (debounceTimer) {
     clearTimeout(debounceTimer);
   }
   
-  // Set new timer
   debounceTimer = setTimeout(() => {
     emit('update:name', localName.value);
   }, 3000);
 };
 
-// Watch for external name changes
+const handleFromAgeInput = (e: Event) => {
+  const value = (e.target as HTMLInputElement).value;
+  const numValue = value ? Number(value) : null;
+  console.log('From age input:', { value, numValue });
+  from_age.value = numValue;
+  
+  if (debounceTimer) {
+    clearTimeout(debounceTimer);
+  }
+  
+  debounceTimer = setTimeout(() => {
+    console.log('Emitting from-age:', from_age.value);
+    emit('update:from-age', from_age.value);
+  }, 3000);
+};
+
+const handleToAgeInput = (e: Event) => {
+  const value = (e.target as HTMLInputElement).value;
+  const numValue = value ? Number(value) : null;
+  console.log('To age input:', { value, numValue });
+  to_age.value = numValue;
+  
+  if (debounceTimer) {
+    clearTimeout(debounceTimer);
+  }
+  
+  debounceTimer = setTimeout(() => {
+    console.log('Emitting to-age:', to_age.value);
+    emit('update:to-age', to_age.value);
+  }, 3000);
+};
+
+// Watch for external changes
 watch(() => props.name, (newValue) => {
   if (newValue !== localName.value) {
     localName.value = newValue ?? '';
+  }
+});
+
+watch(() => props.from_age, (newValue) => {
+  if (newValue !== from_age.value) {
+    from_age.value = newValue ?? null;
+  }
+});
+
+watch(() => props.to_age, (newValue) => {
+  if (newValue !== to_age.value) {
+    to_age.value = newValue ?? null;
   }
 });
 

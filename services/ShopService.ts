@@ -18,6 +18,8 @@ export interface StoreFilterParams {
 export interface ProductFilterParams {
 	name?: string;
 	category_name?: string;
+	from_age?: number | null;
+	to_age?: number | null;
 	page?: number;
 	per_page?: number;
 }
@@ -181,13 +183,32 @@ export const ShopService = {
 		}
 	},
 
-	async getAllProducts(params: ProductFilterParams): Promise<PaginatedResponse<Product>> {
+	async getAllProducts(filters: ProductFilterParams): Promise<PaginatedResponse<Product>> {
 		try {
 			const queryParams = new URLSearchParams();
-			if (params.name) queryParams.set('name', params.name);
-			if (params.category_name) queryParams.set('category_name', params.category_name);
-			if (params.page) queryParams.set('page', params.page.toString());
-			if (params.per_page) queryParams.set('per_page', params.per_page.toString());
+			
+			console.log('Sending filters to API:', filters);
+			
+			if (filters.name) {
+				queryParams.set('name', filters.name);
+			}
+			if (filters.category_name) {
+				queryParams.set('category_name', filters.category_name);
+			}
+			if (filters.from_age !== null && filters.from_age !== undefined) {
+				queryParams.set('from_age', filters.from_age.toString());
+			}
+			if (filters.to_age !== null && filters.to_age !== undefined) {
+				queryParams.set('to_age', filters.to_age.toString());
+			}
+			if (filters.page) {
+				queryParams.set('page', filters.page.toString());
+			}
+			if (filters.per_page) {
+				queryParams.set('per_page', filters.per_page.toString());
+			}
+
+			console.log('Final query string:', queryParams.toString());
 
 			const response = await fetch(`${API_BASE_URL}/shops/products/?${queryParams}`);
 			if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);

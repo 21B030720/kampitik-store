@@ -23,10 +23,14 @@
 					v-if="selectedSubtype"
 					:name="filters.name ?? ''"
 					:category-name="filters.category_name ?? ''"
+					:from-age="filters.from_age"
+					:to-age="filters.to_age"
 					:content-type="selectedContentType"
 					:subtype="selectedSubtype"
 					@update:name="filters.name = $event"
 					@update:category-name="filters.category_name = $event"
+					@update:from-age="filters.from_age = $event"
+					@update:to-age="filters.to_age = $event"
 					class="mb-6"
 				/>
 
@@ -98,7 +102,7 @@
 	import { useI18n } from 'vue-i18n';
 	import { useRoute } from 'vue-router';
 	import AdditionalFilters from '~/components/features/catalog/catalog-additional-filters.vue';
-	import type { ProductFilterParams } from '~/services/ShopService';
+	import type { ProductFilterParams } from '~/types/product';
 	import { PER_PAGE } from '~/composables/usePagination';
 
 	const { t } = useI18n();
@@ -122,16 +126,22 @@
 
 	const selectedSubtype = ref<MenuSubtype | ActivitiesSubtype | ServicesSubtype | null>(null);
 
-	// Add filters state with default values
+	// Initialize filters with null values for age fields
 	const filters = ref<ProductFilterParams>({
 		name: '',
-		category_name: ''
+		category_name: '',
+		from_age: null,
+		to_age: null,
+		page: 1,
+		per_page: PER_PAGE
 	});
 
-	// Debounce filter changes
+	// Update debouncedFilters to include age filters
 	const debouncedFilters = computed(() => ({
 		name: filters.value.name,
-		category_name: filters.value.category_name
+		category_name: filters.value.category_name,
+		from_age: filters.value.from_age,
+		to_age: filters.value.to_age
 	}));
 
 	// Watch URL changes to update filters(params from url like type and so on)
@@ -149,8 +159,6 @@
 			}
 		}
 	);
-
-	
 
 	// Watch for filter changes(params from url like type and so on)
 	watch(
