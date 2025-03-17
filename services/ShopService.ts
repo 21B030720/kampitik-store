@@ -368,10 +368,10 @@ export const ShopService = {
 
 	async getProductCategories(): Promise<Category[]> {
 		try {
-			const response = await fetch(`${API_BASE_URL}/activities/products/categories/all`);
+			const response = await fetch(`${API_BASE_URL}/shops/products/categories`);
 			if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 			const data = await response.json();
-			return data;
+			return data.results;
 		} catch (error) {
 			console.error('Error fetching product categories:', error);
 			throw error;
@@ -380,10 +380,10 @@ export const ShopService = {
 
 	async getBundleCategories(): Promise<Category[]> {
 		try {
-			const response = await fetch(`${API_BASE_URL}/shops/bundles/categories/all`);
+			const response = await fetch(`${API_BASE_URL}/shops/bundles/categories`);
 			if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 			const data = await response.json();
-			return data;
+			return data.results;
 		} catch (error) {
 			console.error('Error fetching bundle categories:', error);
 			throw error;
@@ -392,10 +392,10 @@ export const ShopService = {
 
 	async getEventCategories(): Promise<Category[]> {
 		try {
-			const response = await fetch(`${API_BASE_URL}/activities/events/categories/all`);
+			const response = await fetch(`${API_BASE_URL}/activities/events/categories`);
 			if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 			const data = await response.json();
-			return data;
+			return data.results;
 		} catch (error) {
 			console.error('Error fetching event categories:', error);
 			throw error;
@@ -404,10 +404,10 @@ export const ShopService = {
 
 	async getCourseCategories(): Promise<Category[]> {
 		try {
-			const response = await fetch(`${API_BASE_URL}/activities/courses/categories/all`);
+			const response = await fetch(`${API_BASE_URL}/activities/courses/categories`);
 			if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 			const data = await response.json();
-			return data;
+			return data.results;
 		} catch (error) {
 			console.error('Error fetching course categories:', error);
 			throw error;
@@ -416,10 +416,10 @@ export const ShopService = {
 
 	async getServiceCategories(): Promise<Category[]> {
 		try {
-			const response = await fetch(`${API_BASE_URL}/services/categories/all`);
+			const response = await fetch(`${API_BASE_URL}/services/categories`);
 			if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 			const data = await response.json();
-			return data;
+			return data.results;
 		} catch (error) {
 			console.error('Error fetching service categories:', error);
       throw error;

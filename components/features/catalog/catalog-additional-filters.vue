@@ -6,7 +6,7 @@
       <!-- Name and Category Filters in one line -->
       <div class="flex gap-4">
         <!-- Name Filter -->
-        <div class="flex-1">
+        <div class="flex-1 relative">
           <label class="block text-sm font-medium mb-1">
             {{ t('catalog.filters.name') }}
           </label>
@@ -14,19 +14,23 @@
             v-model="localFilters.name"
             type="text"
             class="w-full border rounded-lg p-2"
-            @input="debouncedEmit"
+            @input="handleInput"
           />
+          <!-- Loading indicator for name input -->
+          <div v-if="isDebouncing" class="absolute right-2 top-[34px]">
+            <div class="animate-spin h-5 w-5 border-2 border-blue-500 border-t-transparent rounded-full"></div>
+          </div>
         </div>
 
         <!-- Category Filter -->
-        <div class="flex-1">
+        <div class="flex-1 relative">
           <label class="block text-sm font-medium mb-1">
             {{ t('catalog.filters.category') }}
           </label>
           <select
             v-model="localFilters.category_name"
             class="w-full border rounded-lg p-2"
-            @change="debouncedEmit"
+            @change="handleInput"
           >
             <option value="">{{ t('catalog.filters.allCategories') }}</option>
             <option
@@ -37,6 +41,10 @@
               {{ category.name }}
             </option>
           </select>
+          <!-- Loading indicator for category select -->
+          <div v-if="isDebouncing" class="absolute right-8 top-[34px]">
+            <div class="animate-spin h-5 w-5 border-2 border-blue-500 border-t-transparent rounded-full"></div>
+          </div>
         </div>
       </div>
 
@@ -65,9 +73,8 @@
               type="range"
               :min="0"
               :max="maxAge"
-              :value="localFilters.from_age || 0"
               class="range-input absolute w-full top-1/2 -translate-y-1/2"
-              @input="handleFromAgeInput"
+              @input="handleInput"
             />
 
             <!-- Max Thumb -->
@@ -76,62 +83,43 @@
               type="range"
               :min="0"
               :max="maxAge"
-              :value="localFilters.to_age || maxAge"
               class="range-input absolute w-full top-1/2 -translate-y-1/2"
-              @input="handleToAgeInput"
+              @input="handleInput"
             />
           </div>
-
-          <!-- Age Input Fields -->
-          <!-- <div class="flex gap-4 mt-2">
-            <div class="flex-1">
-              <input
-                v-model.number="localFilters.from_age"
-                type="number"
-                :min="0"
-                :max="maxAge"
-                class="w-full border rounded-lg p-2 text-sm"
-                @input="handleFromAgeInput"
-              />
-            </div>
-            <div class="flex items-center">-</div>
-            <div class="flex-1">
-              <input
-                v-model.number="localFilters.to_age"
-                type="number"
-                :min="0"
-                :max="maxAge"
-                class="w-full border rounded-lg p-2 text-sm"
-                @input="handleToAgeInput"
-              />
-            </div>
-          </div> -->
         </div>
       </div>
 
-      <!-- Apply Button -->
+      <!-- Apply Button with loading state -->
       <button
-        class="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
+        class="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors relative"
         @click="applyFilters"
+        :disabled="isDebouncing"
       >
-        {{ t('catalog.filters.apply') }}
+        <span :class="{ 'opacity-0': isDebouncing }">
+          {{ t('catalog.filters.apply') }}
+        </span>
+        <div 
+          v-if="isDebouncing" 
+          class="absolute inset-0 flex items-center justify-center"
+        >
+          <div class="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></div>
+        </div>
       </button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch, onBeforeUnmount } from 'vue';
+import { ref, reactive, onBeforeUnmount } from 'vue';
 import { useI18n } from 'vue-i18n';
 import type { Category } from '~/types/category';
-import { ShopService } from '~/services/ShopService';
-import { ContentType, MenuSubtype, ActivitiesSubtype, ServicesSubtype } from '~/types/content-type';
-import type { ProductFilterParams } from '~/types/product';
+import type { ProductFilterParams } from '~/services/ShopService';
 
 const { t } = useI18n();
 
 const props = defineProps<{
-  contentType: ContentType;
+  contentType: string;
   categories: Category[];
 }>();
 
@@ -139,87 +127,48 @@ const emit = defineEmits<{
   (e: 'update:filters', filters: ProductFilterParams): void;
 }>();
 
-const maxAge = 100;
+const maxAge = 18;
+const showAgeFilters = true;
 
-// Initialize with default values
-const localFilters = ref<ProductFilterParams>({
+const localFilters = reactive<ProductFilterParams>({
   name: '',
   category_name: '',
   from_age: 0,
-  to_age: 1
+  to_age: maxAge
 });
+
 let debounceTimer: NodeJS.Timeout | null = null;
+const isDebouncing = ref(false);
 
-// Show age filters for products, events, courses, and services
-const showAgeFilters = computed(() => {
-  return [
-    ContentType.MENU,
-    ContentType.ACTIVITIES,
-    ContentType.SERVICES
-  ].includes(props.contentType);
-});
-
-// Debounced emit function
-const debouncedEmit = () => {
+const handleInput = () => {
   if (debounceTimer) {
     clearTimeout(debounceTimer);
   }
-  
+  isDebouncing.value = true;
   debounceTimer = setTimeout(() => {
     emitFilters();
+    isDebouncing.value = false;
   }, 3000);
 };
 
-// Function to emit filters
 const emitFilters = () => {
-  emit('update:filters', {
-    ...localFilters.value,
-    ...(showAgeFilters.value ? {
-      from_age: localFilters.value.from_age,
-      to_age: localFilters.value.to_age
-    } : {
-      from_age: null,
-      to_age: null
-    })
-  });
+  emit('update:filters', { ...localFilters });
 };
 
-// Immediate apply function for the button
 const applyFilters = () => {
   if (debounceTimer) {
     clearTimeout(debounceTimer);
+    debounceTimer = null;
   }
+  isDebouncing.value = false;
   emitFilters();
 };
 
-// Modified handlers for age inputs
-const handleFromAgeInput = () => {
-  const fromAge = localFilters.value.from_age ?? 0;
-  const toAge = localFilters.value.to_age ?? maxAge;
-  
-  // Ensure from_age doesn't exceed to_age
-  if (fromAge > toAge) {
-    localFilters.value.from_age = toAge;
-  }
-  debouncedEmit();
-};
-
-const handleToAgeInput = () => {
-  const fromAge = localFilters.value.from_age ?? 0;
-  const toAge = localFilters.value.to_age ?? maxAge;
-  
-  // Ensure to_age isn't less than from_age
-  if (toAge < fromAge) {
-    localFilters.value.to_age = fromAge;
-  }
-  debouncedEmit();
-};
-
-// Clean up timer when component is destroyed
 onBeforeUnmount(() => {
   if (debounceTimer) {
     clearTimeout(debounceTimer);
   }
+  isDebouncing.value = false;
 });
 </script>
 
@@ -267,11 +216,11 @@ onBeforeUnmount(() => {
 
 /* Custom focus styles */
 .range-input:focus::-webkit-slider-thumb {
-  box-shadow: 0 0 0 3px rgba(var(--color-primary-600), 0.2);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
 }
 
 .range-input:focus::-moz-range-thumb {
-  box-shadow: 0 0 0 3px rgba(var(--color-primary-600), 0.2);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
 }
 
 /* Hover styles */

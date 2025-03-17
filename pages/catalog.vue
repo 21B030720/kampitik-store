@@ -21,7 +21,7 @@
 				<!-- Additional Filters -->
 				<AdditionalFilters
 					:content-type="selectedContentType"
-				:categories="categories"
+					:categories="categories"
 					@update:filters="updateFilters"
 				/>
 
@@ -242,8 +242,7 @@
 	const updateFilters = (newFilters: ProductFilterParams) => {
 		filters.value = {
 			...filters.value,
-			...newFilters,
-			page: 1 // Reset page when filters change
+			...newFilters
 		};
 	};
 
