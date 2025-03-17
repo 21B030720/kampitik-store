@@ -35,8 +35,11 @@
       "category": "Category",
       "allCategories": "All Categories",
       "apply": "Apply Filters",
-      "fromAge": "From Age",
-      "toAge": "To Age"
+      "ageRange": "Age Range",
+      "searchByCity": "Select city...",
+      "allCities": "All Cities",
+      "noProducts": "No products available",
+      "fetchError": "Failed to fetch products"
     },
     "searchByCity": "Select city...",
     "allCities": "All Cities",
@@ -163,8 +166,7 @@
   "common": {
     "cancel": "Cancel",
     "viewOnMap": "View on Map",
-    "years": "years",
-    "optional": "optional"
+    "years": "years"
   },
   "payment": {
     "success": "Payment Successful",
@@ -204,7 +206,6 @@
     "review": "Review",
     "submitRating": "Submit Rating",
     "online": "Online",
-    "offline": "Offline",
-    "reviewPlaceholder": "Write your review here..."
+    "offline": "Offline"
   }
 }
