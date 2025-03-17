@@ -242,52 +242,42 @@ export const ShopService = {
 	},
 
 	// Menu subtypes
-	async getAllBundles(filters?: ProductFilterParams): Promise<Bundle[]> {
+	async getAllBundles(filters?: ProductFilterParams): Promise<PaginatedResponse<Bundle>> {
 		try {
-			const params = new URLSearchParams();
 			const queryParams = new URLSearchParams();
 			
-			console.log('Sending filters to API:', filters);
-			
 			if (filters?.name) {
-				queryParams.set('title', filters.name);
+				queryParams.set('name', filters.name);
 			}
 			if (filters?.category_name) {
 				queryParams.set('category_name', filters.category_name);
 			}
 			if (filters?.from_age !== null && filters?.from_age !== undefined) {
-				queryParams.set('from_age', filters?.from_age.toString());
+				queryParams.set('from_age', filters.from_age.toString());
 			}
 			if (filters?.to_age !== null && filters?.to_age !== undefined) {
-				queryParams.set('to_age', filters?.to_age.toString());
+				queryParams.set('to_age', filters.to_age.toString());
 			}
 			if (filters?.page) {
-				queryParams.set('page', filters?.page.toString());
+				queryParams.set('page', filters.page.toString());
 			}
 			if (filters?.per_page) {
-				queryParams.set('per_page', filters?.per_page.toString());
+				queryParams.set('per_page', filters.per_page.toString());
 			}
 
-			const url = `${API_BASE_URL}/shops/bundles/${params.toString() ? `?${params.toString()}` : ''}`;
+			const url = `${API_BASE_URL}/shops/bundles/${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
 			const response = await fetch(url);
-			if (!response.ok) {
-				throw new Error(`HTTP error! status: ${response.status}`);
-			}
-			const data: PaginatedResponse<Bundle> = await response.json();
-			return data.results;
+			return await response.json();
 		} catch (error) {
-			console.error('Error fetching packs:', error);
+			console.error('Error fetching bundles:', error);
 			throw error;
 		}
 	},
 
 	// Activities subtypes
-	async getAllEvents(filters?: ProductFilterParams): Promise<Event[]> {
+	async getAllEvents(filters?: ProductFilterParams): Promise<PaginatedResponse<Event>> {
 		try {
-			const params = new URLSearchParams();
 			const queryParams = new URLSearchParams();
-			
-			console.log('Sending filters to API:', filters);
 			
 			if (filters?.name) {
 				queryParams.set('title', filters.name);
@@ -296,37 +286,30 @@ export const ShopService = {
 				queryParams.set('category_name', filters.category_name);
 			}
 			if (filters?.from_age !== null && filters?.from_age !== undefined) {
-				queryParams.set('from_age', filters?.from_age.toString());
+				queryParams.set('from_age', filters.from_age.toString());
 			}
 			if (filters?.to_age !== null && filters?.to_age !== undefined) {
-				queryParams.set('to_age', filters?.to_age.toString());
+				queryParams.set('to_age', filters.to_age.toString());
 			}
 			if (filters?.page) {
-				queryParams.set('page', filters?.page.toString());
+				queryParams.set('page', filters.page.toString());
 			}
 			if (filters?.per_page) {
-				queryParams.set('per_page', filters?.per_page.toString());
+				queryParams.set('per_page', filters.per_page.toString());
 			}
 
-			const url = `${API_BASE_URL}/activities/events/${params.toString() ? `?${params.toString()}` : ''}`;
+			const url = `${API_BASE_URL}/activities/events/${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
 			const response = await fetch(url);
-			if (!response.ok) {
-				throw new Error(`HTTP error! status: ${response.status}`);
-			}
-			const data: PaginatedResponse<Event> = await response.json();
-			return data.results;
+			return await response.json();
 		} catch (error) {
 			console.error('Error fetching events:', error);
 			throw error;
 		}
 	},
 
-	async getAllCourses(filters?: ProductFilterParams): Promise<Course[]> {
+	async getAllCourses(filters?: ProductFilterParams): Promise<PaginatedResponse<Course>> {
 		try {
-			const params = new URLSearchParams();
 			const queryParams = new URLSearchParams();
-			
-			console.log('Sending filters to API:', filters);
 			
 			if (filters?.name) {
 				queryParams.set('title', filters.name);
@@ -335,25 +318,21 @@ export const ShopService = {
 				queryParams.set('category_name', filters.category_name);
 			}
 			if (filters?.from_age !== null && filters?.from_age !== undefined) {
-				queryParams.set('from_age', filters?.from_age.toString());
+				queryParams.set('from_age', filters.from_age.toString());
 			}
 			if (filters?.to_age !== null && filters?.to_age !== undefined) {
-				queryParams.set('to_age', filters?.to_age.toString());
+				queryParams.set('to_age', filters.to_age.toString());
 			}
 			if (filters?.page) {
-				queryParams.set('page', filters?.page.toString());
+				queryParams.set('page', filters.page.toString());
 			}
 			if (filters?.per_page) {
-				queryParams.set('per_page', filters?.per_page.toString());
+				queryParams.set('per_page', filters.per_page.toString());
 			}
 
-			const url = `${API_BASE_URL}/activities/courses/${params.toString() ? `?${params.toString()}` : ''}`;
+			const url = `${API_BASE_URL}/activities/courses/${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
 			const response = await fetch(url);
-			if (!response.ok) {
-				throw new Error(`HTTP error! status: ${response.status}`);
-			}
-			const data: PaginatedResponse<Course> = await response.json();
-			return data.results;
+			return await response.json();
 		} catch (error) {
 			console.error('Error fetching courses:', error);
 			throw error;
@@ -389,10 +368,10 @@ export const ShopService = {
 
 	async getProductCategories(): Promise<Category[]> {
 		try {
-			const response = await fetch(`${API_BASE_URL}/shops/products/categories/`);
+			const response = await fetch(`${API_BASE_URL}/activities/products/categories/all`);
 			if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 			const data = await response.json();
-			return data.results;
+			return data;
 		} catch (error) {
 			console.error('Error fetching product categories:', error);
 			throw error;
@@ -401,10 +380,10 @@ export const ShopService = {
 
 	async getBundleCategories(): Promise<Category[]> {
 		try {
-			const response = await fetch(`${API_BASE_URL}/shops/bundles/categories/`);
+			const response = await fetch(`${API_BASE_URL}/shops/bundles/categories/all`);
 			if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 			const data = await response.json();
-			return data.results;
+			return data;
 		} catch (error) {
 			console.error('Error fetching bundle categories:', error);
 			throw error;
@@ -413,10 +392,10 @@ export const ShopService = {
 
 	async getEventCategories(): Promise<Category[]> {
 		try {
-			const response = await fetch(`${API_BASE_URL}/shops/events/categories/`);
+			const response = await fetch(`${API_BASE_URL}/activities/events/categories/all`);
 			if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 			const data = await response.json();
-			return data.results;
+			return data;
 		} catch (error) {
 			console.error('Error fetching event categories:', error);
 			throw error;
@@ -425,10 +404,10 @@ export const ShopService = {
 
 	async getCourseCategories(): Promise<Category[]> {
 		try {
-			const response = await fetch(`${API_BASE_URL}/shops/courses/categories/`);
+			const response = await fetch(`${API_BASE_URL}/activities/courses/categories/all`);
 			if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 			const data = await response.json();
-			return data.results;
+			return data;
 		} catch (error) {
 			console.error('Error fetching course categories:', error);
 			throw error;
@@ -437,10 +416,10 @@ export const ShopService = {
 
 	async getServiceCategories(): Promise<Category[]> {
 		try {
-			const response = await fetch(`${API_BASE_URL}/shops/services/categories/`);
+			const response = await fetch(`${API_BASE_URL}/services/categories/all`);
 			if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 			const data = await response.json();
-			return data.results;
+			return data;
 		} catch (error) {
 			console.error('Error fetching service categories:', error);
       throw error;

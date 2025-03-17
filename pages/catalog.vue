@@ -20,18 +20,9 @@
 			<div class="flex-1">
 				<!-- Additional Filters -->
 				<AdditionalFilters
-					v-if="selectedSubtype"
-					:name="filters.name ?? ''"
-					:category-name="filters.category_name ?? ''"
-					:from-age="filters.from_age"
-					:to-age="filters.to_age"
 					:content-type="selectedContentType"
-					:subtype="selectedSubtype"
-					@update:name="filters.name = $event"
-					@update:category-name="filters.category_name = $event"
-					@update:from-age="filters.from_age = $event"
-					@update:to-age="filters.to_age = $event"
-					class="mb-6"
+				:categories="categories"
+					@update:filters="updateFilters"
 				/>
 
 				<div v-if="isLoading" class="flex justify-center items-center">
@@ -105,6 +96,7 @@
 	import type { ProductFilterParams } from '~/types/product';
 	import { PER_PAGE } from '~/composables/usePagination';
 	import type { PaginatedResponse } from '~/types/category';
+	import type { Category } from '~/types/category';
 
 	const { t } = useI18n();
 	const route = useRoute();
@@ -119,6 +111,7 @@
 	const isLoading = ref(false);
 	const error = ref<string | null>(null);
 	const totalItems = ref(0);
+	const categories = ref<Category[]>([]);
 
 	// Initialize filters from URL params with proper type checking
 	const selectedContentType = ref<ContentType>(
@@ -161,6 +154,44 @@
 		}
 	);
 
+	// Add a function to fetch categories based on content type
+	const fetchCategories = async (type: ContentType, subtype: string | null) => {
+		try {
+			switch (type) {
+				case ContentType.MENU:
+					if (!subtype || subtype === MenuSubtype.PRODUCTS) {
+						categories.value = await ShopService.getProductCategories();
+					} else if (subtype === MenuSubtype.PACKS) {
+						categories.value = await ShopService.getBundleCategories();
+					}
+					break;
+				case ContentType.ACTIVITIES:
+					if (subtype === ActivitiesSubtype.EVENTS) {
+						categories.value = await ShopService.getEventCategories();
+					} else if (subtype === ActivitiesSubtype.COURSES) {
+						categories.value = await ShopService.getCourseCategories();
+					}
+					break;
+				case ContentType.SERVICES:
+					if (subtype === ServicesSubtype.SERVICES) {
+						categories.value = await ShopService.getServiceCategories();
+					}
+					break;
+			}
+		} catch (err) {
+			console.error('Failed to fetch categories:', err);
+		}
+	};
+
+	// Update the watch to include category fetching
+	watch(
+		[() => selectedContentType.value, () => selectedSubtype.value],
+		async ([type, subtype]) => {
+			await fetchCategories(type, subtype);
+		},
+		{ immediate: true }
+	);
+
 	// Watch for filter changes(params from url like type and so on)
 	watch(
 		[() => selectedContentType.value, () => selectedSubtype.value, debouncedFilters],
@@ -171,36 +202,31 @@
 			try {
 				if (type === ContentType.MENU) {
 					if (!subtype || subtype === MenuSubtype.PRODUCTS) {
-						const response = await ShopService.getAllProducts({
-							...currentFilters,
-							page: 1,
-							per_page: PER_PAGE
-						});
-						products.value = response.results.map(product => ({
-							...product,
-							nutrition_characteristics: product.nutrition_characteristics || {
-								nutritional_value: 0,
-								fats: 0,
-								proteins: 0,
-								carbohydrates: 0
-							}
-						}));
+						const response = await ShopService.getAllProducts(currentFilters);
+						products.value = response.results;
 						totalItems.value = response.count;
 					} else if (subtype === MenuSubtype.PACKS) {
-						packs.value = await ShopService.getAllBundles(currentFilters);
+						const response = await ShopService.getAllBundles(currentFilters);
+						packs.value = response.results;
+						totalItems.value = response.count;
 					}
 				} 
 				else if (type === ContentType.ACTIVITIES) {
 					if (subtype === ActivitiesSubtype.EVENTS) {
-						events.value = await ShopService.getAllEvents(currentFilters);
+						const response = await ShopService.getAllEvents(currentFilters);
+						events.value = response.results;
+						totalItems.value = response.count;
 					} else if (subtype === ActivitiesSubtype.COURSES) {
-						courses.value = await ShopService.getAllCourses(currentFilters);
+						const response = await ShopService.getAllCourses(currentFilters);
+						courses.value = response.results;
+						totalItems.value = response.count;
 					}
 				}
 				else if (type === ContentType.SERVICES) {
 					if (subtype === ServicesSubtype.SERVICES) {
 						const response = await ShopService.getAllServices(currentFilters);
 						services.value = response.results;
+						totalItems.value = response.count;
 					}
 				}
 			} catch (err) {
@@ -212,6 +238,14 @@
 		},
 		{ immediate: true }
 	);
+
+	const updateFilters = (newFilters: ProductFilterParams) => {
+		filters.value = {
+			...filters.value,
+			...newFilters,
+			page: 1 // Reset page when filters change
+		};
+	};
 
 </script>
 

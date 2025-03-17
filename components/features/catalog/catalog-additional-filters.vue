@@ -1,81 +1,78 @@
 <template>
-  <div class="bg-white rounded-lg shadow p-4">
-    <div class="flex flex-wrap gap-4 items-end">
+  <div class="bg-white rounded-lg shadow p-4 space-y-4">
+    <h2 class="font-semibold text-lg">{{ t('catalog.additionalFilters') }}</h2>
+    
+    <div class="space-y-4">
       <!-- Name Filter -->
-      <div class="flex-1 min-w-[200px]">
-        <label class="block text-sm font-medium text-gray-700 mb-1">
+      <div>
+        <label class="block text-sm font-medium mb-1">
           {{ t('catalog.filters.name') }}
         </label>
         <input
-          v-model="localName"
+          v-model="localFilters.name"
           type="text"
-          class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-          @input="handleNameInput"
+          class="w-full border rounded-lg p-2"
+          @input="debouncedEmit"
         />
       </div>
 
       <!-- Category Filter -->
-      <div class="flex-1 min-w-[200px]">
-        <label class="block text-sm font-medium text-gray-700 mb-1">
+      <div>
+        <label class="block text-sm font-medium mb-1">
           {{ t('catalog.filters.category') }}
         </label>
-        <div class="relative">
-          <select
-            v-model="categoryModel"
-            class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 appearance-none"
-            :disabled="isLoadingCategories"
+        <select
+          v-model="localFilters.category_name"
+          class="w-full border rounded-lg p-2"
+          @change="debouncedEmit"
+        >
+          <option value="">{{ t('catalog.filters.allCategories') }}</option>
+          <option
+            v-for="category in categories"
+            :key="category.name"
+            :value="category.name"
           >
-            <option value="">{{ t('catalog.filters.allCategories') }}</option>
-            <option
-              v-for="category in categories"
-              :key="category.id"
-              :value="category.name"
-            >
-              {{ category.name }}
-            </option>
-          </select>
-          <!-- Loading indicator -->
-          <div 
-            v-if="isLoadingCategories" 
-            class="absolute right-3 top-1/2 transform -translate-y-1/2"
-          >
-            <div class="animate-spin h-5 w-5 border-2 border-primary-500 rounded-full border-t-transparent"></div>
-          </div>
-        </div>
+            {{ category.name }}
+          </option>
+        </select>
       </div>
 
       <!-- Age Range Filters -->
-      <div class="flex gap-4">
-        <!-- From Age -->
-        <div class="min-w-[120px]">
-          <label class="block text-sm font-medium text-gray-700 mb-1">
-            {{ t('catalog.filters.from_age') }}
+      <div v-if="showAgeFilters" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium mb-1">
+            {{ t('catalog.filters.fromAge') }}
           </label>
           <input
-            :value="from_age"
+            v-model.number="localFilters.from_age"
             type="number"
             min="0"
-            max="18"
-            class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-            @input="handleFromAgeInput"
+            class="w-full border rounded-lg p-2"
+            @input="debouncedEmit"
           />
         </div>
 
-        <!-- To Age -->
-        <div class="min-w-[120px]">
-          <label class="block text-sm font-medium text-gray-700 mb-1">
-            {{ t('catalog.filters.to_age') }}
+        <div>
+          <label class="block text-sm font-medium mb-1">
+            {{ t('catalog.filters.toAge') }}
           </label>
           <input
-            :value="to_age"
+            v-model.number="localFilters.to_age"
             type="number"
             min="0"
-            max="18"
-            class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-            @input="handleToAgeInput"
+            class="w-full border rounded-lg p-2"
+            @input="debouncedEmit"
           />
         </div>
       </div>
+
+      <!-- Apply Button -->
+      <button
+        class="w-full bg-primary-600 text-white py-2 px-4 rounded-lg hover:bg-primary-700"
+        @click="applyFilters"
+      >
+        {{ t('catalog.filters.apply') }}
+      </button>
     </div>
   </div>
 </template>
@@ -86,127 +83,67 @@ import { useI18n } from 'vue-i18n';
 import type { Category } from '~/types/category';
 import { ShopService } from '~/services/ShopService';
 import { ContentType, MenuSubtype, ActivitiesSubtype, ServicesSubtype } from '~/types/content-type';
+import type { ProductFilterParams } from '~/types/product';
 
 const { t } = useI18n();
 
 const props = defineProps<{
-  name?: string;
-  categoryName?: string;
-  from_age?: number | null;
-  to_age?: number | null;
   contentType: ContentType;
-  subtype?: MenuSubtype | ActivitiesSubtype | ServicesSubtype;
+  categories: Category[];
 }>();
 
 const emit = defineEmits<{
-  (e: 'update:name', value: string): void;
-  (e: 'update:category-name', value: string): void;
-  (e: 'update:from-age', value: number | null): void;
-  (e: 'update:to-age', value: number | null): void;
+  (e: 'update:filters', filters: ProductFilterParams): void;
 }>();
 
-const categories = ref<Category[]>([]);
-const isLoadingCategories = ref(false);
-const localName = ref(props.name ?? '');
-const from_age = ref<number | null>(props.from_age ?? null);
-const to_age = ref<number | null>(props.to_age ?? null);
+const localFilters = ref<ProductFilterParams>({
+  name: '',
+  category_name: '',
+  from_age: null,
+  to_age: null
+});
 let debounceTimer: NodeJS.Timeout | null = null;
 
-const categoryModel = computed({
-  get: () => props.categoryName ?? '',
-  set: (value: string) => emit('update:category-name', value)
+// Show age filters for products, events, courses, and services
+const showAgeFilters = computed(() => {
+  return [
+    ContentType.MENU,
+    ContentType.ACTIVITIES,
+    ContentType.SERVICES
+  ].includes(props.contentType);
 });
 
-const handleNameInput = () => {
+// Debounced emit function
+const debouncedEmit = () => {
   if (debounceTimer) {
     clearTimeout(debounceTimer);
   }
   
   debounceTimer = setTimeout(() => {
-    emit('update:name', localName.value);
+    emitFilters();
   }, 3000);
 };
 
-const handleFromAgeInput = (e: Event) => {
-  const value = (e.target as HTMLInputElement).value;
-  const numValue = value ? Number(value) : null;
-  console.log('From age input:', { value, numValue });
-  from_age.value = numValue;
-  
+// Function to emit filters
+const emitFilters = () => {
+  emit('update:filters', {
+    ...localFilters.value,
+    ...(showAgeFilters.value ? {
+      from_age: localFilters.value.from_age,
+      to_age: localFilters.value.to_age
+    } : {
+      from_age: null,
+      to_age: null
+    })
+  });
+};
+
+// Immediate apply function for the button
+const applyFilters = () => {
   if (debounceTimer) {
     clearTimeout(debounceTimer);
   }
-  
-  debounceTimer = setTimeout(() => {
-    console.log('Emitting from-age:', from_age.value);
-    emit('update:from-age', from_age.value);
-  }, 3000);
-};
-
-const handleToAgeInput = (e: Event) => {
-  const value = (e.target as HTMLInputElement).value;
-  const numValue = value ? Number(value) : null;
-  console.log('To age input:', { value, numValue });
-  to_age.value = numValue;
-  
-  if (debounceTimer) {
-    clearTimeout(debounceTimer);
-  }
-  
-  debounceTimer = setTimeout(() => {
-    console.log('Emitting to-age:', to_age.value);
-    emit('update:to-age', to_age.value);
-  }, 3000);
-};
-
-// Watch for external changes
-watch(() => props.name, (newValue) => {
-  if (newValue !== localName.value) {
-    localName.value = newValue ?? '';
-  }
-});
-
-watch(() => props.from_age, (newValue) => {
-  if (newValue !== from_age.value) {
-    from_age.value = newValue ?? null;
-  }
-});
-
-watch(() => props.to_age, (newValue) => {
-  if (newValue !== to_age.value) {
-    to_age.value = newValue ?? null;
-  }
-});
-
-const fetchCategories = async () => {
-  isLoadingCategories.value = true;
-  try {
-    switch (props.contentType) {
-      case ContentType.MENU:
-        if (props.subtype === MenuSubtype.PRODUCTS) {
-          categories.value = await ShopService.getProductCategories();
-        } else if (props.subtype === MenuSubtype.PACKS) {
-          categories.value = await ShopService.getBundleCategories();
-        }
-        break;
-      case ContentType.ACTIVITIES:
-        if (props.subtype === ActivitiesSubtype.EVENTS) {
-          categories.value = await ShopService.getEventCategories();
-        } else if (props.subtype === ActivitiesSubtype.COURSES) {
-          categories.value = await ShopService.getCourseCategories();
-        }
-        break;
-      case ContentType.SERVICES:
-        if (props.subtype === ServicesSubtype.SERVICES) {
-          categories.value = await ShopService.getServiceCategories();
-        }
-        break;
-    }
-  } catch (error) {
-    console.error('Failed to fetch categories:', error);
-  } finally {
-    isLoadingCategories.value = false;
-  }
+  emitFilters();
 };
 
 // Clean up timer when component is destroyed
@@ -214,14 +151,5 @@ onBeforeUnmount(() => {
   if (debounceTimer) {
     clearTimeout(debounceTimer);
   }
-});
-
-// Fetch categories when content type or subtype changes
-watch([() => props.contentType, () => props.subtype], () => {
-  fetchCategories();
-});
-
-onMounted(() => {
-  fetchCategories();
 });
 </script> 
