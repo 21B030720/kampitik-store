@@ -27,26 +27,26 @@
 			</div>
 			<!-- Nutrition info overlay -->
 			<div 
-				v-if="hasNutritionInfo" 
-				class="absolute bottom-0 rounded-lg  left-0 right-0 bg-black/70 text-white p-3 text-sm backdrop-blur-sm"
+				v-if="product.nutrition_characteristics && hasNutritionInfo" 
+				class="absolute bottom-0 rounded-lg left-0 right-0 bg-black/70 text-white p-3 text-sm backdrop-blur-sm"
 			>
 				<p class="font-medium mb-1">{{ t('product.nutritionPer100g') }}:</p>
 				<div class="grid grid-cols-2 gap-x-4 gap-y-1">
 					<p>
 						{{ t('product.nutritionalValue') }}:
-						{{ product.nutrition_characteristics.nutritional_value }}kcal
+						{{ product.nutrition_characteristics?.nutritional_value || 0 }}kcal
 					</p>
 					<p>
 						{{ t('product.fats') }}:
-						{{ product.nutrition_characteristics.fats }}g
+						{{ product.nutrition_characteristics?.fats || 0 }}g
 					</p>
 					<p>
 						{{ t('product.proteins') }}:
-						{{ product.nutrition_characteristics.proteins }}g
+						{{ product.nutrition_characteristics?.proteins || 0 }}g
 					</p>
 					<p>
 						{{ t('product.carbs') }}:
-						{{ product.nutrition_characteristics.carbohydrates }}g
+						{{ product.nutrition_characteristics?.carbohydrates || 0 }}g
 					</p>
 				</div>
 			</div>
@@ -112,19 +112,18 @@
 
 	const hasNutritionInfo = computed(() => {
 		const nutrition = props.product.nutrition_characteristics;
-		return (
-			nutrition.nutritional_value > 0 ||
-			nutrition.fats > 0 ||
-			nutrition.proteins > 0 ||
-			nutrition.carbohydrates > 0
+		return nutrition && (
+			(nutrition.nutritional_value && nutrition.nutritional_value > 0) ||
+			(nutrition.fats && nutrition.fats > 0) ||
+			(nutrition.proteins && nutrition.proteins > 0) ||
+			(nutrition.carbohydrates && nutrition.carbohydrates > 0)
 		);
 	});
 
 	const handleImageError = (event: Event) => {
 		const img = event.target as HTMLImageElement;
 		img.style.display = 'none';
-		img.parentElement!.innerHTML =
-			'<span class="text-gray-400">No image</span>';
+		img.parentElement!.innerHTML = '<span class="text-gray-400">No image</span>';
 	};
 </script>
 

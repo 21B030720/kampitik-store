@@ -21,7 +21,7 @@
 				<!-- Additional Filters -->
 				<AdditionalFilters
 					:content-type="selectedContentType"
-					:categories="categories"
+				:categories="categories"
 					@update:filters="updateFilters"
 				/>
 

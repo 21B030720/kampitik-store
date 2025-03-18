@@ -169,20 +169,22 @@ export const ShopService = {
     }
 	},
 
-	async getCommodityGroupById(id: number): Promise<CommodityGroup> {
+	async getCommodityGroupById(groupId: number): Promise<CommodityGroup> {
 		try {
-			const response = await fetch(
-				`${API_BASE_URL}/shops/commodity-groups/${id}/`,
-			);
-
-			if (!response.ok) {
-				throw new Error(`HTTP error! status: ${response.status}`);
-			}
-
-			const data: CommodityGroup = await response.json();
-			return data;
+			const response = await fetch(`${API_BASE_URL}/shops/commodity-groups/${groupId}/`);
+			return await response.json();
 		} catch (error) {
-			console.error(`Error fetching commodity group with id ${id}:`, error);
+			console.error('Error fetching commodity group:', error);
+			throw error;
+		}
+	},
+
+	async getCommodityGroupProducts(groupId: number): Promise<PaginatedResponse<Product>> {
+		try {
+			const response = await fetch(`${API_BASE_URL}/shops/commodity-groups/${groupId}/products/`);
+			return await response.json();
+		} catch (error) {
+			console.error('Error fetching commodity group products:', error);
 			throw error;
 		}
 	},
@@ -498,6 +500,36 @@ export const ShopService = {
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     } catch (error) {
       console.error('Error rating service provider:', error);
+      throw error;
+    }
+  },
+
+  async getShopCommodityGroupCategories(shopId: number): Promise<PaginatedResponse<Category>> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/shops/commodity-groups/categories/?shop_id=${shopId}`);
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching commodity group categories:', error);
+      throw error;
+    }
+  },
+
+  async getCommodityGroupCategoryById(categoryId: number): Promise<Category> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/shops/commodity-groups/categories/${categoryId}/`);
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching commodity group category:', error);
+      throw error;
+    }
+  },
+
+  async getCommodityGroupsByCategory(shopId: number, categoryId: number): Promise<PaginatedResponse<CommodityGroup>> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/shops/commodity-groups/?shop_id=${shopId}&category_id=${categoryId}`);
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching commodity groups by category:', error);
       throw error;
     }
   }

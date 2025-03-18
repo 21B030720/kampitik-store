@@ -1,13 +1,24 @@
 <template>
 	<div class="container mx-auto px-4 py-8">
 		<ShopHeader :shop="shop" />
-		<ShopCommodityGroups :commodity-groups="commodityGroups" />
+		<ShopCommodityCategories 
+			:categories="commodityCategories.results || []" 
+			:shop-id="shopId"
+		/>
 		<ShopPacks :bundles="bundles" @add-to-basket="addToBasket" />
+		<h2 class="text-2xl font-bold mb-6">{{ t('shop.products') }}</h2>
 		<ShopCategories
-			:categories="categories"
 			v-model:selected-category="selectedCategory"
 		/>
-		<ShopProducts :products="filteredProducts" @add-to-basket="addToBasket" />
+		<div v-if="isLoading" class="text-center py-12">
+			<p class="text-gray-500">{{ t('loading') }}</p>
+		</div>
+		<div v-else>
+			<p class="text-sm text-gray-500 mb-2">Debug: {{ filteredProducts.length }} products</p>
+			<ShopProducts 
+				:products="filteredProducts" 
+			/>
+		</div>
 	</div>
 </template>
 
@@ -19,11 +30,13 @@
 	import type { Category } from '~/types/category';
 	import type { CommodityGroup } from '~/types/commodity-group';
 	import type { Bundle } from '~/types/bundle';
+	import type { PaginatedResponse } from '~/types/category';
 	import ShopHeader from '~/components/features/shop/shop-header.vue';
 	import ShopCategories from '~/components/features/shop/shop-categories.vue';
 	import ShopCommodityGroups from '~/components/features/shop/shop-commodity-groups.vue';
 	import ShopPacks from '~/components/features/shop/shop-packs.vue';
 	import ShopProducts from '~/components/features/shop/shop-products.vue';
+	import ShopCommodityCategories from '~/components/features/shop/shop-commodity-categories.vue';
 	import { useI18n } from 'vue-i18n';
 
 	const { t } = useI18n();
@@ -37,6 +50,16 @@
 	const commodityGroups = ref<CommodityGroup[]>([]);
 	const bundles = ref<Bundle[]>([]);
 	const selectedCategory = ref<number | null>(null);
+	const isLoading = ref(true);
+	const commodityCategories = ref<PaginatedResponse<Category>>({
+		results: [],
+		count: 0,
+		next: null,
+		previous: null,
+		page_number: 1,
+		per_page: 10,
+		total_pages: 1
+	});
 
 	// Filter products based on selected category
 	const filteredProducts = computed(() => {
@@ -48,23 +71,30 @@
 
 	// Fetch all data
 	onMounted(async () => {
+		isLoading.value = true;
 		try {
-			const [shopData, productsData, categoriesData, groupsData, bundlesData] =
+			const [shopData, productsData, categoriesData, groupsData, bundlesData, commodityCategoriesData] =
 				await Promise.all([
 					ShopService.getShopById(shopId),
 					ShopService.getShopProducts(shopId),
 					ShopService.getShopCategories(shopId),
 					ShopService.getShopCommodityGroups(shopId),
 					ShopService.getShopBundles(shopId),
+					ShopService.getShopCommodityGroupCategories(shopId),
 				]);
 
 			shop.value = shopData;
-			products.value = productsData;
+			products.value = Array.isArray(productsData) ? productsData : [];
 			categories.value = categoriesData;
 			commodityGroups.value = groupsData;
 			bundles.value = bundlesData;
+			commodityCategories.value = commodityCategoriesData;
+
+			console.log('Fetched products:', products.value); // Debug log
 		} catch (error) {
 			console.error('Failed to fetch shop data:', error);
+		} finally {
+			isLoading.value = false;
 		}
 	});
 
