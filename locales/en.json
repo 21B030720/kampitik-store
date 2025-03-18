@@ -91,7 +91,10 @@
     "failedToLoadCities": "Failed to load cities. Please try again later.",
     "failedToLoadCourse": "Failed to load course details",
     "failedToLoadService": "Failed to load service details",
-    "failedToSubmitRating": "Failed to submit rating"
+    "failedToSubmitRating": "Failed to submit rating",
+    "failedToLoadKid": "Failed to load child details",
+    "failedToCreateKid": "Failed to create child profile. Please try again.",
+    "failedToUpdateKid": "Failed to update profile. Please try again."
   },
   "loading": "Loading...",
   "checkout": {
@@ -151,7 +154,16 @@
     "clientId": "Client ID",
     "clientInfo": "Client Information",
     "emailVerified": "Verified",
-    "replenishBalance": "Replenish Balance"
+    "replenishBalance": "Replenish Balance",
+    "children": "Children",
+    "kidDetails": "Details",
+    "noKids": "No children added yet",
+    "addChild": "Add Child",
+    "childName": "Child's Name",
+    "childAge": "Age",
+    "childDetails": "Details",
+    "enterChildName": "Enter child's name",
+    "enterChildDetails": "Enter details about your child"
   },
   "balance": {
     "replenishmentTitle": "Balance Replenishment",
@@ -170,7 +182,10 @@
     "cancel": "Cancel",
     "viewOnMap": "View on Map",
     "years": "years",
-    "processing": "Processing..."
+    "processing": "Processing...",
+    "add": "Add",
+    "change": "Change",
+    "save": "Save"
   },
   "payment": {
     "success": "Payment Successful",
@@ -211,5 +226,12 @@
     "submitRating": "Submit Rating",
     "online": "Online",
     "offline": "Offline"
+  },
+  "kid": {
+    "editProfile": "Edit Profile",
+    "image": "Profile Image",
+    "name": "Name",
+    "age": "Age",
+    "details": "Details"
   }
 }
