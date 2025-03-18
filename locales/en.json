@@ -113,7 +113,8 @@
     "selectKid": "Select Child",
     "selectKidLabel": "For Child",
     "selectKidPlaceholder": "Select a child",
-    "noKids": "No children added yet"
+    "noKids": "No children added yet",
+    "selectKidsWarning": "Please select a child for each product"
   },
   "purchase": {
     "confirmed": "Order Confirmed!",

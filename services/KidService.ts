@@ -13,6 +13,9 @@ export const KidService = {
   async getKids(): Promise<PaginatedResponse<Kid>> {
     try {
       const response = await fetchWithAuth(`${BASE_URL}/kids/`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       return await response.json();
     } catch (error) {
       console.error('Error fetching kids:', error);

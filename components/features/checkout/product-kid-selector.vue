@@ -17,17 +17,18 @@
     <!-- Kid Selection Modal -->
     <SelectKidModal
       :show="showKidModal"
-      @close="showKidModal = false"
+      @close="closeModal"
       @select="handleKidSelect"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import type { Kid } from '~/types/kid';
 import { KidService } from '~/services/KidService';
+import SelectKidModal from '~/components/features/checkout/select-kid-modal.vue';
 
 const props = defineProps<{
   productId: number;
@@ -62,5 +63,9 @@ const handleKidSelect = async (kidId: number) => {
   } catch (error) {
     console.error('Failed to fetch kid details:', error);
   }
+};
+
+const closeModal = () => {
+  showKidModal.value = false;
 };
 </script> 

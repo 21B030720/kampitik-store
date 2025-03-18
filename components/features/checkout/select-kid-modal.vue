@@ -135,7 +135,12 @@ const loadKids = async () => {
     console.log('Fetching kids...');
     const response = await KidService.getKids();
     console.log('Kids response:', response);
-    kids.value = response.results;
+    if (response && response.results) {
+      kids.value = response.results;
+    } else {
+      console.error('Invalid response format:', response);
+      error.value = t('errors.failedToLoadKids');
+    }
   } catch (err) {
     console.error('Failed to fetch kids:', err);
     error.value = t('errors.failedToLoadKids');
@@ -145,9 +150,9 @@ const loadKids = async () => {
 };
 
 // Load kids when modal becomes visible
-watch(() => props.show, (newValue) => {
+watch(() => props.show, async (newValue) => {
   if (newValue) {
-    loadKids();
+    await loadKids();
   }
 }, { immediate: true });
 

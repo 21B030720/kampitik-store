@@ -55,24 +55,6 @@
 					<h2 class="text-lg font-semibold mb-4">
 						{{ t('checkout.orderConfirmation') }}
 					</h2>
-					<div class="mb-4">
-						<label class="block text-sm font-medium text-gray-700 mb-1">
-							{{ t('checkout.selectKidLabel') }}
-						</label>
-						<button
-							type="button"
-							class="w-full px-4 py-2 border rounded-lg text-left hover:bg-gray-50 flex items-center justify-between"
-							@click="showKidModal = true"
-						>
-							<span v-if="selectedKid">
-								{{ selectedKid.name }} ({{ selectedKid.age }} {{ t('common.years') }})
-							</span>
-							<span v-else class="text-gray-500">
-								{{ t('checkout.selectKidPlaceholder') }}
-							</span>
-							<span class="text-gray-400">▼</span>
-						</button>
-					</div>
 					<button
 						class="w-full bg-[#128C7E] text-white py-3 rounded-lg hover:bg-[#0E7265] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
 						:disabled="isSubmitting || basketStore.items.length === 0"
@@ -103,25 +85,15 @@
 				</template>
 			</div>
 		</div>
-
-		<!-- Kid Selection Modal -->
-		<SelectKidModal
-			:show="showKidModal"
-			@close="showKidModal = false"
-			@select="handleKidSelect"
-		/>
 	</div>
 </template>
 
 <script setup lang="ts">
-	import { ref } from 'vue';
+	import { ref, computed } from 'vue';
 	import { useI18n } from 'vue-i18n';
 	import { useBasketStore } from '~/stores/useBasketStore';
 	import { useAuthStore } from '~/stores/useAuthStore';
 	import { BASE_URL } from '~/BASE_URL';
-	import SelectKidModal from '~/components/features/checkout/select-kid-modal.vue';
-	import { KidService } from '~/services/KidService';
-	import type { Kid } from '~/types/kid';
 	import ProductKidSelector from '~/components/features/checkout/product-kid-selector.vue';
 
 	const { t } = useI18n();
@@ -132,8 +104,6 @@
 
 	const isSubmitting = ref(false);
 	const error = ref<string | null>(null);
-	const showKidModal = ref(false);
-	const selectedKid = ref<Kid | null>(null);
 
 	const placeholderImage = new URL(
 		'@/assets/images/placeholder-product.png',
@@ -201,28 +171,8 @@
 		}
 	};
 
-	const increaseQuantity = (productId: number) => {
-		basketStore.updateQuantity(productId, basketStore.getItemQuantity(productId) + 1);
-	};
-
-	const decreaseQuantity = (productId: number) => {
-		const currentQuantity = basketStore.getItemQuantity(productId);
-		if (currentQuantity > 1) {
-			basketStore.updateQuantity(productId, currentQuantity - 1);
-		}
-	};
-
 	const handleImageError = (event: Event) => {
 		const img = event.target as HTMLImageElement;
 		img.src = placeholderImage;
-	};
-
-	const handleKidSelect = async (kidId: number) => {
-		try {
-			const kid = await KidService.getKidById(kidId);
-			selectedKid.value = kid;
-		} catch (error) {
-			console.error('Failed to fetch kid details:', error);
-		}
 	};
 </script>
