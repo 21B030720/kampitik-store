@@ -27,21 +27,21 @@
 						<div class="flex items-center gap-2">
 							<button
 								class="p-2 hover:bg-gray-100 rounded-full"
-								@click="decreaseQuantity(item.id, item.quantity)"
+								@click="decreaseQuantity(item)"
 							>
 								-
 							</button>
 							<span class="w-8 text-center">{{ item.quantity }}</span>
 							<button
 								class="p-2 hover:bg-gray-100 rounded-full"
-								@click="increaseQuantity(item.id, item.quantity)"
+								@click="increaseQuantity(item)"
 							>
 								+
 							</button>
 						</div>
 						<button
 							class="p-2 text-red-500 hover:bg-red-50 rounded-full"
-							@click="removeItem(item.id)"
+							@click="removeItem(item)"
 						>
 							×
 						</button>
@@ -64,12 +64,12 @@
 						<span>{{ basketStore.totalPrice }}тг</span>
 					</div>
 				</div>
-				<button
-					class="w-full mt-6 bg-[#128C7E] text-white py-3 rounded-lg hover:bg-[#0E7265] transition-colors"
-					@click="goToCheckout"
+				<NuxtLink
+					:to="localePath('/checkout')"
+					class="w-full mt-6 bg-[#128C7E] text-white py-3 rounded-lg hover:bg-[#0E7265] transition-colors text-center block"
 				>
 					{{ t('basket.checkout') }}
-				</button>
+				</NuxtLink>
 			</div>
 		</div>
 
@@ -89,34 +89,29 @@
 <script setup lang="ts">
 	import { useI18n } from 'vue-i18n';
 	import { useBasketStore } from '~/stores/useBasketStore';
-	import { useRouter } from 'vue-router';
+	import type { BasketItem } from '~/types/basket';
 
 	const { t } = useI18n();
 	const localePath = useLocalePath();
 	const basketStore = useBasketStore();
-	const router = useRouter();
 
 	const placeholderImage = new URL(
 		'@/assets/images/placeholder-product.png',
 		import.meta.url,
 	).href;
 
-	const increaseQuantity = (productId: number, currentQuantity: number) => {
-		basketStore.updateQuantity(productId, currentQuantity + 1);
+	const increaseQuantity = (item: BasketItem) => {
+		basketStore.updateQuantity(item.id, item.quantity + 1, item.type);
 	};
 
-	const decreaseQuantity = (productId: number, currentQuantity: number) => {
-		if (currentQuantity > 1) {
-			basketStore.updateQuantity(productId, currentQuantity - 1);
+	const decreaseQuantity = (item: BasketItem) => {
+		if (item.quantity > 1) {
+			basketStore.updateQuantity(item.id, item.quantity - 1, item.type);
 		}
 	};
 
-	const removeItem = (productId: number) => {
-		basketStore.removeItem(productId);
-	};
-
-	const goToCheckout = () => {
-		router.push(localePath('/checkout'));
+	const removeItem = (item: BasketItem) => {
+		basketStore.removeItem(item.id, item.type);
 	};
 
 	const handleImageError = (event: Event) => {

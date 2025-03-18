@@ -21,23 +21,30 @@
 							@error="handleImageError"
 						>
 						<div class="flex-grow">
-                            <h3 class="font-semibold">{{ item.name }}</h3>
-                            <p class="text-sm text-gray-600">
-                                {{ item.quantity }} × {{ item.price }}тг
-                            </p>
-                        </div>
-                        <div class="text-right">
-                            <p class="font-semibold">
-                                {{ (parseFloat(item.price) * item.quantity).toFixed(2) }}тг
-                            </p>
-                        </div>
-                    </div>
+							<h3 class="font-semibold">{{ item.name }}</h3>
+							<div class="flex items-center gap-4 mt-2">
+								<p class="text-sm text-gray-600">
+									{{ item.quantity }} × {{ item.price }}тг
+								</p>
+								<ProductKidSelector
+									:product-id="item.id"
+									:initial-kid-id="item.kid_id"
+									@update="(kidId) => updateKidForProduct(item.id, kidId)"
+								/>
+							</div>
+						</div>
+						<div class="text-right">
+							<p class="font-semibold">
+								{{ (parseFloat(item.price) * item.quantity).toFixed(2) }}тг
+							</p>
+						</div>
+					</div>
 
-                    <div class="pt-4 border-t">
-                        <div class="flex justify-between text-lg font-semibold">
-                            <span>{{ t('checkout.total') }}</span>
-                            <span>{{ basketStore.totalPrice }}тг</span>
-                        </div>
+					<div class="pt-4 border-t">
+						<div class="flex justify-between text-lg font-semibold">
+							<span>{{ t('checkout.total') }}</span>
+							<span>{{ basketStore.totalPrice }}тг</span>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -48,6 +55,24 @@
 					<h2 class="text-lg font-semibold mb-4">
 						{{ t('checkout.orderConfirmation') }}
 					</h2>
+					<div class="mb-4">
+						<label class="block text-sm font-medium text-gray-700 mb-1">
+							{{ t('checkout.selectKidLabel') }}
+						</label>
+						<button
+							type="button"
+							class="w-full px-4 py-2 border rounded-lg text-left hover:bg-gray-50 flex items-center justify-between"
+							@click="showKidModal = true"
+						>
+							<span v-if="selectedKid">
+								{{ selectedKid.name }} ({{ selectedKid.age }} {{ t('common.years') }})
+							</span>
+							<span v-else class="text-gray-500">
+								{{ t('checkout.selectKidPlaceholder') }}
+							</span>
+							<span class="text-gray-400">▼</span>
+						</button>
+					</div>
 					<button
 						class="w-full bg-[#128C7E] text-white py-3 rounded-lg hover:bg-[#0E7265] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
 						:disabled="isSubmitting || basketStore.items.length === 0"
@@ -78,6 +103,13 @@
 				</template>
 			</div>
 		</div>
+
+		<!-- Kid Selection Modal -->
+		<SelectKidModal
+			:show="showKidModal"
+			@close="showKidModal = false"
+			@select="handleKidSelect"
+		/>
 	</div>
 </template>
 
@@ -87,6 +119,10 @@
 	import { useBasketStore } from '~/stores/useBasketStore';
 	import { useAuthStore } from '~/stores/useAuthStore';
 	import { BASE_URL } from '~/BASE_URL';
+	import SelectKidModal from '~/components/features/checkout/select-kid-modal.vue';
+	import { KidService } from '~/services/KidService';
+	import type { Kid } from '~/types/kid';
+	import ProductKidSelector from '~/components/features/checkout/product-kid-selector.vue';
 
 	const { t } = useI18n();
 	const router = useRouter();
@@ -96,6 +132,8 @@
 
 	const isSubmitting = ref(false);
 	const error = ref<string | null>(null);
+	const showKidModal = ref(false);
+	const selectedKid = ref<Kid | null>(null);
 
 	const placeholderImage = new URL(
 		'@/assets/images/placeholder-product.png',
@@ -111,6 +149,10 @@
 		item_type: 'PRODUCT' | 'BUNDLE';
 	}
 
+	const updateKidForProduct = (productId: number, kidId: number | null) => {
+		basketStore.updateKidForProduct(productId, kidId);
+	};
+
 	const submitOrder = async () => {
 		if (basketStore.items.length === 0) return;
 		
@@ -121,7 +163,7 @@
 			const orderItems: OrderItem[] = basketStore.items.map(item => ({
 				product_id: item.type === 'PRODUCT' ? item.id : null,
 				bundle_id: item.type === 'BUNDLE' ? item.id : null,
-				for_kid_id: null,
+				for_kid_id: item.kid_id || null,
 				discount: "0",
 				quantity: item.quantity.toString(),
 				item_type: item.type === 'PRODUCT' ? 'PRODUCT' : 'BUNDLE'
@@ -173,5 +215,14 @@
 	const handleImageError = (event: Event) => {
 		const img = event.target as HTMLImageElement;
 		img.src = placeholderImage;
+	};
+
+	const handleKidSelect = async (kidId: number) => {
+		try {
+			const kid = await KidService.getKidById(kidId);
+			selectedKid.value = kid;
+		} catch (error) {
+			console.error('Failed to fetch kid details:', error);
+		}
 	};
 </script>

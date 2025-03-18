@@ -94,7 +94,8 @@
     "failedToSubmitRating": "Failed to submit rating",
     "failedToLoadKid": "Failed to load child details",
     "failedToCreateKid": "Failed to create child profile. Please try again.",
-    "failedToUpdateKid": "Failed to update profile. Please try again."
+    "failedToUpdateKid": "Failed to update profile. Please try again.",
+    "failedToLoadKids": "Failed to load children list"
   },
   "loading": "Loading...",
   "checkout": {
@@ -108,7 +109,11 @@
     "total": "Total",
     "pleaseLoginFirst": "Please log in to complete your order",
     "orderConfirmation": "Order Confirmation",
-    "orderError": "Failed to place order. Please try again."
+    "orderError": "Failed to place order. Please try again.",
+    "selectKid": "Select Child",
+    "selectKidLabel": "For Child",
+    "selectKidPlaceholder": "Select a child",
+    "noKids": "No children added yet"
   },
   "purchase": {
     "confirmed": "Order Confirmed!",
@@ -185,7 +190,8 @@
     "processing": "Processing...",
     "add": "Add",
     "change": "Change",
-    "save": "Save"
+    "save": "Save",
+    "confirm": "Confirm"
   },
   "payment": {
     "success": "Payment Successful",

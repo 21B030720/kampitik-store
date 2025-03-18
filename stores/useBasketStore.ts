@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import type { Product } from '~/types/product';
 import type { Bundle } from '~/types/bundle';
+import type { BasketItem } from '~/types/basket';
 
 export type BasketItemType = 'PRODUCT' | 'BUNDLE';
 
@@ -11,6 +12,7 @@ export interface BasketItem {
 	image?: string | null;
 	quantity: number;
 	type: BasketItemType;
+	kid_id?: number | null;
 	[key: string]: any;
 }
 
@@ -41,15 +43,14 @@ export const useBasketStore = defineStore('basket', {
 	},
 
 	actions: {
-		addItem(item: BasketItem) {
+		addItem(item: Omit<BasketItem, 'quantity'>) {
 			const existingItem = this.items.find(
 				(i) => i.id === item.id && i.type === item.type
 			);
-
 			if (existingItem) {
 				existingItem.quantity++;
 			} else {
-				this.items.push({ ...item, quantity: 1 });
+				this.items.push({ ...item, quantity: 1, kid_id: null });
 			}
 		},
 
@@ -68,6 +69,13 @@ export const useBasketStore = defineStore('basket', {
 			);
 			if (item) {
 				item.quantity = quantity;
+			}
+		},
+
+		updateKidForProduct(productId: number, kidId: number | null) {
+			const item = this.items.find(item => item.id === productId);
+			if (item) {
+				item.kid_id = kidId;
 			}
 		},
 
