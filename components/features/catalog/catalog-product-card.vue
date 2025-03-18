@@ -80,11 +80,11 @@
 
 			<!-- Price and Add to Basket Button in horizontal layout -->
 			<div class="mt-2 pt-2 border-t flex items-center justify-between">
-				<p v-if="!basketStore.getItemQuantity(product.id)" class="text-gray-600 font-medium whitespace-nowrap">
+				<p v-if="!basketStore.getItemQuantity(product.id, 'PRODUCT')" class="text-gray-600 font-medium whitespace-nowrap">
 					{{ product.price }}тг/{{ product.measure }}
 				</p>
 				<AddToBasketButton 
-					:product="product" 
+					:item="{ ...product, type: 'PRODUCT' as const }" 
 					class="ml-auto" 
 				/>
 			</div>

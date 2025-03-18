@@ -104,7 +104,8 @@
     "placeOrder": "Place Order",
     "total": "Total",
     "pleaseLoginFirst": "Please log in to complete your order",
-    "orderConfirmation": "Order Confirmation"
+    "orderConfirmation": "Order Confirmation",
+    "orderError": "Failed to place order. Please try again."
   },
   "purchase": {
     "confirmed": "Order Confirmed!",

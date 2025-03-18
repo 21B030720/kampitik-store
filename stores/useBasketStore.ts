@@ -1,9 +1,17 @@
 import { defineStore } from 'pinia';
 import type { Product } from '~/types/product';
+import type { Bundle } from '~/types/bundle';
 
-interface BasketItem extends Product {
+export type BasketItemType = 'PRODUCT' | 'BUNDLE';
+
+export interface BasketItem {
+	id: number;
+	name: string;
+	price: string;
+	image?: string | null;
 	quantity: number;
-	type: 'PRODUCT' | 'BUNDLE';
+	type: BasketItemType;
+	[key: string]: any;
 }
 
 export const useBasketStore = defineStore('basket', {
@@ -24,32 +32,40 @@ export const useBasketStore = defineStore('basket', {
 				.toFixed(2);
 		},
 
-		getItemQuantity: (state) => (productId: number) => {
-			const item = state.items.find((item) => item.id === productId);
+		getItemQuantity: (state) => (itemId: number, type: BasketItemType) => {
+			const item = state.items.find(
+				(item) => item.id === itemId && item.type === type
+			);
 			return item?.quantity || 0;
 		},
 	},
 
 	actions: {
-		addItem(product: Product) {
-			const existingItem = this.items.find((item) => item.id === product.id);
+		addItem(item: BasketItem) {
+			const existingItem = this.items.find(
+				(i) => i.id === item.id && i.type === item.type
+			);
 
 			if (existingItem) {
 				existingItem.quantity++;
 			} else {
-				this.items.push({ ...product, quantity: 1, type: 'PRODUCT' });
+				this.items.push({ ...item, quantity: 1 });
 			}
 		},
 
-		removeItem(productId: number) {
-			const index = this.items.findIndex((item) => item.id === productId);
+		removeItem(itemId: number, type: BasketItemType) {
+			const index = this.items.findIndex(
+				(item) => item.id === itemId && item.type === type
+			);
 			if (index > -1) {
 				this.items.splice(index, 1);
 			}
 		},
 
-		updateQuantity(productId: number, quantity: number) {
-			const item = this.items.find((item) => item.id === productId);
+		updateQuantity(itemId: number, quantity: number, type: BasketItemType) {
+			const item = this.items.find(
+				(item) => item.id === itemId && item.type === type
+			);
 			if (item) {
 				item.quantity = quantity;
 			}

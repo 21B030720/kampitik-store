@@ -55,40 +55,44 @@
 	import { useI18n } from 'vue-i18n';
 	import { useBasketStore } from '~/stores/useBasketStore';
 	import type { Product } from '~/types/product';
+	import type { Bundle } from '~/types/bundle';
+	import type { BasketItemType } from '~/stores/useBasketStore';
+
+	type ItemWithType = (Product | Bundle) & { type: BasketItemType };
 
 	const props = defineProps<{
-		product: Product;
+		item: ItemWithType;
 	}>();
 
 	const { t } = useI18n();
 	const basketStore = useBasketStore();
 
-	const quantity = computed(() =>
-		basketStore.getItemQuantity(props.product.id),
-	);
+	const quantity = computed(() => {
+		return basketStore.getItemQuantity(props.item.id, props.item.type);
+	});
 
 	const totalPrice = computed(() => {
-		return (parseFloat(props.product.price) * quantity.value).toFixed(0);
+		return (parseFloat(props.item.price) * quantity.value).toFixed(0);
 	});
 
 	const addToBasket = () => {
-		basketStore.addItem(props.product);
+		basketStore.addItem(props.item);
 	};
 
 	const increaseQuantity = () => {
-		basketStore.updateQuantity(props.product.id, quantity.value + 1);
+		basketStore.updateQuantity(props.item.id, quantity.value + 1, props.item.type);
 	};
 
 	const decreaseQuantity = () => {
 		if (quantity.value > 1) {
-			basketStore.updateQuantity(props.product.id, quantity.value - 1);
+			basketStore.updateQuantity(props.item.id, quantity.value - 1, props.item.type);
 		} else {
-			basketStore.removeItem(props.product.id);
+			basketStore.removeItem(props.item.id, props.item.type);
 		}
 	};
 
 	const removeItem = () => {
-		basketStore.removeItem(props.product.id);
+		basketStore.removeItem(props.item.id, props.item.type);
 	};
 </script>
 

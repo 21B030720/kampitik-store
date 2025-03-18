@@ -55,6 +55,12 @@
 					>
 						{{ isSubmitting ? t('common.processing') : t('checkout.placeOrder') }}
 					</button>
+					<div 
+						v-if="error" 
+						class="mt-4 p-3 bg-red-50 border border-red-200 text-red-600 rounded-lg text-sm"
+					>
+						{{ error }}
+					</div>
 				</template>
 
 				<template v-else>
@@ -89,6 +95,7 @@
 	const authStore = useAuthStore();
 
 	const isSubmitting = ref(false);
+	const error = ref<string | null>(null);
 
 	const placeholderImage = new URL(
 		'@/assets/images/placeholder-product.png',
@@ -108,6 +115,8 @@
 		if (basketStore.items.length === 0) return;
 		
 		isSubmitting.value = true;
+		error.value = null;
+		
 		try {
 			const orderItems: OrderItem[] = basketStore.items.map(item => ({
 				product_id: item.type === 'PRODUCT' ? item.id : null,
@@ -133,17 +142,18 @@
 			});
 
 			if (!response.ok) {
-				throw new Error(`HTTP error! status: ${response.status}`);
+				const errorData = await response.json().catch(() => null);
+				throw new Error(errorData?.detail || `HTTP error! status: ${response.status}`);
 			}
 
 			// Clear basket after successful order
 			basketStore.clearBasket();
 			
-			// Redirect to success page or show success message
+			// Redirect to success page
 			await router.push(localePath('/purchase-confirmation'));
-		} catch (error) {
-			console.error('Failed to submit order:', error);
-			// Handle error (show error message to user)
+		} catch (err) {
+			console.error('Failed to submit order:', err);
+			error.value = err instanceof Error ? err.message : t('checkout.orderError');
 		} finally {
 			isSubmitting.value = false;
 		}
