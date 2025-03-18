@@ -3,6 +3,7 @@ import type { Product } from '~/types/product';
 
 interface BasketItem extends Product {
 	quantity: number;
+	type: 'PRODUCT' | 'BUNDLE';
 }
 
 export const useBasketStore = defineStore('basket', {
@@ -36,7 +37,7 @@ export const useBasketStore = defineStore('basket', {
 			if (existingItem) {
 				existingItem.quantity++;
 			} else {
-				this.items.push({ ...product, quantity: 1 });
+				this.items.push({ ...product, quantity: 1, type: 'PRODUCT' });
 			}
 		},
 

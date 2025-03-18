@@ -102,7 +102,9 @@
     "phone": "Phone Number",
     "address": "Delivery Address",
     "placeOrder": "Place Order",
-    "total": "Total"
+    "total": "Total",
+    "pleaseLoginFirst": "Please log in to complete your order",
+    "orderConfirmation": "Order Confirmation"
   },
   "purchase": {
     "confirmed": "Order Confirmed!",
@@ -166,7 +168,8 @@
   "common": {
     "cancel": "Cancel",
     "viewOnMap": "View on Map",
-    "years": "years"
+    "years": "years",
+    "processing": "Processing..."
   },
   "payment": {
     "success": "Payment Successful",
