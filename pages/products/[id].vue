@@ -86,7 +86,13 @@
 					</div>
 
 					<!-- Add to Basket Button -->
-					<AddToBasketButton :product="product" />
+					<AddToBasketButton 
+                        v-if="product"
+                        :item="{
+                            ...product,
+                            type: 'PRODUCT'
+                        }" 
+                    />
 				</div>
 			</div>
 		</div>
@@ -109,6 +115,12 @@
 				{{ t('back.toCatalog') }}
 			</NuxtLink>
 		</div>
+		<ReviewsSection
+            :fetch-reviews="() => ShopService.getProductReviews(productId)"
+            :submit-review="(rating, review) => ShopService.submitProductReview(productId, rating, review)"
+            :fetch-my-review="() => ShopService.getMyProductReview(productId)"
+            class="mt-8"
+        />
 	</div>
 </template>
 
@@ -119,6 +131,7 @@
 	import { ShopService } from '~/services/ShopService';
 	import type { Product } from '~/types/product';
 	import AddToBasketButton from '~/components/shared/add-to-basket-button.vue';
+	import ReviewsSection from '~/components/shared/reviews-section.vue';
 
 	const { t } = useI18n();
 	const localePath = useLocalePath();

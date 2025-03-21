@@ -7,6 +7,8 @@ import type { Event } from '~/types/event';
 import type { Course } from '~/types/course';
 import type { Service } from '~/types/service';
 import { BASE_URL } from '~/BASE_URL';
+import type { Review } from '~/types/review';
+import { fetchWithAuth } from '~/utils/api';
 
 const API_BASE_URL = BASE_URL;
 
@@ -531,6 +533,45 @@ export const ShopService = {
     } catch (error) {
       console.error('Error fetching commodity groups by category:', error);
       throw error;
+    }
+  },
+  
+  async getProductReviews(productId: number): Promise<Review[]> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/shops/products/${productId}/product-reviews`);
+      if (!response.ok) 
+      throw new Error(`HTTP error! status: ${response.status}`);
+      return await response.json();
+    } catch (error) {
+      console.error(`Error fetching product reviews ${productId}:`, error);
+      throw error;
+    }
+  },
+  
+  async submitProductReview(productId: number, rating: number, review: string): Promise<void> {
+    try {
+      const response = await fetchWithAuth(`${API_BASE_URL}/shops/products/${productId}/rate-product/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ rating, review }),
+      });
+      
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    } catch (error) {
+      console.error('Error submitting product review:', error);
+      throw error;
+    }
+  },
+  
+  async getMyProductReview(productId: number): Promise<Review | null> {
+    try {
+      const response = await fetchWithAuth(`${API_BASE_URL}/shops/products/${productId}/my-review/`);
+      return await response.json();
+    } catch (error) {
+      // Return null if no review exists or there's an error
+      return null;
     }
   }
 };

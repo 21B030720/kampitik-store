@@ -7,6 +7,7 @@ interface NutritionCharacteristics {
 
 export interface Product {
 	id: number;
+	// type: "PRODUCT",
 	name: string;
 	image: string | null;
 	description: string;
