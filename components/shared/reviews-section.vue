@@ -58,13 +58,13 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
-import type { Review } from '~/types/review';
+import type { Review, MyReview } from '~/types/review';
 import ReviewInput from './review-input.vue';
 
 const props = defineProps<{
   fetchReviews: () => Promise<Review[]>;
   submitReview: (rating: number, review: string) => Promise<void>;
-  fetchMyReview: () => Promise<Review | null>;
+  fetchMyReview: () => Promise<MyReview | null>;
 }>();
 
 const myReview = ref<Review | null>(null);

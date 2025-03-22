@@ -96,16 +96,16 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-import type { Review } from '~/types/review';
+import type { Review, MyReview } from '~/types/review';
 
 const props = defineProps<{
-  existingReview?: Review | null;
+  existingReview?: MyReview | null;
   onSubmit: (rating: number, review: string) => Promise<void>;
 }>();
 
 const { t } = useI18n();
 
-const isEditing = ref(false);
+const isEditing = ref(!props.existingReview);
 const rating = ref(props.existingReview?.rating || 0);
 const hoverRating = ref(0);
 const reviewText = ref(props.existingReview?.review || '');
@@ -126,6 +126,7 @@ const startEditing = () => {
 };
 
 const cancelEditing = () => {
+  if (!props.existingReview) return;
   isEditing.value = false;
   rating.value = props.existingReview?.rating || 0;
   reviewText.value = props.existingReview?.review || '';
@@ -152,9 +153,16 @@ const submitReview = async () => {
 
 // Watch for changes in existingReview
 watch(() => props.existingReview, (newReview) => {
-  if (newReview) {
-    rating.value = newReview.rating;
-    reviewText.value = newReview.review;
-  }
+  if (newReview === null || newReview === undefined || newReview.client_id === null) {
+    console.log(newReview);
+      isEditing.value = true;
+      rating.value = 0;
+      reviewText.value = '';
+    } else {
+      console.log(newReview);
+      isEditing.value = false;
+      rating.value = newReview.rating;
+      reviewText.value = newReview.review;
+    }
 }, { immediate: true });
 </script>

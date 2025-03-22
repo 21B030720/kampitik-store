@@ -7,7 +7,7 @@ import type { Event } from '~/types/event';
 import type { Course } from '~/types/course';
 import type { Service } from '~/types/service';
 import { BASE_URL } from '~/BASE_URL';
-import type { Review } from '~/types/review';
+import type { MyReview, Review } from '~/types/review';
 import { fetchWithAuth } from '~/utils/api';
 
 const API_BASE_URL = BASE_URL;
@@ -548,6 +548,18 @@ export const ShopService = {
     }
   },
   
+  async getBundleReviews(bundleId: number): Promise<Review[]> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/shops/bundles/${bundleId}/bundle-reviews`);
+      if (!response.ok) 
+      throw new Error(`HTTP error! status: ${response.status}`);
+      return await response.json();
+    } catch (error) {
+      console.error(`Error fetching bundle reviews ${bundleId}:`, error);
+      throw error;
+    }
+  },
+  
   async submitProductReview(productId: number, rating: number, review: string): Promise<void> {
     try {
       const response = await fetchWithAuth(`${API_BASE_URL}/shops/products/${productId}/rate-product/`, {
@@ -565,9 +577,36 @@ export const ShopService = {
     }
   },
   
-  async getMyProductReview(productId: number): Promise<Review | null> {
+  async submitBundleReview(bundleId: number, rating: number, review: string): Promise<void> {
+    try {
+      const response = await fetchWithAuth(`${API_BASE_URL}/shops/bundles/${bundleId}/rate-bundle/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ rating, review }),
+      });
+      
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    } catch (error) {
+      console.error('Error submitting bundle review:', error);
+      throw error;
+    }
+  },
+  
+  async getMyProductReview(productId: number): Promise<MyReview | null> {
     try {
       const response = await fetchWithAuth(`${API_BASE_URL}/shops/products/${productId}/my-review/`);
+      return await response.json();
+    } catch (error) {
+      // Return null if no review exists or there's an error
+      return null;
+    }
+  },
+  
+  async getMyBundleReview(bundleId: number): Promise<MyReview | null> {
+    try {
+      const response = await fetchWithAuth(`${API_BASE_URL}/shops/bundles/${bundleId}/my-review/`);
       return await response.json();
     } catch (error) {
       // Return null if no review exists or there's an error

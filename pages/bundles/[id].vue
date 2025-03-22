@@ -50,6 +50,12 @@
     <div v-else class="flex justify-center items-center py-8">
       <p class="text-gray-500">{{ t('loading') }}</p>
     </div>
+    <ReviewsSection
+        :fetch-reviews="() => ShopService.getBundleReviews(bundleId)"
+        :submit-review="(rating, review) => ShopService.submitBundleReview(bundleId, rating, review)"
+        :fetch-my-review="() => ShopService.getMyBundleReview(bundleId)"
+        class="mt-8"
+    />
   </div>
 </template>
 
@@ -60,6 +66,7 @@ import { useI18n } from 'vue-i18n';
 import type { Bundle } from '~/types/bundle';
 import type { Product } from '~/types/product';
 import { ShopService } from '~/services/ShopService';
+import ReviewsSection from '~/components/shared/reviews-section.vue';
 
 const route = useRoute();
 const { t } = useI18n();
@@ -67,6 +74,8 @@ const { t } = useI18n();
 const bundle = ref<Bundle | null>(null);
 const products = ref<Product[]>([]);
 const error = ref<string | null>(null);
+
+const bundleId = parseInt(route.params.id as string);
 
 onMounted(async () => {
   try {
