@@ -560,6 +560,42 @@ export const ShopService = {
     }
   },
   
+  async getCourseReviews(courseId: number): Promise<Review[]> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/activities/courses/${courseId}/courses-reviews`);
+      if (!response.ok) 
+      throw new Error(`HTTP error! status: ${response.status}`);
+      return await response.json();
+    } catch (error) {
+      console.error(`Error fetching course reviews ${courseId}:`, error);
+      throw error;
+    }
+  },
+  
+  async getEventReviews(eventId: number): Promise<Review[]> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/activities/events/${eventId}/event-reviews`);
+      if (!response.ok) 
+      throw new Error(`HTTP error! status: ${response.status}`);
+      return await response.json();
+    } catch (error) {
+      console.error(`Error fetching event reviews ${eventId}:`, error);
+      throw error;
+    }
+  },
+  
+  async getServiceReviews(serviceId: number): Promise<Review[]> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/services/${serviceId}/provider-reviews`);
+      if (!response.ok) 
+      throw new Error(`HTTP error! status: ${response.status}`);
+      return await response.json();
+    } catch (error) {
+      console.error(`Error fetching service reviews ${serviceId}:`, error);
+      throw error;
+    }
+  },
+  
   async submitProductReview(productId: number, rating: number, review: string): Promise<void> {
     try {
       const response = await fetchWithAuth(`${API_BASE_URL}/shops/products/${productId}/rate-product/`, {
@@ -594,6 +630,57 @@ export const ShopService = {
     }
   },
   
+  async submitCourseReview(courseId: number, rating: number, review: string): Promise<void> {
+    try {
+      const response = await fetchWithAuth(`${API_BASE_URL}/activities/courses/${courseId}/rate-course/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ rating, review }),
+      });
+      
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    } catch (error) {
+      console.error('Error submitting course review:', error);
+      throw error;
+    }
+  },
+  
+  async SubmitEventReview(eventId: number, rating: number, review: string): Promise<void> {
+    try {
+      const response = await fetchWithAuth(`${API_BASE_URL}/activities/events/${eventId}/rate-event/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ rating, review }),
+      });
+      
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    } catch (error) {
+      console.error('Error submitting event review:', error);
+      throw error;
+    }
+  },
+  
+  async submitServiceReview(serviceId: number, rating: number, review: string): Promise<void> {
+    try {
+      const response = await fetchWithAuth(`${API_BASE_URL}/services/${serviceId}/rate-provider/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ rating, review }),
+      });
+      
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    } catch (error) {
+      console.error('Error submitting service review:', error);
+      throw error;
+    }
+  },
+  
   async getMyProductReview(productId: number): Promise<MyReview | null> {
     try {
       const response = await fetchWithAuth(`${API_BASE_URL}/shops/products/${productId}/my-review/`);
@@ -607,6 +694,36 @@ export const ShopService = {
   async getMyBundleReview(bundleId: number): Promise<MyReview | null> {
     try {
       const response = await fetchWithAuth(`${API_BASE_URL}/shops/bundles/${bundleId}/my-review/`);
+      return await response.json();
+    } catch (error) {
+      // Return null if no review exists or there's an error
+      return null;
+    }
+  },
+  
+  async getMyCourseReview(courseId: number): Promise<MyReview | null> {
+    try {
+      const response = await fetchWithAuth(`${API_BASE_URL}/activities/courses/${courseId}/my-review/`);
+      return await response.json();
+    } catch (error) {
+      // Return null if no review exists or there's an error
+      return null;
+    }
+  },
+  
+  async getMyEventReview(eventId: number): Promise<MyReview | null> {
+    try {
+      const response = await fetchWithAuth(`${API_BASE_URL}/activities/events/${eventId}/my-review/`);
+      return await response.json();
+    } catch (error) {
+      // Return null if no review exists or there's an error
+      return null;
+    }
+  },
+  
+  async getMyServiceReview(serviceId: number): Promise<MyReview | null> {
+    try {
+      const response = await fetchWithAuth(`${API_BASE_URL}/services/${serviceId}/my-review/`);
       return await response.json();
     } catch (error) {
       // Return null if no review exists or there's an error

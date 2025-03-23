@@ -64,6 +64,13 @@
             </div>
           </div>
         </div>
+        
+        <ReviewsSection
+            :fetch-reviews="() => ShopService.getEventReviews(eventId)"
+            :submit-review="(rating, review) => ShopService.SubmitEventReview(eventId, rating, review)"
+            :fetch-my-review="() => ShopService.getMyEventReview(eventId)"
+            class="mt-8"
+        />
       </div>
     </div>
 
@@ -79,10 +86,12 @@ import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import type { Event } from '~/types/event';
 import { ShopService } from '~/services/ShopService';
+import ReviewsSection from '~/components/shared/reviews-section.vue';
 
 const route = useRoute();
 const { t } = useI18n();
 
+const eventId = parseInt(route.params.id as string);
 const event = ref<Event | null>(null);
 const error = ref<string | null>(null);
 

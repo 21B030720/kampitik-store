@@ -73,12 +73,20 @@
     </div>
 
     <!-- Add the modal at the end of the template -->
-    <ServiceRatingModal
+    <!-- <ServiceRatingModal
       :show="showRatingModal"
       :service-id="Number(route.params.id)"
       @close="showRatingModal = false"
       @rated="refreshServiceData"
+    /> -->
+    
+    <ReviewsSection
+        :fetch-reviews="() => ShopService.getServiceReviews(serviceId)"
+        :submit-review="(rating, review) => ShopService.submitServiceReview(serviceId, rating, review)"
+        :fetch-my-review="() => ShopService.getMyServiceReview(serviceId)"
+        class="mt-8"
     />
+    
   </div>
 </template>
 
@@ -90,11 +98,13 @@ import type { Service } from '~/types/service';
 import { ShopService } from '~/services/ShopService';
 import { useAuthStore } from '~/stores/useAuthStore';
 import ServiceRatingModal from '~/components/features/service/service-rating-modal.vue';
+import ReviewsSection from '~/components/shared/reviews-section.vue';
 
 const route = useRoute();
 const { t } = useI18n();
 const authStore = useAuthStore();
 
+const serviceId = parseInt(route.params.id as string);
 const service = ref<Service | null>(null);
 const error = ref<string | null>(null);
 const showRatingModal = ref(false);

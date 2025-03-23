@@ -79,6 +79,12 @@
           </div>
         </div>
       </div>
+      <ReviewsSection
+          :fetch-reviews="() => ShopService.getCourseReviews(courseId)"
+          :submit-review="(rating, review) => ShopService.submitCourseReview(courseId, rating, review)"
+          :fetch-my-review="() => ShopService.getMyCourseReview(courseId)"
+          class="mt-8"
+      />
     </div>
 
     <div v-else class="flex justify-center items-center py-8">
@@ -93,10 +99,11 @@ import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import type { Course } from '~/types/course';
 import { ShopService } from '~/services/ShopService';
+import ReviewsSection from '~/components/shared/reviews-section.vue';
 
 const route = useRoute();
 const { t } = useI18n();
-
+const courseId = parseInt(route.params.id as string);
 const course = ref<Course | null>(null);
 const error = ref<string | null>(null);
 
