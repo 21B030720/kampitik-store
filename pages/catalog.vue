@@ -1,76 +1,75 @@
 <template>
-	<div class="container mx-auto px-4 py-8">
-		<!-- StoreCarousel now handles its own data fetching -->
-		<StoreCarousel v-if="!selectedSubtype" />
+  <div class="container mx-auto px-4 py-8">
+    <!-- StoreCarousel now handles its own data fetching -->
+    <StoreCarousel v-if="!selectedSubtype" />
 
-		<div v-if="error" class="text-red-600 mb-4">
-			{{ error }}
-		</div>
+    <div v-if="error" class="text-red-600 mb-4">
+      {{ error }}
+    </div>
 
-		<div class="flex flex-col md:flex-row gap-8">
-			<!-- Content type filter -->
-			<div>
-			<TypeFilters
-					v-model:selected-type="selectedContentType"
-					v-model:selected-subtype="selectedSubtype"
-				/>
-			</div>
+    <div class="flex flex-col md:flex-row gap-8">
+      <!-- Content type filter -->
+      <div>
+        <TypeFilters
+          v-model:selected-type="selectedContentType"
+          v-model:selected-subtype="selectedSubtype"
+        />
+        <!-- Move Additional Filters here -->
+        <AdditionalFilters
+          :content-type="selectedContentType"
+          :categories="categories"
+          @update:filters="updateFilters"
+        />
+      </div>
 
-			<!-- Content display -->
-			<div class="flex-1">
-				<!-- Additional Filters -->
-				<AdditionalFilters
-					:content-type="selectedContentType"
-				:categories="categories"
-					@update:filters="updateFilters"
-				/>
+      <!-- Content display -->
+      <div class="flex-1">
+        <div v-if="isLoading" class="flex justify-center items-center">
+          <p class="text-gray-500">{{ t('loading') }}</p>
+        </div>
+        <template v-else>
+          <!-- Menu Content -->
+          <template v-if="selectedContentType === ContentType.MENU">
+            <ProductGrid
+              v-if="!selectedSubtype || selectedSubtype === MenuSubtype.PRODUCTS"
+              :filters="filters"
+              v-model:products="products"
+            />
+            <PackGrid
+              v-else-if="selectedSubtype === MenuSubtype.PACKS"
+              :packs="packs"
+            />
+          </template>
 
-				<div v-if="isLoading" class="flex justify-center items-center">
-					<p class="text-gray-500">{{ t('loading') }}</p>
-				</div>
-				<template v-else>
-					<!-- Menu Content -->
-					<template v-if="selectedContentType === ContentType.MENU">
-						<ProductGrid
-							v-if="!selectedSubtype || selectedSubtype === MenuSubtype.PRODUCTS"
-							:filters="filters"
-							v-model:products="products"
-						/>
-						<PackGrid
-							v-else-if="selectedSubtype === MenuSubtype.PACKS"
-							:packs="packs"
-						/>
-					</template>
+          <!-- Activities Content -->
+          <template v-else-if="selectedContentType === ContentType.ACTIVITIES">
+            <EventGrid
+              v-if="selectedSubtype === ActivitiesSubtype.EVENTS"
+              :events="events"
+            />
+            <CourseGrid
+              v-else-if="selectedSubtype === ActivitiesSubtype.COURSES"
+              :courses="courses"
+            />
+            <p v-else class="text-gray-500">
+              {{ t('catalog.selectActivityType') }}
+            </p>
+          </template>
 
-					<!-- Activities Content -->
-					<template v-else-if="selectedContentType === ContentType.ACTIVITIES">
-						<EventGrid
-							v-if="selectedSubtype === ActivitiesSubtype.EVENTS"
-							:events="events"
-						/>
-						<CourseGrid
-							v-else-if="selectedSubtype === ActivitiesSubtype.COURSES"
-							:courses="courses"
-						/>
-						<p v-else class="text-gray-500">
-							{{ t('catalog.selectActivityType') }}
-						</p>
-					</template>
-
-					<!-- Services Content -->
-					<template v-else-if="selectedContentType === ContentType.SERVICES">
-						<ServiceGrid
-							v-if="selectedSubtype === ServicesSubtype.SERVICES"
-							:services="services"
-						/>
-						<p v-else class="text-gray-500">
-							{{ t('catalog.selectServiceType') }}
-						</p>
-					</template>
-				</template>
-			</div>
-		</div>
-	</div>
+          <!-- Services Content -->
+          <template v-else-if="selectedContentType === ContentType.SERVICES">
+            <ServiceGrid
+              v-if="selectedSubtype === ServicesSubtype.SERVICES"
+              :services="services"
+            />
+            <p v-else class="text-gray-500">
+              {{ t('catalog.selectServiceType') }}
+            </p>
+          </template>
+        </template>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
