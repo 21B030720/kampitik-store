@@ -1,5 +1,5 @@
 import type { Store } from '~/types/store';
-import type { Product } from '~/types/product';
+import type { Product, ProductFilterParams } from '~/types/product';
 import type { Category } from '~/types/category';
 import type { CommodityGroup } from '~/types/commodity-group';
 import type { Bundle } from '~/types/bundle';
@@ -12,19 +12,75 @@ import { fetchWithAuth } from '~/utils/api';
 
 const API_BASE_URL = BASE_URL;
 
+
+interface FilterMapping {
+  [key: string]: string;
+}
+
+const FILTER_MAPPINGS: Record<string, FilterMapping> = {
+  products: {
+    name: 'name',
+    category_name: 'category_name',
+    from_age: 'from_age',
+    to_age: 'to_age',
+    from_price: 'from_price',
+    to_price: 'to_price',
+    page: 'page',
+    per_page: 'per_page'
+  },
+  bundles: {
+    name: 'name',
+    category_name: 'category_name',
+    from_age: 'from_age',
+    to_age: 'to_age',
+    from_price: 'from_price',
+    to_price: 'to_price',
+    page: 'page',
+    per_page: 'per_page'
+  },
+  events: {
+    name: 'title',
+    category_name: 'category_name',
+    from_age: 'from_age',
+    to_age: 'to_age',
+    page: 'page',
+    per_page: 'per_page'
+  },
+  courses: {
+    name: 'title',
+    category_name: 'category_name',
+    from_age: 'from_age',
+    to_age: 'to_age',
+    page: 'page',
+    per_page: 'per_page'
+  },
+  services: {
+    name: 'title',
+    category_name: 'category_name',
+    page: 'page',
+    per_page: 'per_page'
+  }
+};
+
+const createQueryParamsOfFilter = (filters: ProductFilterParams, type: keyof typeof FILTER_MAPPINGS): URLSearchParams => {
+  const queryParams = new URLSearchParams();
+  const mapping = FILTER_MAPPINGS[type];
+
+  Object.entries(filters).forEach(([key, value]) => {
+    if (value !== null && value !== undefined && value !== '' && mapping[key]) {
+      queryParams.set(mapping[key], value.toString());
+    }
+  });
+
+  return queryParams;
+};
+
 // Different filter types for different endpoints
 export interface StoreFilterParams {
 	city_id?: number;
 }
 
-export interface ProductFilterParams {
-	name?: string;
-	category_name?: string;
-	from_age?: number | null;
-	to_age?: number | null;
-	page?: number;
-	per_page?: number;
-}
+
 
 export interface City {
 	id: number;
@@ -193,30 +249,7 @@ export const ShopService = {
 
 	async getAllProducts(filters: ProductFilterParams): Promise<PaginatedResponse<Product>> {
 		try {
-			const queryParams = new URLSearchParams();
-			
-			console.log('Sending filters to API:', filters);
-			
-			if (filters.name) {
-				queryParams.set('name', filters.name);
-			}
-			if (filters.category_name) {
-				queryParams.set('category_name', filters.category_name);
-			}
-			if (filters.from_age !== null && filters.from_age !== undefined) {
-				queryParams.set('from_age', filters.from_age.toString());
-			}
-			if (filters.to_age !== null && filters.to_age !== undefined) {
-				queryParams.set('to_age', filters.to_age.toString());
-			}
-			if (filters.page) {
-				queryParams.set('page', filters.page.toString());
-			}
-			if (filters.per_page) {
-				queryParams.set('per_page', filters.per_page.toString());
-			}
-
-			console.log('Final query string:', queryParams.toString());
+		  const queryParams = createQueryParamsOfFilter(filters, 'products');
 
 			const response = await fetch(`${API_BASE_URL}/shops/products/?${queryParams}`);
 			if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
@@ -246,28 +279,9 @@ export const ShopService = {
 	},
 
 	// Menu subtypes
-	async getAllBundles(filters?: ProductFilterParams): Promise<PaginatedResponse<Bundle>> {
+	async getAllBundles(filters: ProductFilterParams): Promise<PaginatedResponse<Bundle>> {
 		try {
-			const queryParams = new URLSearchParams();
-			
-			if (filters?.name) {
-				queryParams.set('name', filters.name);
-			}
-			if (filters?.category_name) {
-				queryParams.set('category_name', filters.category_name);
-			}
-			if (filters?.from_age !== null && filters?.from_age !== undefined) {
-				queryParams.set('from_age', filters.from_age.toString());
-			}
-			if (filters?.to_age !== null && filters?.to_age !== undefined) {
-				queryParams.set('to_age', filters.to_age.toString());
-			}
-			if (filters?.page) {
-				queryParams.set('page', filters.page.toString());
-			}
-			if (filters?.per_page) {
-				queryParams.set('per_page', filters.per_page.toString());
-			}
+		  const queryParams = createQueryParamsOfFilter(filters, 'bundles');
 
 			const url = `${API_BASE_URL}/shops/bundles/${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
 			const response = await fetch(url);
@@ -279,28 +293,9 @@ export const ShopService = {
 	},
 
 	// Activities subtypes
-	async getAllEvents(filters?: ProductFilterParams): Promise<PaginatedResponse<Event>> {
+	async getAllEvents(filters: ProductFilterParams): Promise<PaginatedResponse<Event>> {
 		try {
-			const queryParams = new URLSearchParams();
-			
-			if (filters?.name) {
-				queryParams.set('title', filters.name);
-			}
-			if (filters?.category_name) {
-				queryParams.set('category_name', filters.category_name);
-			}
-			if (filters?.from_age !== null && filters?.from_age !== undefined) {
-				queryParams.set('from_age', filters.from_age.toString());
-			}
-			if (filters?.to_age !== null && filters?.to_age !== undefined) {
-				queryParams.set('to_age', filters.to_age.toString());
-			}
-			if (filters?.page) {
-				queryParams.set('page', filters.page.toString());
-			}
-			if (filters?.per_page) {
-				queryParams.set('per_page', filters.per_page.toString());
-			}
+		  const queryParams = createQueryParamsOfFilter(filters, 'events');
 
 			const url = `${API_BASE_URL}/activities/events/${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
 			const response = await fetch(url);
@@ -311,28 +306,9 @@ export const ShopService = {
 		}
 	},
 
-	async getAllCourses(filters?: ProductFilterParams): Promise<PaginatedResponse<Course>> {
+	async getAllCourses(filters: ProductFilterParams): Promise<PaginatedResponse<Course>> {
 		try {
-			const queryParams = new URLSearchParams();
-			
-			if (filters?.name) {
-				queryParams.set('title', filters.name);
-			}
-			if (filters?.category_name) {
-				queryParams.set('category_name', filters.category_name);
-			}
-			if (filters?.from_age !== null && filters?.from_age !== undefined) {
-				queryParams.set('from_age', filters.from_age.toString());
-			}
-			if (filters?.to_age !== null && filters?.to_age !== undefined) {
-				queryParams.set('to_age', filters.to_age.toString());
-			}
-			if (filters?.page) {
-				queryParams.set('page', filters.page.toString());
-			}
-			if (filters?.per_page) {
-				queryParams.set('per_page', filters.per_page.toString());
-			}
+			const queryParams = createQueryParamsOfFilter(filters, 'courses');
 
 			const url = `${API_BASE_URL}/activities/courses/${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
 			const response = await fetch(url);
@@ -344,22 +320,9 @@ export const ShopService = {
 	},
 
 	// Services subtype
-	async getAllServices(filters?: ProductFilterParams): Promise<PaginatedResponse<Service>> {
+	async getAllServices(filters: ProductFilterParams): Promise<PaginatedResponse<Service>> {
 		try {
-		  const queryParams = new URLSearchParams();
-		  
-		  if (filters?.name) {
-			queryParams.set('title', filters.name);
-		  }
-		  if (filters?.category_name) {
-			queryParams.set('category_name', filters.category_name);
-		  }
-		  if (filters?.page) {
-			queryParams.set('page', filters.page.toString());
-		  }
-		  if (filters?.per_page) {
-			queryParams.set('per_page', filters.per_page.toString());
-		  }
+		  const queryParams = createQueryParamsOfFilter(filters, 'courses');
 	
 		  const url = `${API_BASE_URL}/services/${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
 		  const response = await fetch(url);

@@ -5,16 +5,6 @@ import type { BasketItem } from '~/types/basket';
 
 export type BasketItemType = 'PRODUCT' | 'BUNDLE';
 
-export interface BasketItem {
-	id: number;
-	name: string;
-	price: string;
-	image?: string | null;
-	quantity: number;
-	type: BasketItemType;
-	kid_id?: number | null;
-	[key: string]: any;
-}
 
 export const useBasketStore = defineStore('basket', {
 	state: () => ({

@@ -1,95 +1,109 @@
 <template>
   <div class="review-input-section border rounded-lg p-4 mb-6">
-    <h3 class="text-lg font-semibold mb-4">
-      {{ existingReview ? t('reviews.yourReview') : t('reviews.leaveReview') }}
-    </h3>
-
-    <!-- View Mode -->
-    <div v-if="existingReview && !isEditing" class="space-y-4">
-      <div class="flex items-center gap-2">
-        <span class="text-sm text-gray-600">{{ t('reviews.rating') }}:</span>
-        <div class="flex">
-          <template v-for="star in 5" :key="star">
-            <span
-              class="text-2xl"
-              :class="star <= existingReview.rating ? 'text-yellow-400' : 'text-gray-300'"
-            >★</span>
-          </template>
-        </div>
-      </div>
-
-      <p class="text-gray-700 border rounded-lg p-3 bg-gray-50">
-        {{ existingReview.review }}
-      </p>
-
-      <div class="flex justify-between items-center">
-        <span class="text-sm text-gray-500">
-          {{ formatDate(existingReview.created_at) }}
-        </span>
-        <button
-          class="text-primary-600 hover:text-primary-700"
-          @click="startEditing"
+    <!-- Unauthorized User View -->
+    <div v-if="!authStore.isAuthenticated" class="text-center py-4">
+        <h3 class="text-lg font-semibold mb-2">{{ t('reviews.loginToReview') }}</h3>
+        <p class="text-gray-600 mb-4">{{ t('reviews.loginPrompt') }}</p>
+        <NuxtLink
+          :to="localePath('/login')"
+          class="inline-flex items-center justify-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
         >
-          {{ t('reviews.edit') }}
-        </button>
-      </div>
+          {{ t('auth.login') }}
+        </NuxtLink>
     </div>
-
-    <!-- Edit Mode -->
+    <!-- Authorized User View -->
     <div v-else>
-      <!-- Rating Stars -->
-      <div class="flex items-center gap-2 mb-4">
-        <span class="text-sm text-gray-600">{{ t('reviews.rating') }}:</span>
-        <div class="flex">
-          <button
-            v-for="star in 5"
-            :key="star"
-            class="text-2xl focus:outline-none"
-            :class="star <= (hoverRating || rating) ? 'text-yellow-400' : 'text-gray-300'"
-            @click="rating = star"
-            @mouseover="hoverRating = star"
-            @mouseleave="hoverRating = 0"
-          >★</button>
+        <h3 class="text-lg font-semibold mb-4">
+        {{ existingReview ? t('reviews.yourReview') : t('reviews.leaveReview') }}
+        </h3>
+        <!-- View Mode -->
+        <div v-if="existingReview && !isEditing" class="space-y-4">
+        <div class="flex items-center gap-2">
+            <span class="text-sm text-gray-600">{{ t('reviews.rating') }}:</span>
+            <div class="flex">
+            <template v-for="star in 5" :key="star">
+                <span
+                class="text-2xl"
+                :class="star <= existingReview.rating ? 'text-yellow-400' : 'text-gray-300'"
+                >★</span>
+            </template>
+            </div>
         </div>
-      </div>
-
-      <!-- Review Text -->
-      <textarea
-        v-model="reviewText"
-        :placeholder="t('reviews.writeReview')"
-        class="w-full p-3 border rounded-lg mb-4 min-h-[100px] focus:outline-none focus:ring-2 focus:ring-primary-500"
-        :maxlength="maxReviewLength"
-      />
-
-      <!-- Character Count -->
-      <div class="text-sm text-gray-500 mb-4">
-        {{ reviewText.length }}/{{ maxReviewLength }}
-      </div>
-
-      <!-- Submit Button -->
-      <div class="flex gap-2">
-        <button
-          class="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
-          :disabled="!isValid || isSubmitting"
-          @click="submitReview"
-        >
-          {{ t(existingReview ? 'reviews.update' : 'reviews.submit') }}
-        </button>
-        
-        <button
-          v-if="isEditing"
-          class="border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-50"
-          @click="cancelEditing"
-        >
-          {{ t('reviews.cancel') }}
-        </button>
-      </div>
-
-      <!-- Error Message -->
-      <p v-if="error" class="text-red-500 mt-2 text-sm">
-        {{ error }}
-      </p>
+    
+        <p class="text-gray-700 border rounded-lg p-3 bg-gray-50">
+            {{ existingReview.review }}
+        </p>
+    
+        <div class="flex justify-between items-center">
+            <span class="text-sm text-gray-500">
+            {{ formatDate(existingReview.created_at) }}
+            </span>
+            <button
+            class="text-primary-600 hover:text-primary-700"
+            @click="startEditing"
+            >
+            {{ t('reviews.edit') }}
+            </button>
+        </div>
+        </div>
+    
+        <!-- Edit Mode -->
+        <div v-else>
+        <!-- Rating Stars -->
+        <div class="flex items-center gap-2 mb-4">
+            <span class="text-sm text-gray-600">{{ t('reviews.rating') }}:</span>
+            <div class="flex">
+            <button
+                v-for="star in 5"
+                :key="star"
+                class="text-2xl focus:outline-none"
+                :class="star <= (hoverRating || rating) ? 'text-yellow-400' : 'text-gray-300'"
+                @click="rating = star"
+                @mouseover="hoverRating = star"
+                @mouseleave="hoverRating = 0"
+            >★</button>
+            </div>
+        </div>
+    
+        <!-- Review Text -->
+        <textarea
+            v-model="reviewText"
+            :placeholder="t('reviews.writeReview')"
+            class="w-full p-3 border rounded-lg mb-4 min-h-[100px] focus:outline-none focus:ring-2 focus:ring-primary-500"
+            :maxlength="maxReviewLength"
+        />
+    
+        <!-- Character Count -->
+        <div class="text-sm text-gray-500 mb-4">
+            {{ reviewText.length }}/{{ maxReviewLength }}
+        </div>
+    
+        <!-- Submit Button -->
+        <div class="flex gap-2">
+            <button
+            class="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            :disabled="!isValid || isSubmitting"
+            @click="submitReview"
+            >
+            {{ t(existingReview ? 'reviews.update' : 'reviews.submit') }}
+            </button>
+            
+            <button
+            v-if="isEditing"
+            class="border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-50"
+            @click="cancelEditing"
+            >
+            {{ t('reviews.cancel') }}
+            </button>
+        </div>
+    
+        <!-- Error Message -->
+        <p v-if="error" class="text-red-500 mt-2 text-sm">
+            {{ error }}
+        </p>
+        </div>
     </div>
+    
   </div>
 </template>
 
@@ -97,6 +111,7 @@
 import { ref, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import type { Review, MyReview } from '~/types/review';
+import { useAuthStore } from '~/stores/useAuthStore';
 
 const props = defineProps<{
   existingReview?: MyReview | null;
@@ -105,9 +120,13 @@ const props = defineProps<{
 
 const { t } = useI18n();
 
+const localePath = useLocalePath();
+const authStore = useAuthStore();
+
 const isEditing = ref(!props.existingReview);
 const rating = ref(props.existingReview?.rating || 0);
 const hoverRating = ref(0);
+
 const reviewText = ref(props.existingReview?.review || '');
 const error = ref('');
 const isSubmitting = ref(false);

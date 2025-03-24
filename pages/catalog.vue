@@ -10,7 +10,7 @@
 		<div class="flex flex-col md:flex-row gap-8">
 			<!-- Content type filter -->
 			<div>
-			<ProductFilters
+			<TypeFilters
 					v-model:selected-type="selectedContentType"
 					v-model:selected-subtype="selectedSubtype"
 				/>
@@ -78,13 +78,13 @@
 	import { ShopService } from '~/services/ShopService';
 	import { ContentType, MenuSubtype, ActivitiesSubtype, ServicesSubtype } from '~/types/content-type';
 	import type { Store } from '~/types/store';
-	import type { Product } from '~/types/product';
+	import type { Product, ProductFilterParams } from '~/types/product';
 	import type { Bundle } from '~/types/bundle';
 	import type { Event as ShopEvent } from '~/types/event';
 	import type { Course } from '~/types/course';
 	import type { Service } from '~/types/service';
 	import StoreCarousel from '~/components/features/catalog/catalog-store-carousel.vue';
-	import ProductFilters from '~/components/features/catalog/catalog-product-filters.vue';
+	import TypeFilters from '~/components/features/catalog/catalog-type-filters.vue';
 	import ProductGrid from '~/components/features/catalog/catalog-product-grid.vue';
 	import PackGrid from '~/components/features/catalog/catalog-pack-grid.vue';
 	import EventGrid from '~/components/features/catalog/catalog-event-grid.vue';
@@ -93,10 +93,9 @@
 	import { useI18n } from 'vue-i18n';
 	import { useRoute } from 'vue-router';
 	import AdditionalFilters from '~/components/features/catalog/catalog-additional-filters.vue';
-	import type { ProductFilterParams } from '~/types/product';
 	import { PER_PAGE } from '~/composables/usePagination';
-	import type { PaginatedResponse } from '~/types/category';
-	import type { Category } from '~/types/category';
+	import type { PaginatedResponse, Category } from '~/types/category';
+	
 
 	const { t } = useI18n();
 	const route = useRoute();
@@ -127,7 +126,9 @@
 		from_age: null,
 		to_age: null,
 		page: 1,
-		per_page: PER_PAGE
+		per_page: PER_PAGE,
+		from_price: null,
+		to_price: null
 	});
 
 	// Update debouncedFilters to include age filters
@@ -135,7 +136,9 @@
 		name: filters.value.name,
 		category_name: filters.value.category_name,
 		from_age: filters.value.from_age,
-		to_age: filters.value.to_age
+		to_age: filters.value.to_age,
+		from_price: filters.value.from_price,
+		to_price: filters.value.to_price,
 	}));
 
 	// Watch URL changes to update filters(params from url like type and so on)

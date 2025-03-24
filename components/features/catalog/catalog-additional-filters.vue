@@ -47,6 +47,48 @@
           </div>
         </div>
       </div>
+      
+      <!-- Price Range Filters -->
+      <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium mb-3">
+                {{ t('catalog.filters.priceRange') }}: {{ localFilters.from_price || 0 }} - {{ localFilters.to_price || maxPrice }} {{ t('common.currency') }}
+              </label>
+              <div class="relative h-14">
+                <!-- Track -->
+                <div class="absolute h-2 bg-gray-200 rounded-full w-full top-1/2 -translate-y-1/2"></div>
+                
+                <!-- Selected Range -->
+                <div 
+                  class="absolute h-2 bg-blue-500 rounded-full top-1/2 -translate-y-1/2"
+                  :style="{
+                    left: `${((localFilters.from_price || 0) / maxPrice) * 100}%`,
+                    width: `${((localFilters.to_price || maxPrice) - (localFilters.from_price || 0)) / maxPrice * 100}%`
+                  }"
+                ></div>
+                
+                <!-- Min Price Thumb -->
+                <input
+                  v-model.number="localFilters.from_price"
+                  type="range"
+                  :min="0"
+                  :max="maxPrice"
+                  class="range-input absolute w-full top-1/2 -translate-y-1/2"
+                  @input="handleInput"
+                />
+                
+                <!-- Max Price Thumb -->
+                <input
+                  v-model.number="localFilters.to_price"
+                  type="range"
+                  :min="0"
+                  :max="maxPrice"
+                  class="range-input absolute w-full top-1/2 -translate-y-1/2"
+                  @input="handleInput"
+                />
+              </div>
+            </div>
+          </div>
 
       <!-- Age Range Filters -->
       <div v-if="showAgeFilters" class="space-y-4">
@@ -65,7 +107,7 @@
                 left: `${((localFilters.from_age || 0) / maxAge) * 100}%`,
                 width: `${((localFilters.to_age || maxAge) - (localFilters.from_age || 0)) / maxAge * 100}%`
               }"
-            ></div>
+            />
 
             <!-- Min Thumb -->
             <input
@@ -75,7 +117,7 @@
               :max="maxAge"
               class="range-input absolute w-full top-1/2 -translate-y-1/2"
               @input="handleInput"
-            />
+            >
 
             <!-- Max Thumb -->
             <input
@@ -85,7 +127,7 @@
               :max="maxAge"
               class="range-input absolute w-full top-1/2 -translate-y-1/2"
               @input="handleInput"
-            />
+            >
           </div>
         </div>
       </div>
@@ -114,7 +156,7 @@
 import { ref, reactive, onBeforeUnmount } from 'vue';
 import { useI18n } from 'vue-i18n';
 import type { Category } from '~/types/category';
-import type { ProductFilterParams } from '~/services/ShopService';
+import type { ProductFilterParams } from '~/types/product';
 
 const { t } = useI18n();
 
@@ -128,13 +170,16 @@ const emit = defineEmits<{
 }>();
 
 const maxAge = 18;
+const maxPrice = 100000;
 const showAgeFilters = true;
 
 const localFilters = reactive<ProductFilterParams>({
   name: '',
   category_name: '',
   from_age: 0,
-  to_age: maxAge
+  to_age: maxAge,
+  from_price: 0,
+  to_price: 10000
 });
 
 let debounceTimer: NodeJS.Timeout | null = null;
