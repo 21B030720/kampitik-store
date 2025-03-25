@@ -1,71 +1,48 @@
 <template>
   <div class="container mx-auto px-4 py-8">
-    <!-- StoreCarousel now handles its own data fetching -->
-    <StoreCarousel v-if="!selectedSubtype" />
+    <StoreCarousel v-if="showCarousel" />
 
     <div v-if="error" class="text-red-600 mb-4">
       {{ error }}
     </div>
 
     <div class="flex flex-col md:flex-row gap-8">
-      <!-- Content type filter -->
       <div>
         <TypeFilters
-          v-model:selected-type="selectedContentType"
-          v-model:selected-subtype="selectedSubtype"
+          v-model:selected-type="selectedType"
         />
-        <!-- Move Additional Filters here -->
         <AdditionalFilters
-          :content-type="selectedContentType"
           :categories="categories"
           @update:filters="updateFilters"
         />
       </div>
 
-      <!-- Content display -->
       <div class="flex-1">
         <div v-if="isLoading" class="flex justify-center items-center">
           <p class="text-gray-500">{{ t('loading') }}</p>
         </div>
         <template v-else>
-          <!-- Menu Content -->
-          <template v-if="selectedContentType === ContentType.MENU">
-            <ProductGrid
-              v-if="!selectedSubtype || selectedSubtype === MenuSubtype.PRODUCTS"
-              :filters="filters"
-              v-model:products="products"
-            />
-            <PackGrid
-              v-else-if="selectedSubtype === MenuSubtype.PACKS"
-              :packs="packs"
-            />
-          </template>
-
-          <!-- Activities Content -->
-          <template v-else-if="selectedContentType === ContentType.ACTIVITIES">
-            <EventGrid
-              v-if="selectedSubtype === ActivitiesSubtype.EVENTS"
-              :events="events"
-            />
-            <CourseGrid
-              v-else-if="selectedSubtype === ActivitiesSubtype.COURSES"
-              :courses="courses"
-            />
-            <p v-else class="text-gray-500">
-              {{ t('catalog.selectActivityType') }}
-            </p>
-          </template>
-
-          <!-- Services Content -->
-          <template v-else-if="selectedContentType === ContentType.SERVICES">
-            <ServiceGrid
-              v-if="selectedSubtype === ServicesSubtype.SERVICES"
-              :services="services"
-            />
-            <p v-else class="text-gray-500">
-              {{ t('catalog.selectServiceType') }}
-            </p>
-          </template>
+          <ProductGrid
+            v-if="selectedType === ContentType.PRODUCT"
+            :filters="filters"
+            v-model:products="products"
+          />
+          <PackGrid
+            v-else-if="selectedType === ContentType.BUNDLE"
+            :packs="packs"
+          />
+          <EventGrid
+            v-else-if="selectedType === ContentType.EVENT"
+            :events="events"
+          />
+          <CourseGrid
+            v-else-if="selectedType === ContentType.COURSE"
+            :courses="courses"
+          />
+          <ServiceGrid
+            v-else-if="selectedType === ContentType.SERVICE"
+            :services="services"
+          />
         </template>
       </div>
     </div>
@@ -110,13 +87,11 @@
 	const error = ref<string | null>(null);
 	const totalItems = ref(0);
 	const categories = ref<Category[]>([]);
-
+	
 	// Initialize filters from URL params with proper type checking
-	const selectedContentType = ref<ContentType>(
-		(route.query.type as ContentType) || ContentType.MENU
-	);
+	const selectedType = ref<ContentType>(ContentType.PRODUCT);
+	const showCarousel = computed(() => selectedType.value === ContentType.PRODUCT);
 
-	const selectedSubtype = ref<MenuSubtype | ActivitiesSubtype | ServicesSubtype | null>(null);
 
 	// Initialize filters with null values for age fields
 	const filters = ref<ProductFilterParams>({
@@ -141,105 +116,84 @@
 	}));
 
 	// Watch URL changes to update filters(params from url like type and so on)
+	const fetchCategories = async (type: ContentType) => {
+      try {
+        switch (type) {
+          case ContentType.PRODUCT:
+            categories.value = await ShopService.getProductCategories();
+            break;
+          case ContentType.BUNDLE:
+            categories.value = await ShopService.getBundleCategories();
+            break;
+          case ContentType.EVENT:
+            categories.value = await ShopService.getEventCategories();
+            break;
+          case ContentType.COURSE:
+            categories.value = await ShopService.getCourseCategories();
+            break;
+          case ContentType.SERVICE:
+            categories.value = await ShopService.getServiceCategories();
+            break;
+        }
+      } catch (err) {
+        console.error('Failed to fetch categories:', err);
+      }
+    };
+
 	watch(
-		() => route.query,
-		(query) => {
-			// Only update type if it's a valid ContentType
-			if (query.type && Object.values(ContentType).includes(query.type as ContentType)) {
-				selectedContentType.value = query.type as ContentType;
-			}
-			
-			// Only update subtype if it exists in query
-			if ('subtype' in query) {
-				selectedSubtype.value = query.subtype as MenuSubtype | ActivitiesSubtype | ServicesSubtype | null;
-			}
-		}
-	);
-
-	// Add a function to fetch categories based on content type
-	const fetchCategories = async (type: ContentType, subtype: string | null) => {
-		try {
-			switch (type) {
-				case ContentType.MENU:
-					if (!subtype || subtype === MenuSubtype.PRODUCTS) {
-						categories.value = await ShopService.getProductCategories();
-					} else if (subtype === MenuSubtype.PACKS) {
-						categories.value = await ShopService.getBundleCategories();
-					}
-					break;
-				case ContentType.ACTIVITIES:
-					if (subtype === ActivitiesSubtype.EVENTS) {
-						categories.value = await ShopService.getEventCategories();
-					} else if (subtype === ActivitiesSubtype.COURSES) {
-						categories.value = await ShopService.getCourseCategories();
-					}
-					break;
-				case ContentType.SERVICES:
-					if (subtype === ServicesSubtype.SERVICES) {
-						categories.value = await ShopService.getServiceCategories();
-					}
-					break;
-			}
-		} catch (err) {
-			console.error('Failed to fetch categories:', err);
-		}
-	};
-
-	// Update the watch to include category fetching
-	watch(
-		[() => selectedContentType.value, () => selectedSubtype.value],
-		async ([type, subtype]) => {
-			await fetchCategories(type, subtype);
-		},
-		{ immediate: true }
-	);
-
-	// Watch for filter changes(params from url like type and so on)
-	watch(
-		[() => selectedContentType.value, () => selectedSubtype.value, debouncedFilters],
-		async ([type, subtype, currentFilters]) => {
-			isLoading.value = true;
-			error.value = null;
-
-			try {
-				if (type === ContentType.MENU) {
-					if (!subtype || subtype === MenuSubtype.PRODUCTS) {
-						const response = await ShopService.getAllProducts(currentFilters);
-						products.value = response.results;
-						totalItems.value = response.count;
-					} else if (subtype === MenuSubtype.PACKS) {
-						const response = await ShopService.getAllBundles(currentFilters);
-						packs.value = response.results;
-						totalItems.value = response.count;
-					}
-				} 
-				else if (type === ContentType.ACTIVITIES) {
-					if (subtype === ActivitiesSubtype.EVENTS) {
-						const response = await ShopService.getAllEvents(currentFilters);
-						events.value = response.results;
-						totalItems.value = response.count;
-					} else if (subtype === ActivitiesSubtype.COURSES) {
-						const response = await ShopService.getAllCourses(currentFilters);
-						courses.value = response.results;
-						totalItems.value = response.count;
-					}
-				}
-				else if (type === ContentType.SERVICES) {
-					if (subtype === ServicesSubtype.SERVICES) {
-						const response = await ShopService.getAllServices(currentFilters);
-						services.value = response.results;
-						totalItems.value = response.count;
-					}
-				}
-			} catch (err) {
-				console.error('Failed to fetch data:', err);
-				error.value = t('catalog.fetchError');
-			} finally {
-				isLoading.value = false;
-			}
-		},
-		{ immediate: true }
-	);
+      [() => selectedType.value, debouncedFilters],
+      async ([type, currentFilters]) => {
+        isLoading.value = true;
+        error.value = null;
+    
+        try {
+          await fetchCategories(type);
+          
+          switch (type) {
+            case ContentType.PRODUCT: {
+              const productResponse = await ShopService.getAllProducts(currentFilters);
+              products.value = productResponse.results;
+              totalItems.value = productResponse.count;
+              break;
+            }
+            case ContentType.BUNDLE: {
+              const bundleResponse = await ShopService.getAllBundles(currentFilters);
+              packs.value = bundleResponse.results;
+              totalItems.value = bundleResponse.count;
+              break;
+            }
+            case ContentType.EVENT: {
+              const eventResponse = await ShopService.getAllEvents(currentFilters);
+              events.value = eventResponse.results;
+              totalItems.value = eventResponse.count;
+              break;
+            }
+            case ContentType.COURSE: {
+              const courseResponse = await ShopService.getAllCourses(currentFilters);
+              courses.value = courseResponse.results;
+              totalItems.value = courseResponse.count;
+              break;
+            }
+            case ContentType.SERVICE: {
+              const serviceResponse = await ShopService.getAllServices(currentFilters);
+              services.value = serviceResponse.results;
+              totalItems.value = serviceResponse.count;
+              break;
+            }
+            default: {
+              console.error('Unknown content type:', type);
+              error.value = t('catalog.unknownContentType');
+            }
+          }
+        } catch (err) {
+          console.error('Failed to fetch data:', err);
+          error.value = t('catalog.fetchError');
+        } finally {
+          isLoading.value = false;
+        }
+      },
+      { immediate: true }
+    );
 
 	const updateFilters = (newFilters: ProductFilterParams) => {
 		filters.value = {
