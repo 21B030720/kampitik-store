@@ -12,6 +12,7 @@
           v-model:selected-type="selectedType"
         />
         <AdditionalFilters
+            :content-type="selectedType"
           :categories="categories"
           @update:filters="updateFilters"
         />
@@ -52,7 +53,7 @@
 <script setup lang="ts">
 	import { ref, computed, onMounted, watch } from 'vue';
 	import { ShopService } from '~/services/ShopService';
-	import { ContentType, MenuSubtype, ActivitiesSubtype, ServicesSubtype } from '~/types/content-type';
+	import { ContentType } from '~/types/content-type';
 	import type { Store } from '~/types/store';
 	import type { Product, ProductFilterParams } from '~/types/product';
 	import type { Bundle } from '~/types/bundle';
@@ -90,7 +91,7 @@
 	
 	// Initialize filters from URL params with proper type checking
 	const selectedType = ref<ContentType>(ContentType.PRODUCT);
-	const showCarousel = computed(() => selectedType.value === ContentType.PRODUCT);
+	const showCarousel = computed(() => selectedType.value === ContentType.PRODUCT || selectedType.value === ContentType.BUNDLE);
 
 
 	// Initialize filters with null values for age fields

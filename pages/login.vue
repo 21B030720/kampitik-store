@@ -103,15 +103,14 @@
 					</div>
 
 					<!-- Submit button -->
-					<div>
-						<button
-							type="submit"
-							class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#128C7E] hover:bg-[#0E7265] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
-							:disabled="isLoading"
-						>
-							{{ isLogin ? t('auth.login') : t('auth.signup') }}
-						</button>
-					</div>
+					<button
+                        type="submit"
+                        class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#128C7E] hover:bg-[#0E7265] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                        :disabled="isLoading"
+                    >
+                        <BaseSpinner v-if="isLoading" class="mr-2" />
+                        <span>{{ isLogin ? t('auth.login') : t('auth.signup') }}</span>
+                    </button>
 
 					<!-- Toggle login/signup -->
 					<div class="text-sm text-center">
@@ -133,6 +132,7 @@
 	import { ref, reactive } from 'vue';
 	import { useI18n } from 'vue-i18n';
 	import { useAuthStore } from '~/stores/useAuthStore';
+	import BaseSpinner from '~/components/shared/base-spinner.vue';
 
 	const { t } = useI18n();
 	const router = useRouter();
