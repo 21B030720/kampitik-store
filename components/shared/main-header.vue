@@ -1,6 +1,6 @@
 <template>
-	<nav  :class="{ 'shadow-md': isScrolled }" class="fixed top-0 w-full z-50 transition-shadow duration-300    bg-white border-b-2 border-[#D6D6D6]">
-		<div class="container mx-auto px-14">
+	<nav  :class="{ 'shadow-md': isScrolled }" class=" fixed top-0 w-full z-50 transition-shadow duration-300    bg-white border-b-2 border-[#D6D6D6]">
+		<div class="container mx-auto px-14 ">
 			<div class="flex items-center justify-between h-16">
 				<NuxtLink :to="localePath('/')" class="flex items-center">
 					<img

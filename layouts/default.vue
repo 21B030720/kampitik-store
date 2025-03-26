@@ -29,7 +29,7 @@
 <template>
 	<div>
 		<Header />
-		<Html :lang="head?.htmlAttrs?.lang" :dir="head?.htmlAttrs?.dir">
+		<Html class="mt-12" :lang="head?.htmlAttrs?.lang" :dir="head?.htmlAttrs?.dir">
 			<Head>
 				<Title>{{ title }}</Title>
 
