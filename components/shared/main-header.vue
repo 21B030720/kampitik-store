@@ -1,5 +1,5 @@
 <template>
-	<nav class="bg-white border-b-2 border-[#D6D6D6]">
+	<nav  :class="{ 'shadow-md': isScrolled }" class="fixed top-0 w-full z-50 transition-shadow duration-300    bg-white border-b-2 border-[#D6D6D6]">
 		<div class="container mx-auto px-14">
 			<div class="flex items-center justify-between h-16">
 				<NuxtLink :to="localePath('/')" class="flex items-center">
@@ -116,9 +116,23 @@
 	const basketStore = useBasketStore();
 	const authStore = useAuthStore();
 	const router = useRouter();
+	const isScrolled = ref(false);
 
 	const isDropdownOpen = ref(false);
 	const wallet = ref<Wallet | null>(null);
+	
+	onMounted(() => {
+      const handleScroll = () => {
+        isScrolled.value = window.scrollY > 0;
+      };
+    
+      window.addEventListener('scroll', handleScroll);
+      handleScroll(); // Check initial scroll position
+    
+      onUnmounted(() => {
+        window.removeEventListener('scroll', handleScroll);
+      });
+    });
 
 	const toggleDropdown = () => {
 		isDropdownOpen.value = !isDropdownOpen.value;
