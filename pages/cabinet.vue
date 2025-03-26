@@ -167,36 +167,48 @@
 			</div>
 
 			<!-- Order History Section -->
-			<div class="bg-white rounded-lg shadow-lg p-6">
-				<h2 class="text-lg font-semibold mb-4">
-					{{ t('cabinet.orderHistory') }}
-				</h2>
-				<div v-if="purchaseStore.purchases.length > 0">
-					<div
-						v-for="purchase in purchaseStore.purchases"
-						:key="purchase.createdAt.toString()"
-						class="border-b last:border-0 py-4"
-					>
-						<div class="flex justify-between items-start mb-2">
-							<div>
-								<p class="font-medium">{{ formatDate(purchase.createdAt) }}</p>
-								<p class="text-sm text-gray-600">
-									{{ purchase.totalAmount }}тг
-								</p>
-							</div>
-							<span class="text-green-600 text-sm">{{
-								t('cabinet.completed')
-							}}</span>
-						</div>
-						<div class="text-sm text-gray-600">
-							{{ purchase.items.length }} {{ t('cabinet.items') }}
-						</div>
-					</div>
-				</div>
-				<div v-else class="text-gray-500 text-center py-4">
-					{{ t('cabinet.noOrders') }}
-				</div>
-			</div>
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-lg font-semibold mb-4">
+                {{ t('cabinet.transactionHistory') }}
+                </h2>
+                <!-- Loading State -->
+                <div v-if="isTransactionsLoading" class="text-center py-4">
+                <p class="text-gray-500">{{ t('loading') }}</p>
+                </div>
+                <!-- Transactions List -->
+                <div v-else-if="transactions.length > 0">
+                <div
+                    v-for="transaction in transactions"
+                    :key="transaction.id"
+                    class="border-b last:border-0 py-4"
+                >
+                    <div class="flex justify-between items-start mb-2">
+                    <div>
+                        <p class="font-medium">{{ formatDate(transaction.created_at) }}</p>
+                        <p class="text-sm text-gray-600">
+                        {{ transaction.amount }}тг
+                        </p>
+                    </div>
+                    <span
+                        :class="{
+                        'text-green-600': transaction.status === 'finished',
+                        'text-yellow-600': transaction.status === 'pending',
+                        'text-red-600': transaction.status === 'canceled'
+                        }"
+                        class="text-sm"
+                    >
+                        {{ t(`cabinet.transactionStatus.${transaction.status}`) }}
+                    </span>
+                    </div>
+                    <div class="text-sm text-gray-600">
+                    {{ t(`cabinet.transactionType.${transaction.transaction_type}`) }}
+                    </div>
+                </div>
+            </div>
+            <!-- No Transactions -->
+            <div v-else class="text-gray-500 text-center py-4">
+                {{ t('cabinet.noTransactions') }}
+            </div>
 		</div>
 
 		<!-- Add Kid Modal -->
@@ -205,6 +217,7 @@
 			@close="showAddKidModal = false"
 			@added="refreshKids"
 		/>
+	</div>
 	</div>
 </template>
 
@@ -216,7 +229,7 @@
 	import { WalletService } from '~/services/WalletService';
 	import { ClientService } from '~/services/ClientService';
 	import { KidService } from '~/services/KidService';
-	import type { Wallet } from '~/types/wallet';
+	import type { Wallet, Transaction } from '~/types/wallet';
 	import type { ClientDetails } from '~/types/client';
 	import type { Kid } from '~/types/kid';
 	import KidsList from '~/components/features/cabinet/kids-list.vue';
@@ -235,6 +248,8 @@
 	const kids = ref<Kid[]>([]);
 	const isKidsLoading = ref(true);
 	const showAddKidModal = ref(false);
+	const transactions = ref<Transaction[]>([]);
+	const isTransactionsLoading = ref(true);
 	const placeholderImage = new URL(
 		'@/assets/images/placeholder-kid.png',
 		import.meta.url
@@ -269,6 +284,15 @@
 		} finally {
 			isKidsLoading.value = false;
 		}
+		
+		try {
+          const transactionHistory = await WalletService.getTransactionHistory();
+          transactions.value = transactionHistory.results;
+        } catch (error) {
+          console.error('Failed to fetch transaction history:', error);
+        } finally {
+          isTransactionsLoading.value = false;
+        }
 	});
 
 	const formatDate = (date: Date) => {

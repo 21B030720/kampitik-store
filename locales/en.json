@@ -169,7 +169,22 @@
     "childAge": "Age",
     "childDetails": "Details",
     "enterChildName": "Enter child's name",
-    "enterChildDetails": "Enter details about your child"
+    "enterChildDetails": "Enter details about your child",
+    "transactionHistory": "Transaction History",
+    "noTransactions": "No transactions yet",
+    "transactionStatus": {
+      "finished": "Completed",
+      "pending": "Pending",
+      "canceled": "Canceled"
+    },
+    "transactionType": {
+      "top_up": "Top Up",
+      "purchase": "Purchase",
+      "refund": "Refund",
+      "bonus": "Bonus",
+      "withdraw": "Withdraw",
+      "deposit": "Deposit"
+    }
   },
   "balance": {
     "replenishmentTitle": "Balance Replenishment",

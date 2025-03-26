@@ -60,9 +60,9 @@
 					</div>
 				</div>
 
-				<p v-if="product.description" class="text-sm text-gray-600 mb-2">
+				<!-- <p v-if="product.description" class="text-sm text-gray-600 mb-2">
 					{{ product.description }}
-				</p>
+				</p> -->
 
 				<div class="text-sm">
 					<div class="grid grid-cols-[auto,1fr] gap-x-2">

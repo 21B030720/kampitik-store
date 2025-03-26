@@ -3,7 +3,7 @@
 	import Header from '~/components/shared/main-header.vue';
 	import ChatButton from '~/components/features/chat/chat-button.vue';
 	import ChatWindow from '~/components/features/chat/chat-window.vue';
-
+	import Footer from '~/components/shared/main-footer.vue';
 	const route = useRoute();
 	const { t, te } = useI18n();
 
@@ -60,5 +60,6 @@
 				/>
 			</Body>
 		</Html>
+		<Footer />
 	</div>
 </template>

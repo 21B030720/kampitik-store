@@ -1,5 +1,5 @@
 import { BASE_URL } from '~/BASE_URL';
-import type { Wallet } from '~/types/wallet';
+import type { Wallet, Transaction, TransactionHistory } from '~/types/wallet';
 import { fetchWithAuth } from '~/utils/api';
 
 interface TopUpResponse {
@@ -53,5 +53,15 @@ export const WalletService = {
 			console.error('Error initializing payment:', error);
 			throw error;
 		}
-	}
+	},
+	
+	async getTransactionHistory(): Promise<TransactionHistory> {
+    try {
+      const response = await fetchWithAuth(`${API_BASE_URL}/wallets/transactions-history/`);
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching transaction history:', error);
+      throw error;
+    }
+  }
 }; 

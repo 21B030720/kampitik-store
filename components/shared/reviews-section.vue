@@ -67,7 +67,7 @@ const props = defineProps<{
   fetchMyReview: () => Promise<MyReview | null>;
 }>();
 
-const myReview = ref<Review | null>(null);
+const myReview = ref<MyReview | null>(null);
 const { t } = useI18n();
 const reviews = ref<Review[]>([]);
 const error = ref<string | null>(null);
