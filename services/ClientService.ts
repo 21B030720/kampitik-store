@@ -13,5 +13,15 @@ export const ClientService = {
 			console.error('Error fetching client details:', error);
 			throw error;
 		}
-	}
+	},
+	
+	async getClientOrders(): Promise<{ results: ClientOrder[] }> {
+    try {
+      const response = await fetchWithAuth(`${API_BASE_URL}/client-orders/`);
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching client orders:', error);
+      throw error;
+    }
+  }
 }; 

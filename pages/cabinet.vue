@@ -22,6 +22,8 @@
             :is-loading="isKidsLoading"
             @add-kid="showAddKidModal = true"
         />
+        
+        <ClientOrdersSection />
 
 		<TransactionHistorySection
             :transactions="transactions"
@@ -54,7 +56,8 @@
     import TransactionHistorySection from '~/components/features/cabinet/transaction-history-section.vue';
 	import AddKidModal from '~/components/features/cabinet/add-kid-modal.vue';
     import KidsSection from '~/components/features/cabinet/kids/kid-section.vue';
-	
+	import ClientOrdersSection from '~/components/features/cabinet/client-orders-section.vue';
+    
     const { t } = useI18n();
 	const authStore = useAuthStore();
 	const localePath = useLocalePath();
