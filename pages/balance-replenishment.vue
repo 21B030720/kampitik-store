@@ -81,7 +81,7 @@ const cleanedHtml = ref('');
 
 const isValidAmount = computed(() => {
 	const value = amount.value;
-	return value >= 2000 && value <= 10000;
+	return value >= 2000;
 });
 
 onMounted(async () => {

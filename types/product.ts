@@ -22,6 +22,7 @@ export interface Product {
 	shop_id: number;
 	shop_name: string;
 	commodity_group: number | null;
+	commodity_group_name: string | null;
 }
 
 export interface ProductFilterParams {

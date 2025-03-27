@@ -23,7 +23,6 @@
 						@input="$emit('update:modelValue', Number(($event.target as HTMLInputElement).value))"
 						type="number"
 						min="2000"
-						max="10000"
 						step="100"
 						required
 						class="w-full px-4 py-2 border rounded-lg focus:ring-primary-500 focus:border-primary-500"
@@ -88,7 +87,7 @@ const emit = defineEmits<{
 const quickAmounts = [2000, 5000, 10000];
 
 const isValidAmount = computed(() => {
-	return props.modelValue >= 2000 && props.modelValue <= 10000;
+	return props.modelValue >= 2000;
 });
 
 const handleSubmit = () => {

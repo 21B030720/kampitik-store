@@ -7,9 +7,9 @@
 		/>
 		<ShopPacks :bundles="bundles" @add-to-basket="addToBasket" />
 		<h2 class="text-2xl font-bold mb-6">{{ t('shop.products') }}</h2>
-		<ShopCategories
+		<!-- <ShopCategories
 			v-model:selected-category="selectedCategory"
-		/>
+		/> -->
 		<div v-if="isLoading" class="text-center py-12">
 			<p class="text-gray-500">{{ t('loading') }}</p>
 		</div>

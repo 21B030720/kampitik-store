@@ -69,8 +69,12 @@
 						<p class="text-gray-500">Age:</p>
 						<p class="text-right">{{ product.from_age }}-{{ product.to_age }} years</p>
 						
+						
+						
 						<p class="text-gray-500">Category:</p>
-						<p class="text-right">{{ product.category_name }}</p>
+    				    <p v-if="product.category_name !== null" class="text-right">{{ product.category_name }}</p>
+                        <p v-else class="text-right">{{ product.commodity_group_name }}</p>
+						
 						
 						<p class="text-gray-500">Shop:</p>
 						<p class="text-right">{{ product.shop_name }}</p>
