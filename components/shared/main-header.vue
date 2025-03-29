@@ -38,7 +38,7 @@
 					</NuxtLink>
 
 					<a
-						href="https://wa.me/YOUR_WHATSAPP_NUMBER"
+						href="https://wa.me/77759865619"
 						target="_blank"
 						class="flex items-center px-4 py-2 bg-[#25D366] text-white rounded-lg hover:bg-[#128C7E] transition-colors"
 					>
