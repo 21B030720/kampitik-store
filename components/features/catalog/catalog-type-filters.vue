@@ -1,9 +1,6 @@
 <template>
   <div class="w-full md:w-64">
-    <div class="bg-white rounded-lg shadow-lg">
-      <div class="p-4">
-        <h3 class="text-lg font-medium text-gray-900">{{ t('catalog.filters') }}</h3>
-      </div>
+    <div class="bg-white rounded-2xl border-2 border-[#E8EDF5]">
 
       <div>
         <div
@@ -18,7 +15,7 @@
             <span class="w-5 h-5">
               <ContentTypeIcon :type="type" />
             </span>
-            <span class="text-gray-700">{{ t(`contentTypes.${type}`) }}</span>
+            <span class="text-black font-bold">{{ t(`contentTypes.${type}`) }}</span>
           </div>
         </div>
       </div>

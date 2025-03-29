@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white rounded-lg shadow p-4 space-y-4 mb-10">
+  <div class="bg-white rounded-2xl border border-2 border-[#E8EDF5] p-4 space-y-4 mb-10">
     <h2 class="font-semibold text-lg">{{ t('catalog.additionalFilters') }}</h2>
 
     <div class="space-y-4">
@@ -41,7 +41,7 @@
       />
 
       <!-- Apply Button with loading state -->
-      <button
+      <!-- <button
         class="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors relative"
         @click="applyFilters"
         :disabled="isDebouncing"
@@ -55,7 +55,7 @@
         >
           <div class="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full" />
         </div>
-      </button>
+      </button> -->
     </div>
   </div>
 </template>
