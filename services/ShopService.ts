@@ -26,7 +26,9 @@ const FILTER_MAPPINGS: Record<string, FilterMapping> = {
     from_price: 'from_price',
     to_price: 'to_price',
     page: 'page',
-    per_page: 'per_page'
+    per_page: 'per_page',
+    commodity_group_category_id: 'commodity_group_category_id',
+    commodity_group_id: 'commodity_group_id'
   },
   bundles: {
     name: 'name',
@@ -692,5 +694,29 @@ export const ShopService = {
       // Return null if no review exists or there's an error
       return null;
     }
-  }
+  },
+  
+  async getCommodityGroupCategories(): Promise<Category[]> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/shops/commodity-groups/categories/`);
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      const data = await response.json();
+      return data.results;
+    } catch (error) {
+      console.error('Error fetching commodity group categories:', error);
+      throw error;
+    }
+  },
+  
+  async getCommodityGroups(categoryId: number): Promise<CommodityGroup[]> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/shops/commodity-groups/?category_id=${categoryId}`);
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      const data = await response.json();
+      return data.results;
+    } catch (error) {
+      console.error('Error fetching commodity groups:', error);
+      throw error;
+    }
+  },
 };

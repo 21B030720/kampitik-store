@@ -34,4 +34,6 @@ export interface ProductFilterParams {
 	per_page?: number;
 	from_price?: number | null;
 	to_price?: number | null;
+	commodity_group_category_id: number | null,
+  commodity_group_id: number | null
 }

@@ -45,6 +45,56 @@
         </div>
       </div>
 
+      <!-- Commodity Group Category Filter -->
+      <div v-if="contentType === 'product'" class="relative">
+        <label class="block text-sm font-medium mb-1">
+          {{ t('catalog.filters.commodityGroupCategory') }}
+        </label>
+        <select
+          v-model="localFilters.commodity_group_category_id"
+          class="w-full border rounded-lg p-2"
+          @change="fetchCommodityGroups"
+        >
+          <option value="">{{ t('catalog.filters.allCommodityGroupCategories') }}</option>
+          <option
+            v-for="groupCategory in commodityGroupCategories"
+            :key="groupCategory.id"
+            :value="groupCategory.id"
+          >
+            {{ groupCategory.name }}
+          </option>
+        </select>
+        <!-- Loading indicator for commodity group category select -->
+        <div v-if="isDebouncing" class="absolute right-8 top-[34px]">
+          <div class="animate-spin h-5 w-5 border-2 border-blue-500 border-t-transparent rounded-full" />
+        </div>
+      </div>
+
+      <!-- Commodity Group Filter -->
+      <div v-if="contentType === 'product' && localFilters.commodity_group_category_id" class="relative">
+        <label class="block text-sm font-medium mb-1">
+          {{ t('catalog.filters.commodityGroup') }}
+        </label>
+        <select
+          v-model="localFilters.commodity_group_id"
+          class="w-full border rounded-lg p-2"
+          @change="handleInput"
+        >
+          <option value="">{{ t('catalog.filters.allCommodityGroups') }}</option>
+          <option
+            v-for="group in commodityGroups"
+            :key="group.id"
+            :value="group.id"
+          >
+            {{ group.name }}
+          </option>
+        </select>
+        <!-- Loading indicator for commodity group select -->
+        <div v-if="isDebouncing" class="absolute right-8 top-[34px]">
+          <div class="animate-spin h-5 w-5 border-2 border-blue-500 border-t-transparent rounded-full" />
+        </div>
+      </div>
+
       <!-- Price Range Filters -->
       <div>
         <label class="block text-sm font-medium mb-3">
@@ -146,10 +196,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onBeforeUnmount } from 'vue';
+import { ref, reactive, onBeforeUnmount, watch, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import type { Category } from '~/types/category';
+import type { CommodityGroup } from '~/types/commodity-group';
 import type { ProductFilterParams } from '~/types/product';
+import { ShopService } from '~/services/ShopService';
 
 const { t } = useI18n();
 
@@ -172,8 +224,13 @@ const localFilters = reactive<ProductFilterParams>({
   from_age: 0,
   to_age: maxAge,
   from_price: 0,
-  to_price: 10000
+  to_price: 10000,
+  commodity_group_category_id: null,
+  commodity_group_id: null
 });
+
+const commodityGroupCategories = ref<Category[]>([]);
+const commodityGroups = ref<CommodityGroup[]>([]);
 
 let debounceTimer: NodeJS.Timeout | null = null;
 const isDebouncing = ref(false);
@@ -201,6 +258,42 @@ const applyFilters = () => {
   isDebouncing.value = false;
   emitFilters();
 };
+
+const fetchCommodityGroupCategories = async () => {
+  try {
+    commodityGroupCategories.value = await ShopService.getCommodityGroupCategories();
+  } catch (err) {
+    console.error('Failed to fetch commodity group categories:', err);
+  }
+};
+
+const fetchCommodityGroups = async () => {
+  if (localFilters.commodity_group_category_id) {
+    try {
+      commodityGroups.value = await ShopService.getCommodityGroups(localFilters.commodity_group_category_id);
+    } catch (err) {
+      console.error('Failed to fetch commodity groups:', err);
+    }
+  } else {
+    commodityGroups.value = [];
+  }
+};
+
+watch(() => localFilters.category_name, fetchCommodityGroupCategories);
+
+watch(() => localFilters.commodity_group_category_id, fetchCommodityGroups);
+
+watch(() => props.contentType, (newContentType) => {
+  if (newContentType === 'product') {
+    fetchCommodityGroupCategories();
+  }
+});
+
+onMounted(() => {
+  if (props.contentType === 'product') {
+    fetchCommodityGroupCategories();
+  }
+});
 
 onBeforeUnmount(() => {
   if (debounceTimer) {
@@ -271,4 +364,4 @@ onBeforeUnmount(() => {
   background: gray;
   border-color: gray;
 }
-</style> 
+</style>
