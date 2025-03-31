@@ -8,21 +8,21 @@
         <div
           v-for="(src, index) in imageSources"
           :key="index"
-          class="flex flex-col items-center"
+          class="flex flex-col items-center transition-transform transform hover:scale-105"
           :style="{ width: `${10 + index * 2}%` }"
         >
           <div class="flex-1 flex items-end">
             <img
               :src="src"
               :alt="`Growth stage ${index + 1}`"
-              class="h-auto object-contain rounded-lg border-white border-2 mb-2"
+              class="h-auto object-contain rounded-lg border-white border-2 mb-2 shadow-lg"
             >
           </div>
-          <div class="w-6 h-6 bg-white rounded-full border-2 border-blue-500"></div>
+          <div class="w-10 h-10 bg-white rounded-full border-2 border-blue-500 shadow-md"></div>
         </div>
       </div>
-      <!-- Line with points -->
-      <div class="absolute inset-x-0 bottom-0 flex items-center justify-between">
+      <!-- Line for points -->
+      <div class="absolute inset-x-0 bottom-4 flex items-center justify-between">
         <div class="w-full h-1 bg-white"></div>
       </div>
     </div>
@@ -52,5 +52,14 @@ const imageSources = [imageSrc1, imageSrc2, imageSrc3, imageSrc4, imageSrc5, ima
 }
 .focus\:ring-primary:focus {
   --tw-ring-color: #3490dc;
+}
+.transition-transform {
+  transition: transform 0.3s ease-in-out;
+}
+.shadow-lg {
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+.shadow-md {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 </style>
