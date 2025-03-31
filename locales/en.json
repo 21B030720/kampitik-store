@@ -39,7 +39,9 @@
       "searchByCity": "Select city...",
       "allCities": "All Cities",
       "noProducts": "No products available",
-      "fetchError": "Failed to fetch products"
+      "fetchError": "Failed to fetch products",
+      "commodityGroupCategory": "Commodity Group Category",
+      "priceRange": "Price Range"
     },
     "searchByCity": "Select city...",
     "allCities": "All Cities",
@@ -58,8 +60,12 @@
   },
   "contentTypes": {
     "menu": "Menu",
-    "activities": "Activities",
-    "services": "Services"
+    "activity": "Activities",
+    "service": "Services",
+    "course": "Courses",
+    "event": "Events",
+    "product": "Products",
+    "bundle": "Bundles"
   },
   "basket": {
     "title": "Shopping Basket",
@@ -78,7 +84,10 @@
     "carbs": "Carbohydrates",
     "ageRange": "Age Range",
     "years": "years",
-    "addToBasket": "Add to Basket"
+    "addToBasket": "Add to Basket",
+    "age": "Age",
+    "category": "Category",
+    "shop": "Shop"
   },
   "back": {
     "toShop": "Back to Shop",
@@ -207,7 +216,8 @@
     "add": "Add",
     "change": "Change",
     "save": "Save",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "currency": "Currency"
   },
   "payment": {
     "success": "Payment Successful",
@@ -255,5 +265,47 @@
     "name": "Name",
     "age": "Age",
     "details": "Details"
+  },
+  "reviews": {
+    "title": "Reviews",
+    "yourReview": "Your Review",
+    "rating": "Rating",
+    "writeReview": "Write a Review",
+    "update": "Update",
+    "cancel": "Cancel",
+    "noReviews": "No reviews yet"
+  },
+  "orderDetails": {
+    "title": "Order Details",
+    "orderInfo": "Order Information",
+    "orderItems": "Order Items"
+  },
+  "order": {
+    "id": "Order ID",
+    "quantity": "Quantity",
+    "shopName": "Shop Name",
+    "clientName": "Client Name",
+    "clientPhoneNumber": "Client Phone Number",
+    "createdAt": "Created At",
+    "status": "Status",
+    "discount": "Discount",
+    "overallPrice": "Overall Price",
+    "finalPrice": "Final Price",
+    "statuses": {
+      "CANCELLED": "Cancelled",
+      "WAITING": "Waiting",
+      "TOTALLY_GIVEN": "Totally Given",
+      "PARTIALLY_GIVEN": "Partially Given",
+      "WAITING_FOR_COURIER": "Waiting for Courier",
+    }
+  },
+  "shop": {
+    "products": "Products",
+    "preparedBundles": "Prepared Bundles",
+    "commodityCategories": "Commodity Categories",
+  },
+  "bundle": {
+    "includedProducts": "Included Products",
   }
+  
 }

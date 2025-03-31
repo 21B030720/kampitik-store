@@ -24,7 +24,7 @@
               }"
               class="text-sm"
             >
-              {{ t(`order.status.${order.status}`) }}
+              {{ t(`order.statuses.${order.status}`) }}
             </span>
           </div>
           <div class="text-sm text-gray-600">

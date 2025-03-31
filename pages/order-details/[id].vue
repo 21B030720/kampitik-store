@@ -14,7 +14,7 @@
         <p>{{ t('order.overallPrice') }}: {{ order.overall_price }}</p>
         <p>{{ t('order.finalPrice') }}: {{ order.final_price }}</p>
         <p>{{ t('order.createdAt') }}: {{ formatDate(order.created_at) }}</p>
-        <p>{{ t('order.status') }}: {{ t(`order.status.${order.status}`) }}</p>
+        <p>{{ t('order.status') }}: {{ t(`order.statuses.${order.status}`) }}</p>
       </div>
       <div class="bg-white rounded-lg shadow-lg p-6">
         <h2 class="text-lg font-semibold mb-4">{{ t('orderDetails.orderItems') }}</h2>
@@ -33,7 +33,7 @@
               }"
               class="text-sm"
             >
-              {{ t(`order.status.${item.status}`) }}
+              {{ t(`order.statuses.${item.status}`) }}
             </span>
           </div>
           <div class="text-sm text-gray-600">

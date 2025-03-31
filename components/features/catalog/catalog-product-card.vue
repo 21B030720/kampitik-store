@@ -1,9 +1,9 @@
 <template>
   <NuxtLink
     :to="localePath(`/products/${product.id}`)"
-    class="bg-white rounded-lg hover:bg-[#F6FFFE] transition-colors flex flex-col h-full"
+    class="bg-white rounded-lg hover:bg-[#F6FFFE] transition-colors flex flex-col h-full relative group"
   >
-    <div class="aspect-square relative rounded-lg">
+    <div class="aspect-square relative rounded-lg overflow-hidden">
       <img
         v-if="product.image"
         :src="product.image"
@@ -50,6 +50,18 @@
           </p>
         </div>
       </div>
+      <!-- Info overlay on hover -->
+      <div class="absolute inset-0 bg-black/70 text-white p-3 text-sm backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity">
+        <div class="grid grid-cols-2 gap-x-4 gap-y-1">
+          <p class="font-medium">{{ t('product.age') }}:</p>
+          <p class="text-right">{{ product.from_age }}-{{ product.to_age }} years</p>
+          <p class="font-medium">{{ t('product.category') }}:</p>
+          <p v-if="product.category_name !== null" class="text-right">{{ product.category_name }}</p>
+          <p v-else class="text-right">{{ product.commodity_group_name }}</p>
+          <p class="font-medium">{{ t('product.shop') }}:</p>
+          <p class="text-right">{{ product.shop_name }}</p>
+        </div>
+      </div>
     </div>
 
     <div class="p-4 flex flex-col flex-grow">
@@ -63,24 +75,10 @@
         <!-- <p v-if="product.description" class="text-sm text-gray-600 mb-2">
           {{ product.description }}
         </p> -->
-
-        <div class="text-sm">
-          <div class="grid grid-cols-[auto,1fr] gap-x-2">
-            <p class="text-gray-500">Age:</p>
-            <p class="text-right">{{ product.from_age }}-{{ product.to_age }} years</p>
-
-            <p class="text-gray-500">Category:</p>
-            <p v-if="product.category_name !== null" class="text-right">{{ product.category_name }}</p>
-            <p v-else class="text-right">{{ product.commodity_group_name }}</p>
-
-            <p class="text-gray-500">Shop:</p>
-            <p class="text-right">{{ product.shop_name }}</p>
-          </div>
-        </div>
       </div>
 
       <!-- Price and Add to Basket Button in horizontal layout -->
-      <div class="mt-2 pt-2 border-t flex items-center justify-between">
+      <div class="mt-2 flex items-center justify-between">
         <p v-if="!basketStore.getItemQuantity(product.id, 'PRODUCT')" class="text-gray-600 font-medium whitespace-nowrap">
           {{ product.price }}тг/{{ product.measure }}
         </p>
