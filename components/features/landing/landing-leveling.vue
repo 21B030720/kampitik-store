@@ -31,12 +31,12 @@
 </template>
 
 <script setup lang="ts">
-import imageSrc1 from '@/assets/images/level/level_1.png';
-import imageSrc2 from '@/assets/images/level/level_2.png';
-import imageSrc3 from '@/assets/images/level/level_3.png';
-import imageSrc4 from '@/assets/images/level/level_4.png';
+import imageSrc1 from '@/assets/images/level/level_1(1).png';
+import imageSrc2 from '@/assets/images/level/level_2(1).png';
+import imageSrc3 from '@/assets/images/level/level_3(2).png';
+import imageSrc4 from '@/assets/images/level/level_4(1).png';
 import imageSrc5 from '@/assets/images/level/level_5.png';
-import imageSrc6 from '@/assets/images/level/level_6.png';
+import imageSrc6 from '@/assets/images/level/level_6(1).png';
 
 const imageSources = [imageSrc1, imageSrc2, imageSrc3, imageSrc4, imageSrc5, imageSrc6];
 </script>
