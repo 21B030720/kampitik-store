@@ -68,7 +68,7 @@
       <div class="flex-grow">
         <div class="flex justify-between items-start mb-2">
           <div>
-            <h2 class="text-lg font-semibold">{{ product.name }}</h2>
+            <h2 class="text-lg font-semibold product-name">{{ product.name }}</h2>
           </div>
         </div>
 
@@ -130,4 +130,11 @@
 	.aspect-square {
 		aspect-ratio: 1;
 	}
+	.product-name {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2; /* Limit to 2 lines */
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 </style>
