@@ -10,6 +10,9 @@
     "balance": "Balance",
     "logout": "Logout"
   },
+  "commodityGroup": {
+    "products": "Products of commodity group"
+  },
   "catalog": {
     "title": "Product Catalog",
     "stores": "Featured Stores",
@@ -151,6 +154,7 @@
     "error": "Authentication failed. Please try again."
   },
   "cabinet": {
+    "clientOrdersTitle": "My orders",
     "title": "Personal Cabinet",
     "personalInfo": "Personal Information",
     "name": "Name",
@@ -232,6 +236,7 @@
     "error": "Sorry, I couldn't process your message. Please try again."
   },
   "course": {
+    "additionalPrices": "Open to see other plans",
     "details": "Course Details",
     "company": "Company",
     "location": "Location",
