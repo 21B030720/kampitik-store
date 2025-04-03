@@ -15,6 +15,9 @@
         <p>{{ t('order.finalPrice') }}: {{ order.final_price }}</p>
         <p>{{ t('order.createdAt') }}: {{ formatDate(order.created_at) }}</p>
         <p>{{ t('order.status') }}: {{ t(`order.statuses.${order.status}`) }}</p>
+        <button @click="rejectOrder" class="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg">
+          {{ t('order.reject') }}
+        </button>
       </div>
       <div class="bg-white rounded-lg shadow-lg p-6">
         <h2 class="text-lg font-semibold mb-4">{{ t('orderDetails.orderItems') }}</h2>
@@ -75,5 +78,14 @@ onMounted(async () => {
 
 const formatDate = (date: string) => {
   return new Date(date).toLocaleDateString();
+};
+
+const rejectOrder = async () => {
+  try {
+    await ClientService.updateOrderStatus(orderId, 'CANCELLED');
+    order.value!.status = 'CANCELLED';
+  } catch (error) {
+    console.error('Failed to update order status:', error);
+  }
 };
 </script>

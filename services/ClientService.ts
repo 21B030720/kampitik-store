@@ -33,5 +33,23 @@ export const ClientService = {
         console.error('Error fetching client order details:', error);
         throw error;
       }
-    }
+    },
+    
+    async updateOrderStatus(orderId: string, status: string): Promise<void> {
+        try {
+          const response = await fetchWithAuth(`${API_BASE_URL}/client-orders/${orderId}/update-status/`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ status }),
+          });
+          if (!response.ok) {
+            throw new Error('Failed to update order status');
+          }
+        } catch (error) {
+          console.error('Error updating order status:', error);
+          throw error;
+        }
+      }
 }; 

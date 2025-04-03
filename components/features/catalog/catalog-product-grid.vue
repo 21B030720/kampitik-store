@@ -1,24 +1,14 @@
 <template>
 	<div>
-		<!-- Show loading or no products message -->
-		<div v-if="!products.length" class="text-center py-12 text-gray-500">
-			{{ isLoading ? t('loading') : t('catalog.noProducts') }}
-		</div>
-
 		<!-- Products grid -->
-		<div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-			<ProductCard
-				v-for="product in products"
-				:key="product.id"
-				:product="product"
-				@add-to-basket="$emit('add-to-basket', $event)"
-			/>
-		</div>
-
-		<!-- Debug info -->
-		<div class="text-sm text-gray-500 mt-4">
-			Total items: {{ totalItems }}, Total pages: {{ totalPages }}, Current page: {{ currentPage }}
-		</div>
+        <transition-group name="fade-slide" tag="div" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <ProductCard
+            v-for="product in products"
+            :key="product.id"
+            :product="product"
+            @add-to-basket="$emit('add-to-basket', $event)"
+        />
+        </transition-group>
 
 		<!-- Pagination - show when there are items -->
 		<Pagination
@@ -108,3 +98,14 @@
 		onPageChange(1); // Reset to first page when filters change
 	}, { deep: true });
 </script>
+
+<style scoped>
+/* Fade and slide transition styles */
+.fade-slide-enter-active, .fade-slide-leave-active {
+  transition: opacity 0.5s, transform 0.5s;
+}
+.fade-slide-enter-from, .fade-slide-leave-to {
+  opacity: 0;
+  transform: translateY(20px);
+}
+</style>

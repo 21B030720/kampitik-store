@@ -1,6 +1,8 @@
 <template>
   <div class="container mx-auto px-4 py-8">
-    <StoreCarousel v-if="showCarousel" />
+    <transition name="fade-slide">
+      <StoreCarousel v-if="showCarousel" />
+    </transition>
 
     <div v-if="error" class="text-red-600 mb-4">
       {{ error }}
@@ -19,7 +21,8 @@
       </div>
 
       <div class="flex-1">
-        <div v-if="isLoading" class="flex justify-center items-center">
+        <div v-if="isLoading" class="flex flex-col justify-center items-center">
+          <img :src="loadingGif" alt="Loading..." class="w-16 h-16 mb-4" />
           <p class="text-gray-500">{{ t('loading') }}</p>
         </div>
         <template v-else>
@@ -51,7 +54,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { ShopService } from '~/services/ShopService';
 import { ContentType } from '~/types/content-type';
 import type { Store } from '~/types/store';
@@ -150,7 +153,11 @@ watch(
     error.value = null;
 
     try {
-      await fetchCategories(type);
+      if(type !== ContentType.BUNDLE) {
+        await fetchCategories(type);
+      }
+
+      // await new Promise(resolve => setTimeout(resolve, 5000));
 
       switch (type) {
         case ContentType.PRODUCT: {
@@ -205,6 +212,8 @@ const updateFilters = (newFilters: ProductFilterParams) => {
   };
 };
 
+// Reference to the loading GIF image
+const loadingGif = new URL('@/assets/gifs/loading/loading_1.gif', import.meta.url).href;
 </script>
 
 <style scoped>
@@ -219,5 +228,14 @@ const updateFilters = (newFilters: ProductFilterParams) => {
 .overflow-x-hidden {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* Fade and slide transition styles */
+.fade-slide-enter-active, .fade-slide-leave-active {
+  transition: opacity 0.5s, transform 0.5s;
+}
+.fade-slide-enter-from, .fade-slide-leave-to {
+  opacity: 0;
+  transform: translateY(20px);
 }
 </style>
