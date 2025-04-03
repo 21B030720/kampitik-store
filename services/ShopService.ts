@@ -28,7 +28,8 @@ const FILTER_MAPPINGS: Record<string, FilterMapping> = {
     page: 'page',
     per_page: 'per_page',
     commodity_group_category_id: 'commodity_group_category_id',
-    commodity_group_id: 'commodity_group_id'
+    commodity_group_id: 'commodity_group_id',
+    sort: 'sort'
   },
   bundles: {
     name: 'name',
@@ -38,7 +39,8 @@ const FILTER_MAPPINGS: Record<string, FilterMapping> = {
     from_price: 'from_price',
     to_price: 'to_price',
     page: 'page',
-    per_page: 'per_page'
+    per_page: 'per_page',
+    sort: 'sort'
   },
   events: {
     name: 'title',
@@ -46,7 +48,8 @@ const FILTER_MAPPINGS: Record<string, FilterMapping> = {
     from_age: 'from_age',
     to_age: 'to_age',
     page: 'page',
-    per_page: 'per_page'
+    per_page: 'per_page',
+    sort: 'sort'
   },
   courses: {
     name: 'title',
@@ -54,13 +57,15 @@ const FILTER_MAPPINGS: Record<string, FilterMapping> = {
     from_age: 'from_age',
     to_age: 'to_age',
     page: 'page',
-    per_page: 'per_page'
+    per_page: 'per_page',
+    sort: 'sort'
   },
   services: {
     name: 'title',
     category_name: 'category_name',
     page: 'page',
-    per_page: 'per_page'
+    per_page: 'per_page',
+    sort: 'sort'
   }
 };
 

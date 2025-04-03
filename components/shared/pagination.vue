@@ -22,7 +22,7 @@
         class="px-3 py-1 rounded-lg border"
         :class="[
           page === currentPage
-          ? 'bg-primary-500 text-white border-primary-500'
+          ? 'bg-primary-500 text-blue bg-blue-50'
           : 'text-gray-700 border-gray-300 hover:bg-gray-50'
         ]"
         @click="$emit('update:page', page)"

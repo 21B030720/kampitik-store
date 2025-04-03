@@ -39,23 +39,14 @@
         :showAgeFilters="showAgeFilters"
         :handleInput="handleInput"
       />
-
-      <!-- Apply Button with loading state -->
-      <!-- <button
-        class="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors relative"
-        @click="applyFilters"
-        :disabled="isDebouncing"
-      >
-        <span :class="{ 'opacity-0': isDebouncing }">
-          {{ t('catalog.filters.apply') }}
-        </span>
-        <div 
-          v-if="isDebouncing" 
-          class="absolute inset-0 flex items-center justify-center"
-        >
-          <div class="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full" />
-        </div>
-      </button> -->
+      <div>
+        <label for="sort" class="block text-sm font-medium text-gray-700">{{ t('catalog.sortBy') }}</label>
+        <select id="sort" v-model="localFilters.sort" @change="handleInput" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+          <option value="">{{ t('catalog.sortOptions.default') }}</option>
+          <option value="price asc">{{ t('catalog.sortOptions.priceAsc') }}</option>
+          <option value="price desc">{{ t('catalog.sortOptions.priceDesc') }}</option>
+        </select>
+      </div>
     </div>
   </div>
 </template>
@@ -98,7 +89,8 @@ const localFilters = reactive<ProductFilterParams>({
   from_price: 0,
   to_price: 10000,
   commodity_group_category_id: null,
-  commodity_group_id: null
+  commodity_group_id: null,
+  sort: ''
 });
 
 const commodityGroupCategories = ref<Category[]>([]);

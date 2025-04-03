@@ -10,9 +10,7 @@
 
     <div class="flex flex-col md:flex-row gap-8">
       <div>
-        <TypeFilters
-          v-model:selected-type="selectedType"
-        />
+        <TypeFilters v-model:selected-type="selectedType" />
         <AdditionalFilters
           :content-type="selectedType"
           :categories="categories"
@@ -45,7 +43,8 @@
           />
           <ServiceGrid
             v-else-if="selectedType === ContentType.SERVICE"
-            :services="services"
+            :filters="filters"
+            v-model:services="services"
           />
         </template>
       </div>
@@ -106,7 +105,8 @@ const filters = ref<ProductFilterParams>({
   from_price: null,
   to_price: null,
   commodity_group_category_id: null,
-  commodity_group_id: null
+  commodity_group_id: null,
+  sort: ''
 });
 
 // Update debouncedFilters to include age filters
@@ -118,7 +118,8 @@ const debouncedFilters = computed(() => ({
   from_price: filters.value.from_price,
   to_price: filters.value.to_price,
   commodity_group_category_id: filters.value.commodity_group_category_id,
-  commodity_group_id: filters.value.commodity_group_id
+  commodity_group_id: filters.value.commodity_group_id,
+  sort: filters.value.sort
 }));
 
 // Watch URL changes to update filters(params from url like type and so on)
@@ -153,11 +154,9 @@ watch(
     error.value = null;
 
     try {
-      if(type !== ContentType.BUNDLE) {
+      if (type !== ContentType.BUNDLE) {
         await fetchCategories(type);
       }
-
-      // await new Promise(resolve => setTimeout(resolve, 5000));
 
       switch (type) {
         case ContentType.PRODUCT: {
