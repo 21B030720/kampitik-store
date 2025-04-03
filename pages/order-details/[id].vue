@@ -46,6 +46,9 @@
             <p>{{ t('order.quantity') }}: {{ item.quantity }}</p>
             <p>{{ t('order.shopName') }}: {{ item.shop_name }}</p>
           </div>
+          <button @click="rejectOrderItem(item.id)" class="mt-2 px-4 py-2 bg-red-600 text-white rounded-lg">
+            {{ t('order.rejectItem') }}
+          </button>
         </div>
       </div>
     </div>
@@ -86,6 +89,18 @@ const rejectOrder = async () => {
     order.value!.status = 'CANCELLED';
   } catch (error) {
     console.error('Failed to update order status:', error);
+  }
+};
+
+const rejectOrderItem = async (itemId: string) => {
+  try {
+    await ClientService.updateOrderItemStatus(itemId, 'CANCELLED');
+    const item = order.value!.order_items.find(item => item.id === itemId);
+    if (item) {
+      item.status = 'CANCELLED';
+    }
+  } catch (error) {
+    console.error('Failed to update order item status:', error);
   }
 };
 </script>
