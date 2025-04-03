@@ -5,8 +5,8 @@
       class="px-3 py-1 rounded-lg border"
       :class="[
         currentPage === 1 
-          ? 'text-gray-400 border-gray-200 cursor-not-allowed' 
-          : 'text-gray-700 border-gray-300 hover:bg-gray-50'
+        ? 'text-gray-400 border-gray-200 cursor-not-allowed' 
+        : 'text-gray-700 border-gray-300 hover:bg-gray-50'
       ]"
       :disabled="currentPage === 1"
       @click="$emit('update:page', currentPage - 1)"
@@ -22,8 +22,8 @@
         class="px-3 py-1 rounded-lg border"
         :class="[
           page === currentPage
-            ? 'bg-primary-500 text-white border-primary-500'
-            : 'text-gray-700 border-gray-300 hover:bg-gray-50'
+          ? 'bg-primary-500 text-white border-primary-500'
+          : 'text-gray-700 border-gray-300 hover:bg-gray-50'
         ]"
         @click="$emit('update:page', page)"
       >
@@ -36,8 +36,8 @@
       class="px-3 py-1 rounded-lg border"
       :class="[
         currentPage === totalPages 
-          ? 'text-gray-400 border-gray-200 cursor-not-allowed' 
-          : 'text-gray-700 border-gray-300 hover:bg-gray-50'
+        ? 'text-gray-400 border-gray-200 cursor-not-allowed' 
+        : 'text-gray-700 border-gray-300 hover:bg-gray-50'
       ]"
       :disabled="currentPage === totalPages"
       @click="$emit('update:page', currentPage + 1)"
@@ -96,4 +96,4 @@ const displayedPages = computed(() => {
 
   return pages;
 });
-</script> 
+</script>
