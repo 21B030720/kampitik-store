@@ -31,15 +31,18 @@
           />
           <PackGrid
             v-else-if="selectedType === ContentType.BUNDLE"
-            :packs="packs"
+            :filters="filters"
+            v-model:packs="packs"
           />
           <EventGrid
             v-else-if="selectedType === ContentType.EVENT"
-            :events="events"
+            :filters="filters"
+            v-model:events="events"
           />
           <CourseGrid
             v-else-if="selectedType === ContentType.COURSE"
-            :courses="courses"
+            :filters="filters"
+            v-model:courses="courses"
           />
           <ServiceGrid
             v-else-if="selectedType === ContentType.SERVICE"

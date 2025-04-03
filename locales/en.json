@@ -20,13 +20,13 @@
     "addToBasket": "Add to Basket",
     "storeCount": "stores",
     "searchStores": "Search stores",
-    "sortBy": {
-      "label": "Sort by",
-      "popularity": "Popularity",
-      "newest": "Newest",
-      "priceAsc": "Price: Low to High",
-      "priceDesc": "Price: High to Low"
+    "sortBy": "Sort By",
+    "sortOptions": {
+      "default": "No sorting",
+      "priceAsc": "Price Ascending",
+      "priceDesc": "Price Descending"
     },
+    
     "activitiesComingSoon": "Activities coming soon",
     "servicesComingSoon": "Services coming soon",
     "additionalFilters": "Additional Filters",
