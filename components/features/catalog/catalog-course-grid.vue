@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Courses grid -->
-    <transition-group name="fade-slide" tag="div" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <transition-group name="fade-slide" tag="div" class="grid grid-cols-1 gap-6">
       <CatalogCourseCard
         v-for="course in courses"
         :key="course.id"
