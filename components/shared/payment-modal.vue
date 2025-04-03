@@ -21,11 +21,14 @@
 					</div>
 
 					<!-- Modal Content -->
-					<div class="px-6 py-4">
+					<!-- <div class="px-6 py-4">
 						<div class="mb-4">
 							<p class="text-gray-600 mb-2">{{ t('balance.transactionId') }}:</p>
 							<p class="font-mono bg-gray-50 p-2 rounded select-all">{{ transactionId }}</p>
 						</div>
+					</div> -->
+					<div class="px-6 py-4">
+						<p class="text-gray-600">{{ t('balance.proceedingPaymentWithoutCard') }}</p>
 					</div>
 
 					<!-- Modal Footer -->

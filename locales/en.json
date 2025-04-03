@@ -196,6 +196,7 @@
     }
   },
   "balance": {
+    "proceedingPaymentWithoutCard": "Proceeding payment without choosign card. Are you sure?",
     "replenishmentTitle": "Balance Replenishment",
     "currentBalance": "Current Balance",
     "amount": "Amount",
