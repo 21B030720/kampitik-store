@@ -21,4 +21,5 @@ export interface Course {
   from_age: number;
   to_age: number;
   course_prices: CoursePrice[];
+  avg_rating: number | null;
 } 

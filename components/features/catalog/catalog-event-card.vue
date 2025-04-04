@@ -17,6 +17,13 @@
       >
         <span class="text-gray-400">No image</span>
       </div>
+      <!-- Rating -->
+      <div
+        class="absolute top-2 left-2 bg-white rounded-full px-2 py-1 text-sm flex items-center gap-1"
+      >
+        <span>{{ event.avg_rating ?? 0 }}</span>
+        <span class="text-yellow-400">★</span>
+      </div>
     </div>
     <div class="p-4 flex flex-col flex-grow">
       <div class="flex-grow">
@@ -73,3 +80,16 @@ const handleImageError = (e: Event) => {
   img.style.display = 'none';
 };
 </script>
+
+<style scoped>
+.aspect-square {
+  aspect-ratio: 1;
+}
+.product-name {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2; /* Limit to 2 lines */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+</style>

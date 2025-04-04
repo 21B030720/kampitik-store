@@ -15,4 +15,5 @@ export interface Event {
     date_held: string;
     from_age: number;
     to_age: number;
+    avg_rating: number | null;
 } 

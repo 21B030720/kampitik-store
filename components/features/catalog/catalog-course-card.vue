@@ -19,6 +19,13 @@
         >
           <span class="text-gray-400">No image</span>
         </div>
+        <!-- Rating -->
+        <div
+          class="absolute top-2 left-2 bg-white rounded-full px-2 py-1 text-sm flex items-center gap-1"
+        >
+          <span>{{ course.avg_rating ?? 0 }}</span>
+          <span class="text-yellow-400">★</span>
+        </div>
       </div>
 
       <!-- Content Section -->

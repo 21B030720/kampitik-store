@@ -19,10 +19,9 @@
       </div>
       <!-- Rating -->
       <div
-        v-if="product.rating"
         class="absolute top-2 right-2 bg-white rounded-full px-2 py-1 text-sm flex items-center gap-1"
       >
-        <span>{{ product.rating }}</span>
+        <span>{{ product.avg_rating ?? 0 }}</span>
         <span class="text-yellow-400">★</span>
       </div>
       <!-- Nutrition info overlay -->

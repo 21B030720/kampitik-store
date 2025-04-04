@@ -9,5 +9,6 @@ export interface Bundle {
 	description?: string | null;
 	category_id?: number;
 	category_name?: string;
+	avg_rating: number | null;
 	// Add any other fields that come from the API
 }

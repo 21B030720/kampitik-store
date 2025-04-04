@@ -16,6 +16,13 @@
       >
         -{{ pack.discount }}
       </div>
+      <!-- Rating -->
+      <div
+        class="absolute top-2 left-2 bg-white rounded-full px-2 py-1 text-sm flex items-center gap-1"
+      >
+        <span>{{ pack.avg_rating ?? 0 }}</span>
+        <span class="text-yellow-400">★</span>
+      </div>
     </div>
     <div class="p-4 flex flex-col flex-grow">
       <div class="flex-grow">
