@@ -5,50 +5,16 @@
       <p class="text-gray-500">{{ t('loading') }}</p>
     </div>
     <div v-else>
-      <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
-        <h2 class="text-lg font-semibold mb-4">{{ t('orderDetails.orderInfo') }}</h2>
-        <p>{{ t('order.id') }}: {{ order.id }}</p>
-        <p>{{ t('order.clientName') }}: {{ order.client_name }}</p>
-        <p>{{ t('order.clientPhoneNumber') }}: {{ order.client_phone_number }}</p>
-        <p>{{ t('order.discount') }}: {{ order.discount }}</p>
-        <p>{{ t('order.overallPrice') }}: {{ order.overall_price }}</p>
-        <p>{{ t('order.finalPrice') }}: {{ order.final_price }}</p>
-        <p>{{ t('order.createdAt') }}: {{ formatDate(order.created_at) }}</p>
-        <p>{{ t('order.status') }}: {{ t(`order.statuses.${order.status}`) }}</p>
-        <button @click="rejectOrder" class="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg">
-          {{ t('order.reject') }}
-        </button>
-      </div>
-      <div class="bg-white rounded-lg shadow-lg p-6">
+      <OrderInfo :order="order" :rejectOrder="rejectOrder" />
+      <div class="bg-white rounded-lg p-6">
         <h2 class="text-lg font-semibold mb-4">{{ t('orderDetails.orderItems') }}</h2>
-        <div v-for="item in order.order_items" :key="item.id" class="border-b last:border-0 py-4">
-          <div class="flex justify-between items-start mb-2">
-            <div>
-              <p class="font-medium">{{ formatDate(item.created_at) }}</p>
-              <p class="text-sm text-gray-600">{{ item.for_kid_name }}</p>
-              <p class="text-sm text-gray-600">{{ item.product ? item.product.name : item.bundle.name }}</p>
-            </div>
-            <span
-              :class="{
-                'text-green-600': item.status === 'TOTALLY_GIVEN',
-                'text-yellow-600': item.status === 'PARTIALLY_GIVEN' || item.status === 'WAITING',
-                'text-red-600': item.status === 'CANCELLED'
-              }"
-              class="text-sm"
-            >
-              {{ t(`order.statuses.${item.status}`) }}
-            </span>
-          </div>
-          <div class="text-sm text-gray-600">
-            <p>{{ t('order.discount') }}: {{ item.discount }}</p>
-            <p>{{ t('order.overallPrice') }}: {{ item.overall_price }}</p>
-            <p>{{ t('order.finalPrice') }}: {{ item.final_price }}</p>
-            <p>{{ t('order.quantity') }}: {{ item.quantity }}</p>
-            <p>{{ t('order.shopName') }}: {{ item.shop_name }}</p>
-          </div>
-          <button @click="rejectOrderItem(item.id)" class="mt-2 px-4 py-2 bg-red-600 text-white rounded-lg">
-            {{ t('order.rejectItem') }}
-          </button>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <OrderItem
+            v-for="item in order?.order_items"
+            :key="item.id"
+            :item="item"
+            :rejectOrderItem="rejectOrderItem"
+          />
         </div>
       </div>
     </div>
@@ -61,6 +27,8 @@ import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 import { ClientService } from '~/services/ClientService';
 import type { ClientOrder } from '~/types/client';
+import OrderInfo from '~/components/features/order/order-info.vue';
+import OrderItem from '~/components/features/order/order-item.vue';
 
 const { t } = useI18n();
 const route = useRoute();
@@ -79,10 +47,6 @@ onMounted(async () => {
   }
 });
 
-const formatDate = (date: string) => {
-  return new Date(date).toLocaleDateString();
-};
-
 const rejectOrder = async () => {
   try {
     await ClientService.updateOrderStatus(orderId, 'CANCELLED');
@@ -99,8 +63,26 @@ const rejectOrderItem = async (itemId: string) => {
     if (item) {
       item.status = 'CANCELLED';
     }
+    checkOrderStatus();
   } catch (error) {
     console.error('Failed to update order item status:', error);
   }
 };
+
+const checkOrderStatus = () => {
+  if (order.value) {
+    const allItemsCancelledOrGiven = order.value.order_items.every(
+      item => item.status === 'CANCELLED' || item.status === 'GIVEN_TO_CUSTOMER'
+    );
+    if (allItemsCancelledOrGiven) {
+      order.value.status = 'CANCELLED';
+    }
+  }
+};
 </script>
+
+<style scoped>
+.container {
+  max-width: 800px;
+}
+</style>

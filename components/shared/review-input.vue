@@ -6,7 +6,7 @@
         <p class="text-gray-600 mb-4">{{ t('reviews.loginPrompt') }}</p>
         <NuxtLink
           :to="localePath('/login')"
-          class="inline-flex items-center justify-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+          class="inline-flex items-center justify-center px-4 py-2 bg-blue-500 text-white rounded-lg  transition-colors"
         >
           {{ t('auth.login') }}
         </NuxtLink>

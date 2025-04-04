@@ -1,9 +1,9 @@
 <template>
   <NuxtLink
     :to="localePath(`/services/${service.id}`)"
-    class="bg-white rounded-lg hover:bg-[#F6FFFE] transition-colors flex flex-col h-full relative group"
+    class="bg-white rounded-lg hover:bg-[#F6FFFE] transition-colors flex flex-col h-full relative"
   >
-    <div class="aspect-square relative rounded-lg overflow-hidden">
+    <div class="aspect-square relative rounded-lg overflow-hidden group">
       <img
         v-if="service.service_provider.profile_photo"
         :src="service.service_provider.profile_photo"
@@ -90,5 +90,8 @@ const handleImageError = (e: Event) => {
   -webkit-line-clamp: 2; /* Limit to 2 lines */
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.group:hover .group-hover\:opacity-100 {
+  opacity: 1;
 }
 </style>

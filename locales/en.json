@@ -95,7 +95,8 @@
   "back": {
     "toShop": "Back to Shop",
     "toCatalog": "Back to Catalog",
-    "toCabinet": "Back to Cabinet"
+    "toCabinet": "Back to Cabinet",
+    "toReplenishment": "Back to Replenishment"
   },
   "errors": {
     "failedToLoadProduct": "Failed to load product details",
@@ -213,6 +214,9 @@
     "transactionId": "Transaction ID",
     "proceedToPayment": "Proceed to Payment"
   },
+  "cards": {
+    "addNew": "Add new card"
+  },
   "common": {
     "cancel": "Cancel",
     "viewOnMap": "View on Map",
@@ -273,6 +277,8 @@
     "details": "Details"
   },
   "reviews": {
+    "loginToReview": "Login to leave reviews",
+    "loginPrompt": "Only authorized accounts can leave reviews",
     "title": "Reviews",
     "yourReview": "Your Review",
     "rating": "Rating",
@@ -306,6 +312,8 @@
     }
   },
   "shop": {
+    "openFrom": "Open from",
+    "openUntil": "Open until",
     "products": "Products",
     "preparedBundles": "Prepared Bundles",
     "commodityCategories": "Commodity Categories",
