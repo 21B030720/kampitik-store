@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import imageSrc from '@/assets/images/baby_shop.webp'; // Replace with your image path
+import imageSrc from '@/assets/images/baby_shop.png'; // Replace with your image path
 </script>
 
 <style scoped>

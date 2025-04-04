@@ -1,26 +1,23 @@
 <template>
   <section v-if="categories.length > 0" class="mb-12">
-    <h2 class="text-2xl font-bold mb-6">{{ t('shop.commodityCategories') }}</h2>
+    <h2 class="text-2xl font-bold mb-6 text-center">{{ t('shop.commodityCategories') }}</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <NuxtLink
         v-for="category in categories"
         :key="category.id"
         :to="localePath(`/shop/${shopId}/commodity-groups/categories/${category.id}`)"
-        class="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow"
+        class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow flex flex-col items-center"
       >
-        <div class="flex items-start gap-6">
+        <div class="flex flex-col items-center gap-4">
+          <div class="text-center">
+            <h3 class="text-xl font-semibold mb-2">{{ category.name }}</h3>
+          </div>
           <img
             :src="category.icon || placeholderImage"
             :alt="category.name"
-            class="w-24 h-24 rounded-lg object-cover"
+            class="w-32 h-32 rounded-lg object-cover"
             @error="handleImageError"
           >
-          <div>
-            <h3 class="text-xl font-semibold mb-2">{{ category.name }}</h3>
-            <p class="text-base text-gray-500">
-              {{ category.shop_name }}
-            </p>
-          </div>
         </div>
       </NuxtLink>
     </div>

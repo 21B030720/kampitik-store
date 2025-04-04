@@ -18,13 +18,13 @@
               class="h-auto object-contain rounded-lg  mb-2"
             >
           </div>
-          <div class="w-10 h-10 bg-white rounded-full border-2 border-blue-500 shadow-md mb-2"></div>
+          <div class="w-10 h-10 bg-white rounded-full border-2 border-white mb-2" />
           <span class="text-white font-bold">{{ `Level ${index + 1}` }}</span>
         </div>
       </div>
       <!-- Line for points -->
       <div class="absolute inset-x-0 bottom-12 flex items-center justify-between">
-        <div class="w-full h-1 bg-white"></div>
+        <div class="w-full h-1 bg-white" />
       </div>
     </div>
   </div>

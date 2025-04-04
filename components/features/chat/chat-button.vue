@@ -7,7 +7,7 @@
       src="@/assets/icons/chat-bot.svg"
       alt="Chat"
       class="h-6 w-6"
-    />
+    >
   </button>
 </template>
 
