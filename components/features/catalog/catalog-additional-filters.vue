@@ -9,11 +9,12 @@
         :isDebouncing="isDebouncing"
       />
       <CategoryFilter
-        :localFilters="localFilters"
-        :categories="categories"
-        :handleInput="handleInput"
-        :isDebouncing="isDebouncing"
-      />
+            v-if="contentType !== 'product' && contentType !== 'bundle'"
+            :localFilters="localFilters"
+            :categories="categories"
+            :handleInput="handleInput"
+            :isDebouncing="isDebouncing"
+        />
       <CommodityGroupCategoryFilter
         v-if="contentType === 'product'"
         :localFilters="localFilters"

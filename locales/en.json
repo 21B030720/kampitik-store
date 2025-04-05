@@ -43,8 +43,10 @@
       "allCities": "All Cities",
       "noProducts": "No products available",
       "fetchError": "Failed to fetch products",
-      "commodityGroupCategory": "Commodity Group Category",
-      "priceRange": "Price Range"
+      "commodityGroupCategory": "C-Group Category",
+      "commodityGroup": "Commodity group",
+      "priceRange": "Price Range",
+      "all": "All"
     },
     "searchByCity": "Select city...",
     "allCities": "All Cities",

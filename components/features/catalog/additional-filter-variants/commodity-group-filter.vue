@@ -8,7 +8,7 @@
       class="w-full border rounded-lg p-2"
       @change="handleInput"
     >
-      <option value="">{{ t('catalog.filters.allCommodityGroups') }}</option>
+      <option value="">{{ t('catalog.filters.all') }}</option>
       <option
         v-for="group in commodityGroups"
         :key="group.id"

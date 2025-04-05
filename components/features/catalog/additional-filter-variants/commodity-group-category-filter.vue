@@ -8,7 +8,7 @@
       class="w-full border rounded-lg p-2"
       @change="fetchCommodityGroups"
     >
-      <option value="">{{ t('catalog.filters.allCommodityGroupCategories') }}</option>
+      <option value="">{{ t('catalog.filters.all') }}</option>
       <option
         v-for="groupCategory in commodityGroupCategories"
         :key="groupCategory.id"
