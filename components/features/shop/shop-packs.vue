@@ -1,7 +1,7 @@
 <template>
   <section v-if="bundles.length > 0" class="mb-12">
     <h2 class="text-2xl font-bold mb-6">{{ t('shop.preparedBundles') }}</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
       <CatalogPackCard
         v-for="bundle in bundles"
         :key="bundle.id"

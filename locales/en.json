@@ -82,6 +82,7 @@
     "checkout": "Proceed to Checkout"
   },
   "product": {
+    "details": "Details",
     "nutritionPer100g": "Nutrition per 100g",
     "nutritionalValue": "Calories",
     "fats": "Fats",

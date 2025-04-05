@@ -50,7 +50,7 @@
     <div class="relative">
       <!-- Navigation Buttons -->
       <button
-        class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 bg-white rounded-full p-2 shadow-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+        class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 z-10 bg-white rounded-full p-2 shadow-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
         :disabled="isAtStart"
         @click="scrollStores('left')"
       >
@@ -70,7 +70,7 @@
         </svg>
       </button>
       <button
-        class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 bg-white rounded-full p-2 shadow-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+        class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 z-10 bg-white rounded-full p-2 shadow-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
         :disabled="isAtEnd"
         @click="scrollStores('right')"
       >
@@ -89,7 +89,7 @@
           />
         </svg>
       </button>
-
+      
       <!-- Stores Container -->
       <div
         ref="storesContainer"
@@ -102,7 +102,7 @@
           :store="store"
         />
       </div>
-
+      
       <!-- Scroll Progress Indicator -->
       <div class="flex justify-center mt-4 space-x-1">
         <div
@@ -191,7 +191,7 @@ const scrollStores = (direction: 'left' | 'right') => {
 
   const container = storesContainer.value;
   const scrollAmount = container.clientWidth;
-
+  
   if (direction === 'left') {
     container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
   } else {
@@ -207,7 +207,7 @@ const updateScrollState = () => {
   isAtStart.value = container.scrollLeft <= 0;
   isAtEnd.value =
     container.scrollLeft + container.clientWidth >= container.scrollWidth;
-
+  
   // Update current page
   currentPage.value = Math.floor(
     container.scrollLeft / container.clientWidth,

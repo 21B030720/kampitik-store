@@ -3,7 +3,7 @@
 		<!-- Debug info -->
 		<p class="text-sm text-gray-500 mb-2">Products received: {{ products.length }}</p>
 		
-		<div v-if="products.length > 0" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+		<div v-if="products.length > 0" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
 			<CatalogProductCard
 				v-for="product in products"
 				:key="product.id"
