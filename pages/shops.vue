@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
-import type { Store } from '~/types/store';
+import type { Shop } from '~/types/shop';
 import { usePagination } from '~/composables/usePagination';
 import { ShopService } from '~/services/ShopService';
 import Pagination from '~/components/shared/pagination.vue';
@@ -32,7 +32,7 @@ const { t } = useI18n();
 const isLoading = ref(false);
 const error = ref<string | null>(null);
 
-const shops = ref<Store[]>([]);
+const shops = ref<Shop[]>([]);
 const totalItems = ref(0);
 
 const {

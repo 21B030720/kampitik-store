@@ -14,7 +14,7 @@
         :key="category.name"
         :value="category.name"
       >
-        {{ category.name }}
+        {{ truncateText(category.name) }}
       </option>
     </select>
     <!-- Loading indicator for category select -->
@@ -38,4 +38,8 @@ const props = defineProps<{
   handleInput: () => void;
   isDebouncing: boolean;
 }>();
+
+const truncateText = (text: string, maxLength = 18) => {
+  return text.length > maxLength ? text.slice(0, maxLength) + '...' : text;
+};
 </script>

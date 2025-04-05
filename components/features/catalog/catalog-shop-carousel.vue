@@ -60,7 +60,7 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
-import type { Store } from '~/types/store';
+import type { Shop } from '~/types/shop';
 import ShopCard from './catalog-shop-card.vue';
 import { ShopService } from '~/services/ShopService';
 
@@ -72,7 +72,7 @@ interface City {
 const { t } = useI18n();
 
 // State
-const stores = ref<Store[]>([]);
+const stores = ref<Shop[]>([]);
 const cities = ref<City[]>([]);
 const isLoading = ref(false);
 const error = ref<string | null>(null);

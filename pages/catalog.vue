@@ -59,7 +59,7 @@
 import { ref, computed, watch } from 'vue';
 import { ShopService } from '~/services/ShopService';
 import { ContentType } from '~/types/content-type';
-import type { Store } from '~/types/store';
+import type { Shop } from '~/types/shop';
 import type { Product, ProductFilterParams } from '~/types/product';
 import type { Bundle } from '~/types/bundle';
 import type { Event as ShopEvent } from '~/types/event';
@@ -82,7 +82,7 @@ const { t } = useI18n();
 const route = useRoute();
 
 // Store data with proper typing
-const stores = ref<Store[]>([]);
+const stores = ref<Shop[]>([]);
 const products = ref<Product[]>([]);
 const packs = ref<Bundle[]>([]);
 const events = ref<ShopEvent[]>([]);

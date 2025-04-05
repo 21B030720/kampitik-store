@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white rounded-2xl border border-2 border-[#E8EDF5] p-4 space-y-4 mb-10">
+  <div class="mt-6 bg-white rounded-2xl border border-2 border-[#E8EDF5] p-4 space-y-4 mb-10">
     <h2 class="font-semibold text-lg">{{ t('catalog.additionalFilters') }}</h2>
 
     <div class="space-y-4">

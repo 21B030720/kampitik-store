@@ -28,13 +28,13 @@
 </template>
 
 <script setup lang="ts">
-	import type { Store } from '~/types/store';
+	import type {  Shop } from '~/types/shop';
 
 	// const { t } = useI18n();
 	const localePath = useLocalePath();
 
 	defineProps<{
-		store: Store;
+		store: Shop;
 	}>();
 
 	// Import placeholder image

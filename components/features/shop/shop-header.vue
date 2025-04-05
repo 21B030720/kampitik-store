@@ -25,13 +25,13 @@
 </template>
 
 <script setup lang="ts">
-import type { Store } from '~/types/store';
+import type { Shop } from '~/types/shop';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 
 defineProps<{
-  shop: Store | null;
+  shop: Shop | null;
 }>();
 
 const placeholderImage = new URL(

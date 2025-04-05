@@ -1,4 +1,4 @@
-import type { Shop } from '~/types/store';
+import type { Shop } from '~/types/shop';
 import type { Product, ProductFilterParams } from '~/types/product';
 import type { Category } from '~/types/category';
 import type { CommodityGroup } from '~/types/commodity-group';
