@@ -144,6 +144,9 @@
     "continueShopping": "Continue Shopping"
   },
   "auth": {
+    "emailConfirmationTitle": "Email Confirmation",
+    "emailConfirmationMessage": "A confirmation email has been sent to your email. Please check your inbox and follow the instructions to complete your registration.",
+    "goToHome": "Go to Home",
     "loginTitle": "Sign in to your account",
     "signupTitle": "Create a new account",
     "name": "Full Name",
@@ -156,7 +159,8 @@
     "signup": "Sign up",
     "needAccount": "Need an account? Sign up",
     "haveAccount": "Already have an account? Sign in",
-    "error": "Authentication failed. Please try again."
+    "error": "Authentication failed. Please try again.",
+    "passwordConfirmation": "Confirm Password"
   },
   "cabinet": {
     "clientOrdersTitle": "My orders",

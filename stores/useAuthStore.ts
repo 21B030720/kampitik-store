@@ -23,8 +23,8 @@ export const useAuthStore = defineStore('auth', {
 
 		async signup(credentials: SignupCredentials) {
 			try {
-				const response = await AuthService.signup(credentials);
-				this.setAuthData(response);
+				await AuthService.signup(credentials);
+				// No need to set auth data here
 			} catch (error) {
 				console.error('Signup error:', error);
 				throw error;
