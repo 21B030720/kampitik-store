@@ -14,7 +14,7 @@
         :key="groupCategory.id"
         :value="groupCategory.id"
       >
-        {{ groupCategory.name }}
+        {{ truncateText(groupCategory.name) }}
       </option>
     </select>
     <!-- Loading indicator for commodity group category select -->
@@ -42,5 +42,9 @@ const props = defineProps<{
 const handleCategoryChange = () => {
   props.localFilters.commodity_group_id = ''; // Set to "all" value
   props.fetchCommodityGroups();
+};
+
+const truncateText = (text: string, maxLength = 18) => {
+  return text.length > maxLength ? text.slice(0, maxLength) + '...' : text;
 };
 </script>
