@@ -60,6 +60,7 @@ const handleKidSelect = async (kidId: number) => {
     const kid = await KidService.getKidById(kidId);
     selectedKid.value = kid;
     emit('update', kidId);
+    closeModal(); // Close the modal after selecting a kid
   } catch (error) {
     console.error('Failed to fetch kid details:', error);
   }
@@ -68,4 +69,4 @@ const handleKidSelect = async (kidId: number) => {
 const closeModal = () => {
   showKidModal.value = false;
 };
-</script> 
+</script>
