@@ -93,6 +93,7 @@
     "shop": "Shop"
   },
   "back": {
+    "toCategory": "Back to Category",
     "toShop": "Back to Shop",
     "toCatalog": "Back to Catalog",
     "toCabinet": "Back to Cabinet",

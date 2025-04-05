@@ -1,7 +1,8 @@
 <template>
-  <div>
+  <div class="bg-[#F5F0E6]" >
     <Hero />
     <Shops />
+    <OneTime />
     <Bundles />
     <!-- <Convinience /> -->
     <AiAssitant @send-message="handleSendMessage" />
@@ -30,7 +31,8 @@ import Bundles from '~/components/features/landing/landing-bundles.vue';
 import AiAssitant from "~/components/features/landing/landing-ai-assistant.vue";
 import ChatButton from '~/components/features/chat/chat-button.vue';
 import ChatWindow from '~/components/features/chat/chat-window.vue';
-import Cards from "~/components/features/landing/landing-cards-container.vue"
+import Cards from "~/components/features/landing/landing-cards-container.vue";
+import OneTime from "~/components/features/landing/landing-one-time.vue";
 import { useChatStore } from '~/stores/useChatStore';
 import { BASE_URL } from '~/BASE_URL';
 

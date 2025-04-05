@@ -1,4 +1,4 @@
-import type { Store } from '~/types/store';
+import type { Shop } from '~/types/store';
 import type { Product, ProductFilterParams } from '~/types/product';
 import type { Category } from '~/types/category';
 import type { CommodityGroup } from '~/types/commodity-group';
@@ -66,6 +66,10 @@ const FILTER_MAPPINGS: Record<string, FilterMapping> = {
     page: 'page',
     per_page: 'per_page',
     sort: 'sort'
+  },
+  shops: {
+    page: 'page',
+    per_page: 'per_page'
   }
 };
 
@@ -103,7 +107,7 @@ export interface PaginatedResponse<T> {
 export interface ServiceRating {
 	rating: number;
 	comment?: string;
-  }
+}
 
 export const ShopService = {
 	async getCities(): Promise<City[]> {
@@ -121,7 +125,7 @@ export const ShopService = {
 		}
 	},
 
-	async getShops(filters?: StoreFilterParams): Promise<Store[]> {
+	async getShops(filters?: StoreFilterParams): Promise<Shop[]> {
 		try {
 			const params = new URLSearchParams();
 			if (filters?.city_id) {
@@ -135,7 +139,7 @@ export const ShopService = {
 				throw new Error(`HTTP error! status: ${response.status}`);
 			}
 
-			const data: PaginatedResponse<Store> = await response.json();
+			const data: PaginatedResponse<Shop> = await response.json();
 			return data.results;
 		} catch (error) {
 			console.error('Error fetching stores:', error);
@@ -143,7 +147,7 @@ export const ShopService = {
 		}
 	},
 
-	async getShopById(storeId: number): Promise<Store> {
+	async getShopById(storeId: number): Promise<Shop> {
 		try {
 			const response = await fetch(`${API_BASE_URL}/shops/${storeId}`);
       
@@ -151,7 +155,7 @@ export const ShopService = {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       
-			const data: Store = await response.json();
+			const data: Shop = await response.json();
       return data;
     } catch (error) {
 			console.error(`Error fetching shop with id ${storeId}:`, error);
@@ -259,6 +263,19 @@ export const ShopService = {
 		  const queryParams = createQueryParamsOfFilter(filters, 'products');
 
 			const response = await fetch(`${API_BASE_URL}/shops/products/?${queryParams}`);
+			if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+			return await response.json();
+		} catch (error) {
+			console.error('Error fetching products:', error);
+			throw error;
+		}
+	},
+	
+	async getAllShops(filters: ProductFilterParams): Promise<PaginatedResponse<Shop>> {
+		try {
+		  const queryParams = createQueryParamsOfFilter(filters, 'shops');
+
+			const response = await fetch(`${API_BASE_URL}/shops/?${queryParams}`);
 			if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 			return await response.json();
 		} catch (error) {

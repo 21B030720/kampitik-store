@@ -14,7 +14,7 @@
         class="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-sm"
         v-if="pack.discount"
       >
-        -{{ pack.discount }}
+        -{{ pack.discount }}%
       </div>
       <!-- Rating -->
       <div

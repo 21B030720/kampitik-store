@@ -1,7 +1,7 @@
 <template>
   <div class="container mx-auto px-4 py-8">
     <transition name="fade-slide">
-      <StoreCarousel v-if="showCarousel" />
+      <ShopCarousel v-if="showCarousel" />
     </transition>
 
     <div v-if="error" class="text-red-600 mb-4">
@@ -65,7 +65,7 @@ import type { Bundle } from '~/types/bundle';
 import type { Event as ShopEvent } from '~/types/event';
 import type { Course } from '~/types/course';
 import type { Service } from '~/types/service';
-import StoreCarousel from '~/components/features/catalog/catalog-store-carousel.vue';
+import ShopCarousel from '~/components/features/catalog/catalog-shop-carousel.vue';
 import TypeFilters from '~/components/features/catalog/catalog-type-filters.vue';
 import ProductGrid from '~/components/features/catalog/catalog-product-grid.vue';
 import PackGrid from '~/components/features/catalog/catalog-pack-grid.vue';

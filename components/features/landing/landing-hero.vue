@@ -1,8 +1,8 @@
 <template>
   <div class="flex-1 mt-4 overflow-hidden">
     <!-- Heading -->
-    <div class="text-center mb-8">
-      <h1 class="text-4xl font-bold text-primary">
+    <div class="text-center mt-8 mb-8">
+      <h1 class="text-4xl font-bold text-black">
         FIND EVERYTHING FOR YOUR CHILD IN ONE PLATFORM
       </h1>
     </div>

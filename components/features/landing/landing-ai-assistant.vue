@@ -1,5 +1,12 @@
 <template>
-  <div class="flex items-center p-20 bg-[#E9F5FF] rounded-lg shadow-md relative">
+  <div class="flex items-center p-20 bg-[#F7F0EE] rounded-lg relative">
+    <!-- Text Section -->
+    <div class="mr-4 flex-1 relative h-full">
+      <!-- Title -->
+      <h2 class="text-4xl text-[#4A4A4A] font-bold mb-2">Useful Baby Care Tips</h2>
+      <!-- Description -->
+      <p class="text-xl text-[#B28E87] mb-10">Ask anything and anytime from our AI assistant</p>
+    </div>
     <!-- Image Section with Input -->
     <div class="flex-shrink-0 relative">
       <img src="@/assets/images/ai_assistant_bg.png" alt="AI Assistant Background" class="h-[300px] object-cover rounded-lg">
@@ -20,15 +27,6 @@
         </div>
       </div>
     </div>
-    <!-- Text Section -->
-    <div class="ml-4 flex-1 relative h-full">
-      <!-- Title -->
-      <h2 class="text-2xl font-bold mb-2">Useful Baby Care Tips</h2>
-      <!-- Description -->
-      <p class="text-lg mb-10">Ask anything and anytime from our AI assistant</p>
-    </div>
-    <!-- Icon -->
-    <img src="@/assets/icons/tips.svg" alt="Tips Icon" class="absolute top-10 right-10 w-12 h-12">
   </div>
 </template>
 

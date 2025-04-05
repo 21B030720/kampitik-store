@@ -5,15 +5,14 @@
       <img :src="imageSrc" alt="Baby Image" class="h-[300px] object-cover rounded-lg">
     </div>
     <!-- Text Section -->
-    <div class="ml-4 flex-1 relative h-full">
+    <div class="ml-10 mb-16 flex-1 relative h-full">
       
       <!-- Title -->
-      <h2 class="text-2xl font-bold mb-2">Who Says All Stores and Services For Your Baby In One App?</h2>
+      <h2 class="text-4xl font-bold mb-2">Who Says All Stores and Services For Your Baby In One App?</h2>
       <!-- Description -->
-      <p class="text-lg mb-10">Find many shops</p>
+      <p class="text-xl text-[#4D90A1] mb-10">Find many shops</p>
     </div>
-    <!-- Icon -->
-    <img src="@/assets/icons/shop_blue.svg" alt="Shop Icon" class="absolute top-10 right-10 w-12 h-12 ">
+    
   </div>
 </template>
 

@@ -1,7 +1,7 @@
 <template>
-  <div class="flex flex-col items-center p-6 bg-blue-500 rounded-2xl shadow-lg">
-    <h2 class="text-2xl font-bold mb-2 text-white">Baby Grow and Level Greending</h2>
-    <p class="text-center text-base mb-6 text-white">Watch the growth stages from baby to teenager.</p>
+  <div class="flex flex-col items-center p-6 bg-[#DDEBF4] rounded-2xl shadow-lg">
+    <h2 class="text-4xl font-bold mt-16 mb-2 text-[#333333]">GAMIFICATION OF PARENTING</h2>
+    <p class="text-center text-xl mb-6 text-[#333333]">Make caring into the game. Proctor does your child is get enough attention </p>
     <div class="relative w-full mb-4">
       <!-- Images above points -->
       <div class="flex justify-between">
@@ -18,13 +18,13 @@
               class="h-auto object-contain rounded-lg  mb-2"
             >
           </div>
-          <div class="w-10 h-10 bg-white rounded-full border-2 border-white mb-2" />
-          <span class="text-white font-bold">{{ `Level ${index + 1}` }}</span>
+          <div class="w-10 h-10 bg-[#D6D6D6] rounded-full border-2 border-[#D6D6D6] mb-2" />
+          <!-- <span class="text-black font-bold">{{ `Level ${index + 1}` }}</span> -->
         </div>
       </div>
       <!-- Line for points -->
-      <div class="absolute inset-x-0 bottom-12 flex items-center justify-between">
-        <div class="w-full h-1 bg-white" />
+      <div class="absolute inset-x-0 bottom-6 flex items-center justify-between">
+        <div class="w-full rounded-full h-2 bg-[#D6D6D6]" />
       </div>
     </div>
   </div>

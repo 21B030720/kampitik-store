@@ -15,7 +15,7 @@
           <div class="text-right">
             <p class="text-2xl font-bold">{{ bundle.price }}₸</p>
             <p v-if="bundle.discount !== '0.00'" class="text-green-600">
-              -{{ bundle.discount }}₸
+              -{{ bundle.discount }}%
             </p>
           </div>
         </div>
@@ -36,7 +36,7 @@
               :alt="product.name"
               class="w-16 h-16 object-cover rounded"
               @error="handleImageError"
-            />
+            >
             <div class="flex-1">
               <h3 class="font-medium">{{ product.name }}</h3>
               <p class="text-sm text-gray-600">{{ product.description }}</p>

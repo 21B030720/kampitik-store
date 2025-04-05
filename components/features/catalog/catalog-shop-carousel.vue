@@ -48,7 +48,7 @@
 
     <!-- Stores Grid with Transition -->
     <transition-group name="fade" tag="div" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <StoreCard
+      <ShopCard
         v-for="store in stores"
         :key="store.id"
         :store="store"
@@ -61,7 +61,7 @@
 import { ref, watch, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import type { Store } from '~/types/store';
-import StoreCard from './catalog-store-card.vue';
+import ShopCard from './catalog-shop-card.vue';
 import { ShopService } from '~/services/ShopService';
 
 interface City {
