@@ -10,11 +10,11 @@
         class="text-gray-500 hover:text-gray-700"
         @click="$emit('close')"
       >
-          <img
-            src="@/assets/icons/chat-bot.svg"
-            alt="Chat"
-            class="h-6 w-6"
-          />
+        <img
+          src="@/assets/icons/close.svg"
+          alt="Close"
+          class="h-6 w-6"
+        />
       </button>
     </div>
 
@@ -29,9 +29,8 @@
             ? 'bg-gray-100 text-black ml-auto' 
             : 'bg-gray-100 text-gray-800'
         ]"
-      >
-        {{ message.text }}
-      </div>
+        v-html="formatMessage(message.text)"
+      ></div>
     </div>
 
     <!-- Input -->
@@ -68,6 +67,15 @@ const chatStore = useChatStore();
 
 const newMessage = ref('');
 const isLoading = ref(false);
+
+const formatMessage = (text: string) => {
+  // Convert markdown-like syntax to HTML
+  let formattedText = text
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
+    .replace(/\*(.*?)\*/g, '<em>$1</em>'); // Italic
+
+  return formattedText;
+};
 
 const sendMessage = async () => {
   const messageText = newMessage.value.trim();
@@ -118,4 +126,4 @@ const sendMessage = async () => {
 defineEmits<{
   (e: 'close'): void;
 }>();
-</script> 
+</script>
