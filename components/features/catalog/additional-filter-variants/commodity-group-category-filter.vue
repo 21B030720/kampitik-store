@@ -6,7 +6,7 @@
     <select
       v-model="localFilters.commodity_group_category_id"
       class="w-full border rounded-lg p-2"
-      @change="fetchCommodityGroups"
+      @change="handleCategoryChange"
     >
       <option value="">{{ t('catalog.filters.all') }}</option>
       <option
@@ -38,4 +38,9 @@ const props = defineProps<{
   fetchCommodityGroups: () => void;
   isDebouncing: boolean;
 }>();
+
+const handleCategoryChange = () => {
+  props.localFilters.commodity_group_id = ''; // Set to "all" value
+  props.fetchCommodityGroups();
+};
 </script>

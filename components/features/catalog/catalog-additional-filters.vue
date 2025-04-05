@@ -9,21 +9,21 @@
         :isDebouncing="isDebouncing"
       />
       <CategoryFilter
-            v-if="contentType !== 'product' && contentType !== 'bundle'"
-            :localFilters="localFilters"
-            :categories="categories"
-            :handleInput="handleInput"
-            :isDebouncing="isDebouncing"
-        />
+        v-if="contentType !== 'product' && contentType !== 'bundle'"
+        :localFilters="localFilters"
+        :categories="categories"
+        :handleInput="handleInput"
+        :isDebouncing="isDebouncing"
+      />
       <CommodityGroupCategoryFilter
         v-if="contentType === 'product'"
         :localFilters="localFilters"
         :commodityGroupCategories="commodityGroupCategories"
-        :fetchCommodityGroups="fetchCommodityGroups"
+        :fetchCommodityGroups="debouncedFetchCommodityGroups"
         :isDebouncing="isDebouncing"
       />
       <CommodityGroupFilter
-        v-if="contentType === 'product' && localFilters.commodity_group_category_id"
+        v-if="contentType === 'product' && localFilters.commodity_group_category_id !== null"
         :localFilters="localFilters"
         :commodityGroups="commodityGroups"
         :handleInput="handleInput"
@@ -133,15 +133,29 @@ const fetchCommodityGroupCategories = async () => {
 };
 
 const fetchCommodityGroups = async () => {
-  if (localFilters.commodity_group_category_id) {
+  if (localFilters.commodity_group_category_id !== null) {
     try {
       commodityGroups.value = await ShopService.getCommodityGroups(localFilters.commodity_group_category_id);
+      localFilters.commodity_group_id = ''; // Set to "all" value after fetching groups
+      debouncedEmitFilters(); // Wait and then emit filters
     } catch (err) {
       console.error('Failed to fetch commodity groups:', err);
     }
   } else {
     commodityGroups.value = [];
+    debouncedEmitFilters(); // Wait and then emit filters
   }
+};
+
+const debouncedEmitFilters = () => {
+  if (debounceTimer) {
+    clearTimeout(debounceTimer);
+  }
+  isDebouncing.value = true;
+  debounceTimer = setTimeout(() => {
+    emitFilters();
+    isDebouncing.value = false;
+  }, 2000); // Adjust the delay as needed
 };
 
 watch(() => localFilters.category_name, fetchCommodityGroupCategories);
