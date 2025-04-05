@@ -294,6 +294,12 @@
     "orderItems": "Order Items"
   },
   "order": {
+    "reject": "Reject order",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "rejectItem": "Reject",
+    "confirmRejectTitle": "Are you sure?",
+    "confirmRejectMessage": "After rejecting the product won't come to you",
     "id": "Order ID",
     "quantity": "Quantity",
     "shopName": "Shop Name",

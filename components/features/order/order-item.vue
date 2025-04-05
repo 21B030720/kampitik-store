@@ -48,17 +48,31 @@
         >
           {{ t(`order.statuses.${item.status}`) }}
         </span>
-        <button v-if="item?.status !== 'CANCELLED' && item.status !== 'GIVEN_TO_CUSTOMER'" @click="rejectOrderItem(item.id)" class="ml-auto px-4 py-2 bg-red-600 text-white rounded-lg">
+        <button v-if="item?.status !== 'CANCELLED' && item.status !== 'GIVEN_TO_CUSTOMER'" @click="showModal = true" class="ml-auto px-4 py-2 bg-red-600 text-white rounded-lg">
           {{ t('order.rejectItem') }}
         </button>
       </div>
     </div>
   </div>
+
+  <!-- Confirmation Modal -->
+  <ConfirmationModal
+    v-if="showModal"
+    :show="showModal"
+    :title="t('order.confirmRejectTitle')"
+    :message="t('order.confirmRejectMessage')"
+    :cancelText="t('order.cancel')"
+    :confirmText="t('order.confirm')"
+    @cancel="showModal = false"
+    @confirm="confirmReject"
+  />
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import type { ClientOrderItem } from '~/types/client';
+import ConfirmationModal from '~/components/features/order/order-item-reject-confirmation-modal.vue';
 
 const { t } = useI18n();
 
@@ -66,6 +80,8 @@ const props = defineProps<{
   item: ClientOrderItem;
   rejectOrderItem: (itemId: string) => void;
 }>();
+
+const showModal = ref(false);
 
 const formatDate = (date: string) => {
   return new Date(date).toLocaleDateString();
@@ -75,6 +91,11 @@ const handleImageError = (event: Event) => {
   const img = event.target as HTMLImageElement;
   img.style.display = 'none';
   img.parentElement!.innerHTML = '<span class="text-gray-400">No image</span>';
+};
+
+const confirmReject = () => {
+  props.rejectOrderItem(props.item.id);
+  showModal.value = false;
 };
 </script>
 
