@@ -40,25 +40,88 @@
     <div v-if="isLoading" class="flex justify-center items-center py-8">
       <p class="text-gray-500">{{ t('loading') }}</p>
     </div>
-
+    
     <!-- Error State -->
     <div v-else-if="error" class="text-red-600 mb-4">
       {{ error }}
     </div>
+    
+    <!-- Stores Carousel -->
+    <div class="relative">
+      <!-- Navigation Buttons -->
+      <button
+        class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 bg-white rounded-full p-2 shadow-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+        :disabled="isAtStart"
+        @click="scrollStores('left')"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"
+          />
+        </svg>
+      </button>
+      <button
+        class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 bg-white rounded-full p-2 shadow-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+        :disabled="isAtEnd"
+        @click="scrollStores('right')"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 5l7 7-7 7"
+          />
+        </svg>
+      </button>
 
-    <!-- Stores Grid with Transition -->
-    <transition-group name="fade" tag="div" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <ShopCard
-        v-for="store in stores"
-        :key="store.id"
-        :store="store"
-      />
-    </transition-group>
+      <!-- Stores Container -->
+      <div
+        ref="storesContainer"
+        class="flex space-x-4 overflow-x-hidden scroll-smooth pb-4"
+        @scroll="updateScrollState"
+      >
+        <ShopCard
+          v-for="store in stores"
+          :key="store.id"
+          :store="store"
+        />
+      </div>
+
+      <!-- Scroll Progress Indicator -->
+      <div class="flex justify-center mt-4 space-x-1">
+        <div
+          v-for="index in Math.ceil(stores.length / itemsPerView)"
+          :key="index"
+          :class="[
+            'h-1 rounded transition-all duration-300',
+            currentPage === index - 1
+              ? 'w-4 bg-primary-600'
+              : 'w-2 bg-gray-300',
+          ]"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch, onMounted, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import type { Shop } from '~/types/shop';
 import ShopCard from './catalog-shop-card.vue';
@@ -77,6 +140,8 @@ const cities = ref<City[]>([]);
 const isLoading = ref(false);
 const error = ref<string | null>(null);
 const selectedCityId = ref<number | ''>('');
+const currentPage = ref(0);
+const itemsPerView = ref(4); // Number of items per view
 
 // Fetch cities
 const fetchCities = async () => {
@@ -93,7 +158,7 @@ const fetchStores = async () => {
   try {
     isLoading.value = true;
     error.value = null;
-    
+
     const filters = selectedCityId.value ? { city_id: selectedCityId.value } : undefined;
     stores.value = await ShopService.getShops(filters);
   } catch (err) {
@@ -114,15 +179,70 @@ onMounted(async () => {
   await fetchCities();
   await fetchStores();
 });
+
+// Carousel state and controls
+const storesContainer = ref<HTMLElement | null>(null);
+const isAtStart = ref(true);
+const isAtEnd = ref(false);
+
+// Scroll stores carousel
+const scrollStores = (direction: 'left' | 'right') => {
+  if (!storesContainer.value) return;
+
+  const container = storesContainer.value;
+  const scrollAmount = container.clientWidth;
+
+  if (direction === 'left') {
+    container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+  } else {
+    container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+  }
+};
+
+// Update scroll state
+const updateScrollState = () => {
+  if (!storesContainer.value) return;
+
+  const container = storesContainer.value;
+  isAtStart.value = container.scrollLeft <= 0;
+  isAtEnd.value =
+    container.scrollLeft + container.clientWidth >= container.scrollWidth;
+
+  // Update current page
+  currentPage.value = Math.floor(
+    container.scrollLeft / container.clientWidth,
+  );
+};
+
+// Update items per view based on viewport
+const updateItemsPerView = () => {
+  if (window.innerWidth < 640) {
+    itemsPerView.value = 1;
+  } else if (window.innerWidth < 1024) {
+    itemsPerView.value = 2;
+  } else {
+    itemsPerView.value = 4;
+  }
+};
+
+// Lifecycle hooks
+onMounted(() => {
+  updateItemsPerView();
+  window.addEventListener('resize', updateItemsPerView);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', updateItemsPerView);
+});
 </script>
 
 <style scoped>
-/* Fade transition styles */
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.5s, transform 0.5s;
+/* Hide scrollbar but keep functionality */
+.overflow-x-hidden::-webkit-scrollbar {
+  display: none;
 }
-.fade-enter-from, .fade-leave-to {
-  opacity: 0;
-  transform: translateY(20px);
+.overflow-x-hidden {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 </style>
