@@ -113,6 +113,7 @@ import { ref, reactive } from 'vue';
 import { useI18n } from 'vue-i18n';
 import type { Kid } from '~/types/kid';
 import { KidService } from '~/services/KidService';
+import placeholderKid from '@/assets/images/placeholder-kid.jpg';
 
 const props = defineProps<{
   show: boolean;
@@ -137,10 +138,7 @@ const form = reactive({
   image: null as File | null
 });
 
-const placeholderImage = new URL(
-  '@/assets/images/placeholder-kid.png',
-  import.meta.url
-).href;
+const placeholderImage = placeholderKid;
 
 const handleImageChange = (event: Event) => {
   const input = event.target as HTMLInputElement;

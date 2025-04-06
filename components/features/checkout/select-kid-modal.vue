@@ -94,6 +94,7 @@ import level_3 from '@/assets/images/level/level_3.png';
 import level_4 from '@/assets/images/level/level_4.png';
 import level_5 from '@/assets/images/level/level_5.png';
 import level_6 from '@/assets/images/level/level_6.png';
+import placeholderKid from '@/assets/images/placeholder-kid.jpg';
 
 const props = defineProps<{
   show: boolean;
@@ -125,14 +126,11 @@ const getDefaultImage = (level: number) => {
   } else if (level >= 7 && level <= 10) {
     return levelImages[6];
   } else {
-    return new URL('@/assets/images/placeholder-kid.png', import.meta.url).href;
+    return placeholderKid;
   }
 };
 
-const placeholderImage = new URL(
-  '@/assets/images/placeholder-kid.png',
-  import.meta.url
-).href;
+const placeholderImage = placeholderKid;
 
 const loadKids = async () => {
   isLoading.value = true;

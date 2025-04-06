@@ -57,6 +57,7 @@
 	import AddKidModal from '~/components/features/cabinet/add-kid-modal.vue';
     import KidsSection from '~/components/features/cabinet/kids/kid-section.vue';
 	import ClientOrdersSection from '~/components/features/cabinet/client-orders-section.vue';
+    import placeholderKid from '@/assets/images/placeholder-kid.jpg';
     
     const { t } = useI18n();
 	const authStore = useAuthStore();
@@ -73,10 +74,7 @@
 	const showAddKidModal = ref(false);
 	const transactions = ref<Transaction[]>([]);
 	const isTransactionsLoading = ref(true);
-	const placeholderImage = new URL(
-		'@/assets/images/placeholder-kid.png',
-		import.meta.url
-	).href;
+	const placeholderImage = placeholderKid;
 
 	onMounted(async () => {
 		try {
