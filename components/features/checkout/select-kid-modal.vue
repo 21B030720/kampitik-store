@@ -53,7 +53,7 @@
                       :src="kid.image || getDefaultImage(kid.kid_level.level_position)"
                       :alt="kid.name"
                       class="w-full h-full rounded-full object-cover"
-                    />
+                    >
                   </div>
                   
                   <!-- Kid info -->
@@ -65,10 +65,10 @@
                   <!-- Level info if available -->
                   <div v-if="kid.kid_level" class="mt-2 flex items-center gap-2">
                     <img
-                      v-if="kid.kid_level.level_image && kid.image"
-                      :src="kid.kid_level.level_image"
+                      
+                      :src="kid.kid_level.level_image || getDefaultImage(kid.kid_level.level_position)"
                       :alt="kid.kid_level.level_name"
-                      class="w-12 h-auto" 
+                      class="w-auto h-10" 
                     >
                     <span class="text-xs text-gray-600">{{ kid.kid_level.level_name }}</span>
                   </div>

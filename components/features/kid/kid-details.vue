@@ -4,8 +4,7 @@
     <div class="flex items-center gap-3 mb-6">
       <div class="flex items-center gap-2 text-gray-800">
         <img
-          v-if="kid.kid_level.level_image"
-          :src="kid.kid_level.level_image"
+          :src="kid.kid_level.level_image || getDefaultImage(kid.kid_level.level_position)"
           :alt="kid.kid_level.level_name"
           class="level-image"
         >
@@ -33,7 +32,7 @@
         <span>Level {{ kid.kid_level.next_level_position }}</span>
       </div>
     </div>
-
+    
     <!-- Details -->
     <div>
       <h2 class="font-semibold mb-2">{{ t('cabinet.kidDetails') }}</h2>
@@ -47,7 +46,34 @@
   import { useI18n } from 'vue-i18n';
   import type { KidDetails } from '~/types/kid';
   
+  import level_1 from '@/assets/images/level/level_1.png';
+  import level_2 from '@/assets/images/level/level_2.png';
+  import level_3 from '@/assets/images/level/level_3.png';
+  import level_4 from '@/assets/images/level/level_4.png';
+  import level_5 from '@/assets/images/level/level_5.png';
+  import level_6 from '@/assets/images/level/level_6.png';
+  import placeholderKid from '@/assets/images/placeholder-kid.jpg';
+  
   const { t } = useI18n();
+  
+  const levelImages: { [key: number]: string } = {
+    1: level_1,
+    2: level_2,
+    3: level_3,
+    4: level_4,
+    5: level_5,
+    6: level_6,
+  };
+  
+  const getDefaultImage = (level: number) => {
+    if (level >= 1 && level <= 6) {
+      return levelImages[level];
+    } else if (level >= 7 && level <= 10) {
+      return levelImages[6];
+    } else {
+      return placeholderKid;
+    }
+  };
   
   const props = defineProps<{
     kid: KidDetails;
