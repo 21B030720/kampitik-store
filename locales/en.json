@@ -306,7 +306,7 @@
     "cancel": "Cancel",
     "rejectItem": "Reject",
     "confirmRejectTitle": "Are you sure?",
-    "confirmRejectMessage": "After rejecting the product won't come to you",
+    "confirmRejectMessage": "After rejecting the order will not come to you",
     "id": "Order ID",
     "quantity": "Quantity",
     "shopName": "Shop Name",

@@ -45,6 +45,13 @@ import EditKidModal from '~/components/features/kid/edit-kid-modal.vue';
 import KidHeader from '~/components/features/kid/kid-header.vue';
 import KidDetailing from '~/components/features/kid/kid-details.vue';
 
+import level_1 from '@/assets/images/level/level_1.png';
+import level_2 from '@/assets/images/level/level_2.png';
+import level_3 from '@/assets/images/level/level_3.png';
+import level_4 from '@/assets/images/level/level_4.png';
+import level_5 from '@/assets/images/level/level_5.png';
+import level_6 from '@/assets/images/level/level_6.png';
+
 const { t } = useI18n();
 const route = useRoute();
 const localePath = useLocalePath();
@@ -54,14 +61,22 @@ const error = ref<string | null>(null);
 const showEditModal = ref(false);
 
 const levelImages: { [key: number]: string } = {
-  1: new URL('@/assets/images/levels/default/level_1.png', import.meta.url).href,
-  2: new URL('@/assets/images/levels/default/level_2.png', import.meta.url).href,
-  3: new URL('@/assets/images/levels/default/level_3.png', import.meta.url).href,
-  // Add more levels as needed
+  1: level_1,
+  2: level_2,
+  3: level_3,
+  4: level_4,
+  5: level_5,
+  6: level_6,
 };
 
 const getDefaultImage = (level: number) => {
-  return levelImages[level] || new URL('@/assets/images/placeholder-kid.png', import.meta.url).href;
+  if (level >= 1 && level <= 6) {
+    return levelImages[level];
+  } else if (level >= 7 && level <= 10) {
+    return levelImages[6];
+  } else {
+    return new URL('@/assets/images/placeholder-kid.png', import.meta.url).href;
+  }
 };
 
 const placeholderImage = new URL(

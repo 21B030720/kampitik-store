@@ -25,13 +25,13 @@
 </template>
 
 <script setup lang="ts">
-  import { defineProps, defineEmits } from 'vue';
-  
-  const props = defineProps({
-    kid: Object,
-    getDefaultImage: Function ,
-    handleImageError: Function,
-  });
-  
-  const emit = defineEmits(['edit']);
+import { defineProps, defineEmits } from 'vue';
+
+const props = defineProps({
+  kid: Object,
+  getDefaultImage: Function,
+  handleImageError: Function,
+});
+
+const emit = defineEmits(['edit']);
 </script>

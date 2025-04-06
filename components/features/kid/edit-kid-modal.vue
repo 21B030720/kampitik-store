@@ -93,7 +93,8 @@
                 </button>
                 <button
                   type="submit"
-                  class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
+                  class="px-4 py-2 text-white rounded-lg"
+                  :style="{ backgroundColor: '#128C7E', borderColor: '#128C7E' }"
                   :disabled="isLoading"
                 >
                   {{ isLoading ? t('common.processing') : t('common.save') }}

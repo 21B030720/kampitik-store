@@ -7,7 +7,7 @@
           v-if="kid.kid_level.level_image"
           :src="kid.kid_level.level_image"
           :alt="kid.kid_level.level_name"
-          class="w-8 h-8"
+          class="level-image"
         >
         <span>{{ kid.kid_level.level_name }}</span>
       </div>
@@ -53,3 +53,11 @@
     kid: KidDetails;
   }>();
 </script>
+
+<style scoped>
+.level-image {
+  height: 32px; 
+  width: auto;
+  object-fit: contain;
+}
+</style>

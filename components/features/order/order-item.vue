@@ -2,24 +2,21 @@
   <div class="bg-white rounded-lg hover:bg-[#F6FFFE] transition-colors flex flex-col h-full relative group border border-gray-200">
     <div class="aspect-square relative rounded-lg overflow-hidden">
       <img
-        v-if="item.product?.image"
-        :src="item.product.image"
-        :alt="item.product.name"
+        :src="item.product?.image || placeholderImage"
+        :alt="item.product?.name || 'Placeholder Image'"
         class="w-full h-full object-cover rounded-lg"
         @error="handleImageError"
       >
-      <div
-        v-else
-        class="w-full h-full bg-gray-200 rounded-lg flex items-center justify-center"
-      >
-        <span class="text-gray-400">No image</span>
-      </div>
       <div
         v-if="item.product?.rating"
         class="absolute top-2 right-2 bg-white rounded-full px-2 py-1 text-sm flex items-center gap-1"
       >
         <span>{{ item.product.rating }}</span>
         <span class="text-yellow-400">★</span>
+      </div>
+      <!-- Order Item Code -->
+      <div class="absolute top-2 left-2 bg-white rounded-full px-2 py-1 text-lg font-bold">
+        {{ item.code }}
       </div>
     </div>
     <div class="p-4 flex flex-col flex-grow">
@@ -73,6 +70,7 @@ import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import type { ClientOrderItem } from '~/types/client';
 import ConfirmationModal from '~/components/features/order/order-item-reject-confirmation-modal.vue';
+import placeholderImage from '~/assets/images/placeholder-product.png';
 
 const { t } = useI18n();
 
@@ -89,8 +87,7 @@ const formatDate = (date: string) => {
 
 const handleImageError = (event: Event) => {
   const img = event.target as HTMLImageElement;
-  img.style.display = 'none';
-  img.parentElement!.innerHTML = '<span class="text-gray-400">No image</span>';
+  img.src = placeholderImage;
 };
 
 const confirmReject = () => {

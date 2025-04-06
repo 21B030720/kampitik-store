@@ -6,7 +6,7 @@
     <!-- Kid Card Content -->
     <div class="aspect-square relative">
       <img
-        :src="kid.image || placeholderImage"
+        :src="kid.image || getDefaultImage(kid.kid_level.level_position)"
         :alt="kid.name"
         class="w-full h-full object-cover"
         @error="handleImageError"
@@ -34,30 +34,56 @@
           <p class="font-medium text-primary-600">{{ kid.xp }} XP</p>
         </div>
       </div>
-
+      
       <KidLevelProgress :kid-level="kid.kid_level" />
     </div>
   </NuxtLink>
 </template>
 
 <script setup lang="ts">
-  import { useI18n } from 'vue-i18n';
-  import type { Kid } from '~/types/kid';
-  
-  const { t } = useI18n();
-  const localePath = useLocalePath();
-  
-  defineProps<{
-    kid: Kid;
-  }>();
-  
-  const placeholderImage = new URL(
-    '@/assets/images/placeholder-kid.png',
-    import.meta.url
-  ).href;
-  
-  const handleImageError = (event: Event) => {
-    const img = event.target as HTMLImageElement;
-    img.src = placeholderImage;
-  };
+import { useI18n } from 'vue-i18n';
+import type { Kid } from '~/types/kid';
+
+import level_1 from '@/assets/images/level/level_1.png';
+import level_2 from '@/assets/images/level/level_2.png';
+import level_3 from '@/assets/images/level/level_3.png';
+import level_4 from '@/assets/images/level/level_4.png';
+import level_5 from '@/assets/images/level/level_5.png';
+import level_6 from '@/assets/images/level/level_6.png';
+
+const { t } = useI18n();
+const localePath = useLocalePath();
+
+defineProps<{
+  kid: Kid;
+}>();
+
+const levelImages: { [key: number]: string } = {
+  1: level_1,
+  2: level_2,
+  3: level_3,
+  4: level_4,
+  5: level_5,
+  6: level_6,
+};
+
+const getDefaultImage = (level: number) => {
+  if (level >= 1 && level <= 6) {
+    return levelImages[level];
+  } else if (level >= 7 && level <= 10) {
+    return levelImages[6];
+  } else {
+    return new URL('@/assets/images/placeholder-kid.png', import.meta.url).href;
+  }
+};
+
+const placeholderImage = new URL(
+  '@/assets/images/placeholder-kid.png',
+  import.meta.url
+).href;
+
+const handleImageError = (event: Event) => {
+  const img = event.target as HTMLImageElement;
+  img.src = placeholderImage;
+};
 </script>
