@@ -7,10 +7,12 @@
 
     <!-- Floating Images -->
     <img :src="bankCardsImage" class="absolute w-64 top-40 left-1/2 transform -translate-x-1/2">
+    <img :src="freedomLogo" class="absolute w-24 top-2 right-2">
   </div>
 </template>
 
 <script setup lang="ts">
+import freedomLogo from '@/assets/images/freedom_pay_logo.png';
 import bankCardsImage from '@/assets/images/bank_cards.png';
 </script>
 
