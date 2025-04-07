@@ -1,39 +1,345 @@
 {
   "nav": {
-    "brand": "Kampitik Store",
+    "brand": "Магазин Кампитик",
     "home": "Главная",
     "catalog": "Каталог",
     "bonusPoints": "Бонусные баллы",
     "chat": "Чат",
-    "signIn": "Войти"
+    "signIn": "Войти",
+    "cabinet": "Личный кабинет",
+    "balance": "Баланс",
+    "logout": "Выйти"
+  },
+  "showMore": "Показать больше",
+  "payment": {
+      "success": {
+        "title": "Оплата успешна",
+        "message": "Ваш платеж был успешно обработан."
+      }
+    },
+  "commodityGroup": {
+    "products": "Продукты товарной группы"
   },
   "catalog": {
-    "title": "Каталог товаров",
-    "stores": "Популярные магазины",
+    "title": "Каталог продуктов",
+    "stores": "Избранные магазины",
     "filters": "Фильтры",
     "priceRange": "Диапазон цен",
     "categories": "Категории",
-    "products": "товаров",
+    "products": "продукты",
     "addToBasket": "Добавить в корзину",
-    "storeCount": "магазинов",
+    "storeCount": "магазины",
     "searchStores": "Поиск магазинов",
-    "sortBy": {
-      "label": "Сортировать по",
-      "popularity": "Популярности",
-      "newest": "Новизне",
-      "priceAsc": "Цене: по возрастанию",
-      "priceDesc": "Цене: по убыванию"
-    }
+    "sortBy": "Сортировать по",
+    "sortOptions": {
+      "default": "Без сортировки",
+      "priceAsc": "Цена по возрастанию",
+      "priceDesc": "Цена по убыванию"
+    },
+    
+    "activitiesComingSoon": "Скоро будут мероприятия",
+    "servicesComingSoon": "Скоро будут услуги",
+    "additionalFilters": "Дополнительные фильтры",
+    "filters": {
+      "name": "Имя",
+      "category": "Категория",
+      "allCategories": "Все категории",
+      "apply": "Применить фильтры",
+      "ageRange": "Возрастной диапазон",
+      "searchByCity": "Выберите город...",
+      "allCities": "Все города",
+      "noProducts": "Нет доступных продуктов",
+      "fetchError": "Не удалось получить продукты",
+      "commodityGroupCategory": "Категория товарной группы",
+      "commodityGroup": "Товарная группа",
+      "priceRange": "Диапазон цен",
+      "all": "Все"
+    },
+    "searchByCity": "Выберите город...",
+    "allCities": "Все города",
+    "noProducts": "Нет доступных продуктов",
+    "fetchError": "Не удалось получить продукты"
   },
   "search": {
     "catalog": "Каталог"
   },
   "categories": {
     "sport": "Спорт",
-    "food": "Питание",
-    "service": "Услуги",
+    "food": "Еда",
+    "service": "Услуга",
     "vitamins": "Витамины",
     "activities": "Мероприятия"
+  },
+  "contentTypes": {
+    "menu": "Меню",
+    "activity": "Мероприятия",
+    "service": "Услуги",
+    "course": "Курсы",
+    "event": "События",
+    "product": "Продукты",
+    "bundle": "Наборы"
+  },
+  "basket": {
+    "title": "Корзина покупок",
+    "empty": "Ваша корзина пуста",
+    "continueShopping": "Продолжить покупки",
+    "orderSummary": "Итог заказа",
+    "subtotal": "Промежуточный итог",
+    "total": "Итого",
+    "checkout": "Перейти к оформлению"
+  },
+  "product": {
+    "details": "Детали",
+    "nutritionPer100g": "Пищевая ценность на 100г",
+    "nutritionalValue": "Калории",
+    "fats": "Жиры",
+    "proteins": "Белки",
+    "carbs": "Углеводы",
+    "ageRange": "Возрастной диапазон",
+    "years": "лет",
+    "addToBasket": "Добавить в корзину",
+    "age": "Возраст",
+    "category": "Категория",
+    "shop": "Магазин"
+  },
+  "back": {
+    "toCategory": "Назад к категории",
+    "toShop": "Назад к магазину",
+    "toCatalog": "Назад к каталогу",
+    "toCabinet": "Назад в кабинет",
+    "toReplenishment": "Назад к пополнению"
+  },
+  "errors": {
+    "failedToLoadProduct": "Не удалось загрузить детали продукта",
+    "failedToLoadStores": "Не удалось загрузить магазины. Пожалуйста, попробуйте позже.",
+    "failedToLoadCities": "Не удалось загрузить города. Пожалуйста, попробуйте позже.",
+    "failedToLoadCourse": "Не удалось загрузить детали курса",
+    "failedToLoadService": "Не удалось загрузить детали услуги",
+    "failedToSubmitRating": "Не удалось отправить оценку",
+    "failedToLoadKid": "Не удалось загрузить детали ребенка",
+    "failedToCreateKid": "Не удалось создать профиль ребенка. Пожалуйста, попробуйте снова.",
+    "failedToUpdateKid": "Не удалось обновить профиль. Пожалуйста, попробуйте снова.",
+    "failedToLoadKids": "Не удалось загрузить список детей"
+  },
+  "loading": "Загрузка...",
+  "checkout": {
+    "title": "Оформление заказа",
+    "orderSummary": "Итог заказа",
+    "customerInfo": "Информация о клиенте",
+    "name": "Полное имя",
+    "phone": "Номер телефона",
+    "address": "Адрес доставки",
+    "placeOrder": "Разместить заказ",
+    "total": "Итого",
+    "pleaseLoginFirst": "Пожалуйста, войдите, чтобы завершить заказ",
+    "orderConfirmation": "Подтверждение заказа",
+    "orderError": "Не удалось разместить заказ. Пожалуйста, попробуйте снова.",
+    "selectKid": "Выберите ребенка",
+    "selectKidLabel": "Для ребенка",
+    "selectKidPlaceholder": "Выберите ребенка",
+    "noKids": "Дети еще не добавлены",
+    "selectKidsWarning": "Пожалуйста, выберите ребенка для каждого продукта"
+  },
+  "purchase": {
+    "confirmed": "Заказ подтвержден!",
+    "thankYou": "Спасибо за вашу покупку. Мы свяжемся с вами в ближайшее время.",
+    "orderDetails": "Детали заказа",
+    "name": "Имя",
+    "phone": "Телефон",
+    "address": "Адрес",
+    "total": "Общая сумма",
+    "continueShopping": "Продолжить покупки"
+  },
+  "auth": {
+    "emailConfirmationTitle": "Подтверждение электронной почты",
+    "emailConfirmationMessage": "Письмо с подтверждением было отправлено на вашу электронную почту. Пожалуйста, проверьте свой почтовый ящик и следуйте инструкциям для завершения регистрации.",
+    "goToHome": "Перейти на главную",
+    "loginTitle": "Войдите в свой аккаунт",
+    "signupTitle": "Создать новый аккаунт",
+    "name": "Полное имя",
+    "username": "Имя пользователя",
+    "email": "Электронная почта",
+    "usernameOrEmail": "Имя пользователя или электронная почта",
+    "phone": "Номер телефона",
+    "password": "Пароль",
+    "login": "Войти",
+    "signup": "Зарегистрироваться",
+    "needAccount": "Нужен аккаунт? Зарегистрируйтесь",
+    "haveAccount": "Уже есть аккаунт? Войдите",
+    "error": "Ошибка аутентификации. Пожалуйста, попробуйте снова.",
+    "passwordConfirmation": "Подтвердите пароль"
+  },
+  "cabinet": {
+    "clientOrdersTitle": "Мои заказы",
+    "title": "Личный кабинет",
+    "personalInfo": "Личная информация",
+    "name": "Имя",
+    "username": "Имя пользователя",
+    "email": "Электронная почта",
+    "phone": "Телефон",
+    "orderHistory": "История заказов",
+    "completed": "Завершено",
+    "items": "товары",
+    "noOrders": "Заказов еще нет",
+    "budget": "Мой бюджет",
+    "balance": "Текущий баланс",
+    "walletId": "ID кошелька",
+    "noWallet": "Информация о кошельке недоступна",
+    "userId": "ID пользователя",
+    "clientId": "ID клиента",
+    "clientInfo": "Информация о клиенте",
+    "emailVerified": "Подтверждено",
+    "replenishBalance": "Пополнить баланс",
+    "children": "Дети",
+    "kidDetails": "Детали",
+    "noKids": "Дети еще не добавлены",
+    "addChild": "Добавить ребенка",
+    "childName": "Имя ребенка",
+    "childAge": "Возраст",
+    "childDetails": "Детали",
+    "enterChildName": "Введите имя ребенка",
+    "enterChildDetails": "Введите детали о вашем ребенке",
+    "transactionHistory": "История транзакций",
+    "noTransactions": "Транзакций еще нет",
+    "transactionStatus": {
+      "finished": "Завершено",
+      "pending": "В ожидании",
+      "canceled": "Отменено"
+    },
+    "transactionType": {
+      "top_up": "Пополнение",
+      "purchase": "Покупка",
+      "refund": "Возврат",
+      "bonus": "Бонус",
+      "withdraw": "Снятие",
+      "deposit": "Депозит"
+    }
+  },
+  "balance": {
+    "proceedingPaymentWithoutCard": "Продолжение оплаты без выбора карты. Вы уверены?",
+    "replenishmentTitle": "Пополнение баланса",
+    "currentBalance": "Текущий баланс",
+    "amount": "Сумма",
+    "enterAmount": "Введите сумму",
+    "replenish": "Пополнить баланс",
+    "invalidAmount": "Сумма должна быть между 2000тг и 10000тг",
+    "limitNote": "Мин: 2000тг, Макс: 10000тг",
+    "replenishmentError": "Не удалось пополнить баланс. Пожалуйста, попробуйте снова.",
+    "paymentProcessing": "Обработка платежа",
+    "transactionId": "ID транзакции",
+    "proceedToPayment": "Перейти к оплате"
+  },
+  "cards": {
+    "addNew": "Добавить новую карту"
+  },
+  "common": {
+    "cancel": "Отмена",
+    "viewOnMap": "Посмотреть на карте",
+    "years": "лет",
+    "processing": "Обработка...",
+    "add": "Добавить",
+    "change": "Изменить",
+    "save": "Сохранить",
+    "confirm": "Подтвердить",
+    "currency": "Валюта"
+  },
+  "payment": {
+    "success": "Оплата успешна",
+    "failure": "Оплата не удалась",
+    "successMessage": "Ваш платеж был успешно обработан. Ваш баланс будет обновлен в ближайшее время.",
+    "failureMessage": "Мы не смогли обработать ваш платеж. Пожалуйста, попробуйте снова или свяжитесь с поддержкой, если проблема сохраняется."
+  },
+  "chat": {
+    "title": "Чат-ассистент",
+    "inputPlaceholder": "Введите ваше сообщение...",
+    "error": "Извините, я не смог обработать ваше сообщение. Пожалуйста, попробуйте снова."
+  },
+  "course": {
+    "additionalPrices": "Открыть, чтобы увидеть другие планы",
+    "details": "Детали курса",
+    "company": "Компания",
+    "location": "Местоположение",
+    "ageRange": "Возрастной диапазон",
+    "contacts": "Контакты",
+    "pricingPlans": "Планы ценообразования",
+    "per": "за"
+  },
+  "event": {
+    "date": "Дата",
+    "organizer": "Организатор",
+    "location": "Местоположение",
+    "ageRange": "Возрастной диапазон",
+    "ticketsLeft": "Осталось билетов"
+  },
+  "service": {
+    "provider": "Поставщик",
+    "type": "Тип",
+    "location": "Местоположение",
+    "rating": "Рейтинг",
+    "noRating": "Рейтингов пока нет",
+    "providerDetails": "Поставщик услуг",
+    "rateProvider": "Оценить поставщика",
+    "review": "Отзыв",
+    "submitRating": "Отправить оценку",
+    "online": "Онлайн",
+    "offline": "Офлайн"
+  },
+  "kid": {
+    "editProfile": "Редактировать профиль",
+    "image": "Изображение профиля",
+    "name": "Имя",
+    "age": "Возраст",
+    "details": "Детали"
+  },
+  "reviews": {
+    "loginToReview": "Войдите, чтобы оставить отзывы",
+    "loginPrompt": "Только авторизованные аккаунты могут оставлять отзывы",
+    "title": "Отзывы",
+    "yourReview": "Ваш отзыв",
+    "rating": "Рейтинг",
+    "writeReview": "Написать отзыв",
+    "update": "Обновить",
+    "cancel": "Отмена",
+    "noReviews": "Отзывов пока нет"
+  },
+  "orderDetails": {
+    "title": "Детали заказа",
+    "orderInfo": "Информация о заказе",
+    "orderItems": "Товары в заказе"
+  },
+  "order": {
+    "reject": "Отклонить заказ",
+    "confirm": "Подтвердить",
+    "cancel": "Отмена",
+    "rejectItem": "Отклонить",
+    "confirmRejectTitle": "Вы уверены?",
+    "confirmRejectMessage": "После отклонения заказ не будет доставлен вам",
+    "id": "ID заказа",
+    "quantity": "Количество",
+    "shopName": "Название магазина",
+    "clientName": "Имя клиента",
+    "clientPhoneNumber": "Номер телефона клиента",
+    "createdAt": "Создано",
+    "status": "Статус",
+    "discount": "Скидка",
+    "overallPrice": "Общая цена",
+    "finalPrice": "Итоговая цена",
+    "statuses": {
+      "CANCELLED": "Отменено",
+      "WAITING": "В ожидании",
+      "TOTALLY_GIVEN": "Полностью выдано",
+      "PARTIALLY_GIVEN": "Частично выдано",
+      "WAITING_FOR_COURIER": "В ожидании курьера"
+    }
+  },
+  "shop": {
+    "openFrom": "Открыто с",
+    "openUntil": "Открыто до",
+    "products": "Продукты",
+    "preparedBundles": "Готовые наборы",
+    "commodityCategories": "Категории товаров"
+  },
+  "bundle": {
+    "includedProducts": "Включенные продукты"
   }
-  
 }
