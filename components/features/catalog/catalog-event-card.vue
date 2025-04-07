@@ -28,8 +28,8 @@
     <div class="p-4 flex flex-col flex-grow">
       <div class="flex-grow">
         <h3 class="font-semibold text-lg mb-2">{{ event.title }}</h3>
-        <p class="text-gray-600 text-sm mb-4">{{ event.description }}</p>
-
+        <p class="text-gray-600 text-sm mb-4 description">{{ event.description }}</p>
+        
         <!-- Event Details -->
         <div class="space-y-2 mb-4">
           <p class="text-sm">
@@ -89,6 +89,13 @@ const handleImageError = (e: Event) => {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2; /* Limit to 2 lines */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.description {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3; /* Limit to 3 lines */
   overflow: hidden;
   text-overflow: ellipsis;
 }

@@ -10,6 +10,12 @@
     "balance": "Balance",
     "logout": "Logout"
   },
+  "payment": {
+      "success": {
+        "title": "Payment Successful",
+        "message": "Your payment has been processed successfully."
+      }
+    },
   "commodityGroup": {
     "products": "Products of commodity group"
   },

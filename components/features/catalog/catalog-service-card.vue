@@ -45,11 +45,11 @@
             <h2 class="text-lg font-semibold service-title">{{ service.title }}</h2>
           </div>
         </div>
-        <p v-if="service.details" class="text-sm text-gray-600 mb-2">
+        <p v-if="service.details" class="text-sm text-gray-600 mb-2 service-details">
           {{ service.details }}
         </p>
       </div>
-
+      
       <!-- Price and Payment Period in horizontal layout -->
       <div class="mt-2 flex items-center justify-between">
         <p class="text-lg font-bold">{{ service.price }}₸</p>
@@ -88,6 +88,13 @@ const handleImageError = (e: Event) => {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2; /* Limit to 2 lines */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.service-details {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3; /* Limit to 3 lines */
   overflow: hidden;
   text-overflow: ellipsis;
 }
