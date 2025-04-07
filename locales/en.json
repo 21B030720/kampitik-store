@@ -329,7 +329,7 @@
       "WAITING": "Waiting",
       "TOTALLY_GIVEN": "Totally Given",
       "PARTIALLY_GIVEN": "Partially Given",
-      "WAITING_FOR_COURIER": "Waiting for Courier",
+      "WAITING_FOR_COURIER": "Waiting for Courier"
     }
   },
   "shop": {
@@ -337,10 +337,10 @@
     "openUntil": "Open until",
     "products": "Products",
     "preparedBundles": "Prepared Bundles",
-    "commodityCategories": "Commodity Categories",
+    "commodityCategories": "Commodity Categories"
   },
   "bundle": {
-    "includedProducts": "Included Products",
+    "includedProducts": "Included Products"
   }
   
 }
